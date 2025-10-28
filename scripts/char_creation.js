@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
         animationContainer.appendChild(iconSpan);
     }
 
-
     const MAX_POINTS = 3;
     const MAX_PER_STAT = 3;
     const MIN_PER_STAT = 1;

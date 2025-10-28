@@ -1,3 +1,9 @@
-# (Colocar nome do Jogo)
+# Turn-Based Card Game
 
- blabla
+Esse é um projeto para a disciplina <abbr title = "Desenvolvimento Front-end III">DFEIII</abbr> do IFSUL Câmpus Charqueadas
+
+## Como Iniciar
+
+- Abra o arquivo [index.html](index.html) localizado na pasta raiz do projeto.
+
+
