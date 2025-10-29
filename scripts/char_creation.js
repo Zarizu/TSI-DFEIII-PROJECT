@@ -1,3 +1,5 @@
+import {Character} from './models.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     
     const animationContainer = document.querySelector('.background-animation');
@@ -5,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let i = 0; i < numberOfIcons; i++) {
         const iconSpan = document.createElement('span');
-        
         animationContainer.appendChild(iconSpan);
     }
 
@@ -82,14 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     charNameInput.addEventListener('input', updateUI);
 
-        startButton.addEventListener('click', ()=> {
-            window.location.href = "main.html";
-        });
-
+    startButton.addEventListener('click', ()=> {
+        let firstChar = new Character(charNameInput.value,stats);
+        console.log(firstChar);
+        
+        window.location.href = 'main.js';
+        
+    });
     updateUI();
-
-    
-
-    
-
 });

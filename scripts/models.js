@@ -1,13 +1,16 @@
-class Character {
-    constructor(name, skin, stats) {
+export class Character {
+    constructor(name, stats) {
         name = this.name;
-        skin = this.skin;
         stats = this.stats;
     }
 
-    showStats() {
+    getAttributes() {
         Object.keys(this.stats).forEach(key => {
             console.log(`${key}: ${this.stats[key]}`);
         });
     }
 }
+
+
+
+
