@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let totalPoints = MAX_POINTS;
     const stats = {
-        ataque: 1,
-        constituicao: 1,
-        inteligencia: 1
+        atk: 1,
+        con: 1,
+        int: 1
     };
 
     const pointsValueEl = document.getElementById('points-value');
@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const minusButtons = document.querySelectorAll('.stat-btn.minus');
     
     const valueElements = {
-        ataque: document.getElementById('ataque-value'),
-        constituicao: document.getElementById('constituicao-value'),
-        inteligencia: document.getElementById('inteligencia-value')
+        atk: document.getElementById('ataque-value'),
+        con: document.getElementById('constituicao-value'),
+        int: document.getElementById('inteligencia-value')
     };
 
     function updateUI() {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startButton.addEventListener('click', () => {
         
-        let firstChar = new Character(charNameInput.value,[stats['ataque'],stats['constituicao'],stats['inteligencia']]);
+        let firstChar = new PCharacter(charNameInput.value, stats);
         const firstCharFormatted = JSON.stringify(firstChar);
 
         localStorage.setItem('FirstCharData',firstCharFormatted);

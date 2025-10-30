@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Principal</title>
+    <title>Tela Inicial - Criação de Personagem</title>
     <script src="./scripts/views/char_creation.js" defer></script>
-    <script src="./models/character.js" defer></script>
+    <script src="./models/Character.js" defer></script>
+    <script src="./models/PCharacter.js" defer></script>
 
     <link rel="stylesheet" href="styles/char_creation.css">
 </head>
@@ -24,25 +25,25 @@
                 <div class="char-stats">
                     <h3 class="title">Ataque</h3>
                     <div class="stat-controls">
-                        <button class="stat-btn minus" data-stat="ataque" disabled>-</button>
+                        <button class="stat-btn minus" data-stat="atk" disabled>-</button>
                         <span class="value" id="ataque-value">1</span>
-                        <button class="stat-btn plus" data-stat="ataque">+</button>
+                        <button class="stat-btn plus" data-stat="atk">+</button>
                     </div>
                 </div>
                 <div class="char-stats">
                     <h3 class="title">Constituição</h3>
                     <div class="stat-controls">
-                        <button class="stat-btn minus" data-stat="constituicao" disabled>-</button>
+                        <button class="stat-btn minus" data-stat="con" disabled>-</button>
                         <span class="value" id="constituicao-value">1</span>
-                        <button class="stat-btn plus" data-stat="constituicao">+</button>
+                        <button class="stat-btn plus" data-stat="con">+</button>
                     </div>
                 </div>
                 <div class="char-stats">
                     <h3 class="title">inteligencia</h3>
                     <div class="stat-controls">
-                        <button class="stat-btn minus" data-stat="inteligencia" disabled>-</button>
+                        <button class="stat-btn minus" data-stat="int" disabled>-</button>
                         <span class="value" id="inteligencia-value">1</span>
-                        <button class="stat-btn plus" data-stat="inteligencia">+</button>
+                        <button class="stat-btn plus" data-stat="int">+</button>
                     </div>
                 </div>
             </div>
