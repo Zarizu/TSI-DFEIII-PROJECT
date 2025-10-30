@@ -1,7 +1,5 @@
-import {Character} from './models.js';
-
 document.addEventListener('DOMContentLoaded', () => {
-    
+    // animacao de queda de emojis
     const animationContainer = document.querySelector('.background-animation');
     const numberOfIcons = 12; 
 
@@ -10,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
         animationContainer.appendChild(iconSpan);
     }
 
+    //distribuicao de atributos 
     const MAX_POINTS = 3;
     const MAX_PER_STAT = 3;
     const MIN_PER_STAT = 1;
 
-    // atributos
     let totalPoints = MAX_POINTS;
     const stats = {
         ataque: 1,
@@ -83,12 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     charNameInput.addEventListener('input', updateUI);
 
-    startButton.addEventListener('click', ()=> {
-        let firstChar = new Character(charNameInput.value,stats);
-        console.log(firstChar);
+    startButton.addEventListener('click', () => {
         
-        window.location.href = 'main.js';
+        let firstChar = new Character(charNameInput.value,[stats['ataque'],stats['constituicao'],stats['inteligencia']]);
+        const firstCharFormatted = JSON.stringify(firstChar);
+
+        localStorage.setItem('FirstCharData',firstCharFormatted);
         
+        window.location.href = './pages/main.html';
     });
     updateUI();
 });
