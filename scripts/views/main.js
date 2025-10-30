@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-
 
     // Painel Esquerdo
     const teamRoster = document.getElementById('team-roster');
@@ -21,40 +19,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Botões de Fechar
     const closeButtons = document.querySelectorAll('.close-panel-btn');
 
-
+    let team = []
 
     //importação do personagem
     let firstCharData = localStorage.getItem('FirstCharData');
 
     if(firstCharData){
+        localStorage.setItem(ID_COUNTER_KEY,1);
         firstCharData = JSON.parse(firstCharData);
         let attributes = firstCharData.attributes
-        console.log(attributes);
         
-        const firstChar = new PCharacter(firstCharData.name,attributes);
-        console.log("Personagem carregado:", firstChar);
-        
-        localStorage.clear();
-        preencherTime(firstChar);
-        desenharPersonagemNaBatalha(firstChar);
+        const firstChar = new PCharacter(firstCharData.name, attributes);
+        firstChar.effects = []; 
+
+        localStorage.removeItem('FirstCharData');
+        pushTeam(firstChar);
+        drawCrew(firstChar);
+
+        team = [firstChar];
+
     } else {
-    localStorage.clear();
+        localStorage.setItem(ID_COUNTER_KEY,1);
+    localStorage.removeItem('FirstCharData');
     console.warn(`Falha ao carregar dados. Criando time de DEBUG com 6 membros.`);
     
-    // 1. Cria um array com o time completo
-    const debugTeam = [
-        new PCharacter('Guerreiro', {"atk": 3, "con": 2, "int": 1}),
-        new PCharacter('Mago', {"atk": 1, "con": 2, "int": 3}),
-        new PCharacter('Ladino', {"atk": 3, "con": 1, "int": 2}),
-        new PCharacter('Clérigo', {"atk": 1, "con": 2, "int": 3}),
-        new PCharacter('Tanque', {"atk": 2, "con": 3, "int": 1}),
-        new PCharacter('Arqueiro', {"atk": 3, "con": 2, "int": 1})
-    ];
+    team = [
+            new PCharacter('Guerreiro', {"atk": 3, "con": 2, "int": 1}),
+            new PCharacter('Mago', {"atk": 1, "con": 2, "int": 3}),
+            new PCharacter('Ladino', {"atk": 3, "con": 2, "int": 1}),
+            new PCharacter('Clérigo', {"atk": 1, "con": 2, "int": 3}),
+            new PCharacter('Tanque', {"atk": 2, "con": 3, "int": 1}),
+            new PCharacter('Arqueiro', {"atk": 3, "con": 2, "int": 1})
+        ];
 
     console.log(`DEBUG: Criação de time padrão para testes de desenvolvimento:`);
 
-
-    debugTeam.forEach(character => {
+    team.forEach(character => {
         character.effects = [
                 // 1. Efeito de Buff (ativo)
                 { name: 'Buff de Ataque', icon: '⚔️', duration: 3 },
@@ -65,9 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ];
         
         console.log(character);
-        preencherTime(character);
-        desenharPersonagemNaBatalha(character);
+        pushTeam(character);
+        drawCrew(character);
     });
+
+    window.debugTeam = team;
+    console.log("Time pronto. Digite 'debugTeam' no console para acessar.");
 }
     
     //INTERATIVIDADE DOS MENUS
@@ -75,6 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Abrir o Painel de Recrutamento
     recruitIcon.addEventListener('click', () => {
         recruitPanel.classList.remove('hidden');
+        
+        //DEBUG 
+        team.forEach(character => {
+
+        pushTeam(character);
+        drawCrew(character);
+    });
+
     });
 
     // Abrir o Painel de Habilidades
@@ -140,10 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //funcoes
 
-    function preencherTime(character) {
+    function pushTeam(character) {
     // Encontra o primeiro slot vazio no painel
     const firstEmptySlot = teamRoster.querySelector('.empty-slot');
-
+    
+    const existingCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
+    
+    if(existingCard){
+        return;
+    }
     if (firstEmptySlot) {
         // Cria o HTML para o novo membro do time
         const newPortraitHTML = `
@@ -161,13 +177,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Adiciona o HTML ao slot
         firstEmptySlot.innerHTML = newPortraitHTML;
         firstEmptySlot.classList.remove('empty-slot');
-        firstEmptySlot.dataset.memberId = character.name;
+        
+        firstEmptySlot.dataset.id = character.id;
 
-        // --- ATUALIZAÇÃO IMPORTANTE ---
-        // Agora, contamos quantos slots estão preenchidos de verdade
         const filledSlots = teamRoster.querySelectorAll('.team-member-portrait:not(.empty-slot)').length;
         
-        // E atualizamos o título dinamicamente
         teamPanelTitle.textContent = `Seu Time (${filledSlots}/6)`;
 
     } else {
@@ -175,65 +189,66 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 
-function desenharPersonagemNaBatalha(character) {
-        
-        // --- Lógica para Efeitos ---
-        // Cria os ícones de efeito (se houver)
-        let effectsHTML = '';
-        if (character.effects && Array.isArray(character.effects)) {
-            character.effects.forEach(effect => {
-                // Só mostra o ícone se a duração for > 0
-                if (effect.duration > 0) {
-                    effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
-                        ${effect.icon}
-                    </div>`;
-                }
-            });
-        }
+function drawCrew(character) {
+    
+    // efeitos
+    let effectsHTML = '';
+    if (character.effects && Array.isArray(character.effects)) {
+        character.effects.forEach(effect => {
+            if (effect.duration > 0) {
+                effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
+                    ${effect.icon}
+                </div>`;
+            }
+        });
+    }
 
-        const newPlayerCardHTML = `
-            <div class="player-card" data-member-id="${character.name}">
-                
-                <div class="player-name">${character.name}</div>
-                
-                <div class="player-sprite"></div>
-                
-                <div class="player-lvl">Lvl ${character.lvl}</div>
-                
-                <div class="player-stats-area">
+    // Procura se o card deste personagem já existe na tela
 
-                    <div class="player-atk">
-                        ATK: ${character.currentStats.damage}
-                    </div>
-                
-                    <div class="stat-bar-container hp-bar">
-                        <div class="bar-text hp-text">
-                            ${character.currentStats.hp} / ${character.stats.hp}
-                        </div>
-                        <div class="armor-text">
-                            ${character.stats.armor}
-                        </div>
-                        <div class="hp-bar-fill" style="width: ${(character.currentStats.hp / character.stats.hp) * 100}%"></div>
-                    </div>
+    
+    const existingCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
 
-                    <div class="stat-bar-container mana-bar">
-                        <div class="bar-text mana-text">
-                            ${character.currentStats.mana} / ${character.stats.mana}
-                        </div>
-                        <div class="mana-bar-fill" style="width: ${(character.currentStats.mana / character.stats.mana) * 100}%"></div>
-                    </div>
-
-                    <div class="player-effects">
-                        ${effectsHTML}
-                    </div>
-
+    const newInnerCardHTML = `
+        <div class="player-name">${character.name}</div>
+        <div class="player-sprite"></div>
+        <div class="player-lvl">Lvl ${character.lvl}</div>
+        <div class="player-stats-area">
+            <div class="player-atk">
+                ATK: ${character.currentStats.damage}
+            </div>
+            <div class="stat-bar-container hp-bar">
+                <div class="bar-text hp-text">
+                    ${character.currentStats.hp} / ${character.stats.hp}
                 </div>
+                <div class="armor-text">
+                    ${character.stats.armor}
+                </div>
+                <div class="hp-bar-fill" style="width: ${(character.currentStats.hp / character.stats.hp) * 100}%"></div>
+            </div>
+            <div class="stat-bar-container mana-bar">
+                <div class="bar-text mana-text">
+                    ${character.currentStats.mana} / ${character.stats.mana}
+                </div>
+                <div class="mana-bar-fill" style="width: ${(character.currentStats.mana / character.stats.mana) * 100}%"></div>
+            </div>
+            <div class="player-effects">
+                ${effectsHTML}
+            </div>
+        </div>
+    `;
+
+    if (existingCard) {
+        existingCard.innerHTML = newInnerCardHTML;
+        
+    } else {
+        playerArea.innerHTML += `
+            <div class="player-card" data-id="${character.id}">
+                ${newInnerCardHTML}
             </div>
         `;
-        
-        playerArea.innerHTML += newPlayerCardHTML;
     }
-});
+}
+
 
 
 

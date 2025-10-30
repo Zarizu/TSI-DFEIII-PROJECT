@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
     // animacao de queda de emojis
     const animationContainer = document.querySelector('.background-animation');
     const numberOfIcons = 12; 
@@ -91,4 +90,3 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = './pages/main.html';
     });
     updateUI();
-});

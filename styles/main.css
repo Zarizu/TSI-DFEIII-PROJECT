@@ -278,7 +278,7 @@ body {
     font-weight: bold;
     line-height: 18px;
     color: var(--mana-color); /* Azul, como pedido */
-    -webkit-text-stroke: 1px black; /* Contorno preto */
+    -webkit-text-stroke: 1px rgb(12, 57, 94); /* Contorno preto */
 }
 
 /* Barras de 'Fill' (HP e Mana) */

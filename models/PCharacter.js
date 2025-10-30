@@ -10,13 +10,13 @@ class PCharacter extends Character {
 
     levelUp() {
         if(this.lvl<=10){
-        this.lvl += 1;
-        this.recalculateAll();
-        this.experienceGap = lvl * 100;
-        this.experience = 0;
-        return this.lvl;
+            this.lvl += 1;
+            this.experienceGap = this.lvl * 100;
+            this.experience = 0;
+            this.recalculateAll();
+            return this.lvl;
         }else{
-            
+            return false;
         }
     }
 

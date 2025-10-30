@@ -1,6 +1,24 @@
+const ID_COUNTER_KEY = 'gameCharacterIdCounter';
+
+function getNextCharacterId() {
+    let nextId = localStorage.getItem(ID_COUNTER_KEY);
+
+    if (nextId === null) {
+        nextId = 1;
+    } else {
+        nextId = parseInt(nextId, 10);
+    }
+    
+    localStorage.setItem(ID_COUNTER_KEY, (nextId + 1).toString());
+
+    return nextId;
+}
 // personagem generico
 class Character {
     constructor(name, attributes, lvl , tier = 1) {
+        //id universal
+        this.id =  getNextCharacterId();
+
         this.name = name;
         this.lvl = lvl;
         this.attributes = attributes;
