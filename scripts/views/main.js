@@ -1,4 +1,4 @@
-
+const inimgo = new Enemy('Xuxo',{atk: 2,con: 3,int:1});
 // Painel Esquerdo
 const teamRoster = document.getElementById('team-roster');
 const skillsIcon = document.getElementById('skills-icon');
@@ -14,7 +14,8 @@ const skillsPanel = document.getElementById('skills-panel');
 const enemyTooltip = document.getElementById('enemy-tooltip');
 // Botões de Fechar
 const closeButtons = document.querySelectorAll('.close-panel-btn');
-let team = []
+let team = [];
+let enemy_team = [];
 //importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData){
@@ -32,7 +33,8 @@ if(firstCharData){
     updateSquad(firstChar);
     
 } else {
-    localStorage.setItem(ID_COUNTER_KEY,1);
+
+localStorage.setItem(ID_COUNTER_KEY,1);
 localStorage.removeItem('FirstCharData');
 console.warn(`Falha ao carregar dados. Criando time de DEBUG com 6 membros.`);
 

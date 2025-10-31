@@ -15,7 +15,7 @@ function getNextCharacterId() {
 }
 // personagem generico
 class Character {
-    constructor(name, attributes, lvl , tier = 1) {
+    constructor(name, attributes, lvl = 1 , tier = 1) {
         //id universal
         this.id =  getNextCharacterId();
 
@@ -37,7 +37,7 @@ class Character {
     recalculateAll() {
         this.modifiers = {
             "damage": 2 + this.lvl,
-            "atkSpeed" : 1 + this.lvl,
+            "initiative" : 1 + this.lvl,
             "hp": 5 + this.lvl,
             "armor": 1 + this.lvl,
             "mana": 2 + this.lvl,
@@ -47,7 +47,7 @@ class Character {
         //esses stats n devem ser modificados diretamente, apenas utilizados para gerar outros stats,
         this.stats = {
             "damage" : this.modifiers['damage'] * this.attributes.atk * this.tier,
-            "atkSpeed" : this.modifiers['atkSpeed'] * this.attributes.atk * this.tier,
+            "initiative" : this.modifiers['initiative'] * this.attributes.atk * this.tier,
             "hp" : this.modifiers['hp'] * this.attributes.con * this.tier,
             "armor" : this.modifiers['armor'] * this.attributes.con * this.tier,
             "mana" : this.modifiers['mana'] * this.attributes.int * this.tier,
@@ -58,30 +58,27 @@ class Character {
         
     }
 
-    ShowAttributes() {
+    showAttributes() {
         console.log(`--- Atributos de ${this.name} ---`);
         Object.keys(this.attributes).forEach(key => {
             console.log(`${key}: ${this.attributes[key]}`); 
         });
     }
 
-    ShowStats() {
+    showStats() {
         console.log(`--- Stats de ${this.name} ---`);
         Object.keys(this.stats).forEach(key => {
             console.log(`${key}: ${this.stats[key]}`); 
         });
     }
 
-    getName() {
-        return this.name;
-    }
-
-    getAttributes() {
-        return this.attributes; 
-    }
-
-    getStats() {
-        return this.stats; 
+    meleeAttack(target){
+        let damage =  this.stats.damage - target.stats.armor;
+        if(damage < 1)damage = 1;
+        target.currentStats.hp -= damage;
+        console.log(`${this.name} ataca ${target.name} `);
+        
+        return damage;
     }
 
 }
