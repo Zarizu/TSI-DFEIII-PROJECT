@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo Principal</title>
     
-    <link rel="stylesheet" href="../styles/main.css">
+
+    <script src="../utils/main_functions.js" defer></script>
 
     <script src="../models/GameManager.js" defer></script>
     <script src="../models/PlayerManager.js" defer></script>
@@ -13,7 +14,10 @@
     <script src="../models/PCharacter.js" defer></script>
     <script src="../models/Enemy.js" defer></script>
     
-    <script src="../scripts/views/main.js" defer></script>
+    <script src="../scripts/views/main-views.js" defer></script>
+    <script src="../scripts/main.js" defer></script>
+
+        <link rel="stylesheet" href="../styles/main.css">
 </head>
 <body>
 
@@ -21,12 +25,6 @@
         <div class="panel-title">Esquadrão (0/6)</div>
         
         <div id="team-roster">
-            <div class="team-member-portrait empty-slot" disabled></div>
-            <div class="team-member-portrait empty-slot" disabled></div>
-            <div class="team-member-portrait empty-slot" disabled></div>
-            <div class="team-member-portrait empty-slot" disabled></div>
-            <div class="team-member-portrait empty-slot" disabled></div>
-            <div class="team-member-portrait empty-slot" disabled></div>
         </div>
 
         <div id="skills-icon" class="panel-icon" title="Habilidades Ativas">
