@@ -19,13 +19,16 @@ let team = []
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData){
     localStorage.setItem(ID_COUNTER_KEY,1);
+
     firstCharData = JSON.parse(firstCharData);
     let attributes = firstCharData.attributes
     
     const firstChar = new PCharacter(firstCharData.name, attributes);
     firstChar.effects = []; 
     localStorage.removeItem('FirstCharData');
-    team = [firstChar];
+    team.push(firstChar);
+    console.log(firstChar);
+    
     updateSquad(firstChar);
     
 } else {
@@ -55,10 +58,7 @@ team.forEach(character => {
     console.log(character);
     updateSquad(character);
 });
-window.debugTeam = team;
-console.log("Time pronto. Digite 'debugTeam' no console para acessar.");
-
-
+}
 //INTERATIVIDADE DOS MENUS
 // Abrir o Painel de Recrutamento
 recruitIcon.addEventListener('click', () => {
@@ -125,7 +125,20 @@ enemyArea.addEventListener('mousemove', (event) => {
     }
 });
 //funcoes
-
+function addCharToSquad(character) {
+    if(team.includes(character)){
+        console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
+        return;
+    }
+    if (team.length >= 6) {
+        console.warn(`Time cheio! Não foi possível adicionar ${character.name}.`);
+        return;
+    }
+    team.push(character);
+    
+    // Chama as funções de desenho
+    updateSquad(character);
+}
 function updateSquad(character){
     drawCrew(character);
     drawRoster(character);
@@ -231,7 +244,6 @@ function drawCrew(character) {
             </div>
         `;
     }
-}
 }
 
 
