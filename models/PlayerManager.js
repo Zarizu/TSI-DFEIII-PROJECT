@@ -21,4 +21,4 @@ PlayerManager.prototype.minusGold = function(n){
     return this.gold;
 }
 
-const playerManager = new Player();
+const PLAYER_MANAGER = new PlayerManager();

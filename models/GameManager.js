@@ -12,3 +12,5 @@ GameManager.prototype.passRound = function(){
     this.round +=1;
     return this.round;
 }
+
+const GAME_MANAGER = new GameManager();

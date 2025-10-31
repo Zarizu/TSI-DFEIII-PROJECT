@@ -1,4 +1,9 @@
 const inimgo = new Enemy('Xuxo',{atk: 2,con: 3,int:1});
+
+//num de rodadas
+const roundNumber = document.getElementById('round-number');
+//moedas atuais
+const goldAmount = document.getElementById('gold-amount');
 // Painel Esquerdo
 const teamRoster = document.getElementById('team-roster');
 const skillsIcon = document.getElementById('skills-icon');
@@ -14,6 +19,16 @@ const skillsPanel = document.getElementById('skills-panel');
 const enemyTooltip = document.getElementById('enemy-tooltip');
 // Botões de Fechar
 const closeButtons = document.querySelectorAll('.close-panel-btn');
+
+//DEBUG
+PLAYER_MANAGER.addGold(100);
+roundNumber.textContent = GAME_MANAGER.getRound();
+goldAmount.textContent = PLAYER_MANAGER.getGold();
+
+/*
+fazer sistema de rodadas
+*/
+
 let team = [];
 let enemy_team = [];
 //importação do personagem

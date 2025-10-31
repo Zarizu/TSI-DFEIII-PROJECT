@@ -341,17 +341,26 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    border-radius: 50%;
-    width: 30px; /* Tamanho ajustado */
-    height: 30px;
-    line-height: 30px; /* Centraliza o emoji */
-    padding: 10px; /* Aumenta a área de clique */
+    z-index: 50;
+
+    background-color: var(--panel-bg);
     border: 2px solid var(--gold-color);
     color: var(--gold-color);
+    border-radius: 8px;
+    padding: 12px 20px; 
+    
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase; 
+    
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
+
 #recruit-icon:hover {
     background-color: var(--gold-color);
-    color: var(--panel-bg);
+    color: var(--panel-bg); 
 }
 
 /* =================================
@@ -456,6 +465,7 @@ body {
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    z-index: 49;
 
     transform: translateX(100%);
     
@@ -464,6 +474,7 @@ body {
 
 .side-panel.is-open {
     transform: translateX(0); 
+    z-index: 51;
 }
 
 /*ouro do jogador*/
@@ -487,13 +498,12 @@ body.shop-is-open #player-gold-display {
 }
 
 #round-display {
-    position: absolute; /* Flutua sobre a área de batalha */
-    top: 20px;          /* 20px do topo */
-    left: 50%;          /* 50% da esquerda */
-    transform: translateX(-50%); /* Puxa de volta 50% do seu próprio tamanho */
+    position: absolute; 
+    top: 20px;          
+    left: 50%;          
+    transform: translateX(-50%); 
 
-    /* Estilo visual */
-    background-color: rgba(0, 0, 0, 0.4); /* Fundo suave */
+    background-color: rgba(0, 0, 0, 0.4); 
     padding: 8px 25px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -503,5 +513,5 @@ body.shop-is-open #player-gold-display {
     color: var(--gold-color);
     text-shadow: 0 0 5px rgba(0,0,0,0.7);
     
-    z-index: 10; /* Garante que fique acima da área de inimigos */
+    z-index: 10;
 }
