@@ -32,6 +32,9 @@
     </aside>
 
     <main id="battlefield">
+        <div id="round-display">
+            Rodada <span id="round-number">1</span>
+        </div>
         <div id="enemy-area">
             <div class="enemy-card" data-enemy-id="enemy1">
                 <div class="enemy-name">Goblin</div>
@@ -55,18 +58,18 @@
     <div id="recruit-icon" class="panel-icon" title="Recrutar">
         💰 </div>
 
-    <aside id="recruit-panel" class="side-panel hidden">
+    <aside id="recruit-panel" class="side-panel">
         <button class="close-panel-btn" data-target-panel="recruit-panel">X</button>
-        <div class="panel-title">Mercenários</div>
+        <div class="panel-title">Recrutar</div>
         <div class="panel-content">
             <div class="mercenary-for-hire">
                 <span class="mercenary-name">Arqueiro Elfo</span>
-                <span class="mercenary-cost">Custo: 50 💰</span>
+                <span class="mercenary-cost">Custo: 50</span>
                 <button class="recruit-btn">Recrutar</button>
             </div>
             <div class="mercenary-for-hire">
                 <span class="mercenary-name">Guerreiro Anão</span>
-                <span class="mercenary-cost">Custo: 75 💰</span>
+                <span class="mercenary-cost">Custo: 75</span>
                 <button class="recruit-btn">Recrutar</button>
             </div>
         </div>
@@ -77,6 +80,7 @@
             <button class="close-panel-btn" data-target-panel="skills-panel">X</button>
             <div class="panel-title">Habilidades Ativas</div>
             <div class="panel-content">
+                <div class="active-skill">DEBUG</div>
                 <div class="active-skill">Cura Leve (Passiva)</div>
                 <div class="active-skill">Aura de Fogo (Ativa)</div>
             </div>
@@ -90,5 +94,8 @@
         <p>ATK: <span id="tooltip-atk">3</span></p>
     </div>
 
+    <div id="player-gold-display">
+        <span id="gold-amount">0</span> 💰
+    </div>
 </body>
 </html>

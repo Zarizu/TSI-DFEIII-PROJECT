@@ -64,12 +64,8 @@ team.forEach(character => {
 //INTERATIVIDADE DOS MENUS
 // Abrir o Painel de Recrutamento
 recruitIcon.addEventListener('click', () => {
-    recruitPanel.classList.remove('hidden');
-    
-    //DEBUG 
-    team.forEach(character => {
-    updateSquad(character);
-});
+    recruitPanel.classList.add('is-open');
+    document.body.classList.add('shop-is-open');
 });
 // Abrir o Painel de Habilidades
 skillsIcon.addEventListener('click', () => {
@@ -81,10 +77,12 @@ closeButtons.forEach(button => {
         // Pega o ID do painel que este botão deve fechar
         // (Nós definimos isso no HTML com 'data-target-panel')
         const panelId = button.dataset.targetPanel;
-        if (panelId) {
-            document.getElementById(panelId).classList.add('hidden');
-        } else {
-            // Fallback se for um modal
+        
+        if (panelId === 'recruit-panel') {
+            recruitPanel.classList.remove('is-open');
+            document.body.classList.remove('shop-is-open');
+            
+        } else if(panelId === 'skills-panel') {
             skillsPanel.classList.add('hidden');
         }
     });
