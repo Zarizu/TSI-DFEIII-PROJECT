@@ -104,3 +104,17 @@ function drawCrew(character) {
         `;
     }
 }
+function addCharToSquad(character) {
+    if(team.includes(character)){
+        console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
+        return;
+    }
+    if (team.length >= 6) {
+        console.warn(`Time cheio! Não foi possível adicionar ${character.name}.`);
+        return;
+    }
+    team.push(character);
+    
+    // Chama as funções de desenho
+    updateSquad(character);
+}

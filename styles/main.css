@@ -498,7 +498,7 @@ body.shop-is-open #player-gold-display {
     right: 320px; 
 }
 
-#Phase-display {
+#phase-display {
     position: absolute;
     top: 20px; 
     left: 50%;

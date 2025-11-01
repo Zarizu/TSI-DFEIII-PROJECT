@@ -1,7 +1,9 @@
 //DEBUG
 PLAYER_MANAGER.addGold(100);
 roundNumber.textContent = GAME_MANAGER.getRound();
+phaseNumber.textContent = GAME_MANAGER.getPhase();
 goldAmount.textContent = PLAYER_MANAGER.getGold();
+
 
 /*
 fazer sistema de rodadas
@@ -10,6 +12,7 @@ fazer sistema de rodadas
 
 let team = [];
 let enemy_team = [];
+let playerActions = {};
 
 //importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
@@ -118,18 +121,4 @@ enemyArea.addEventListener('mousemove', (event) => {
         enemyTooltip.style.top = `${event.pageY + 10}px`;
     }
 });
-//funcoes
-function addCharToSquad(character) {
-    if(team.includes(character)){
-        console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
-        return;
-    }
-    if (team.length >= 6) {
-        console.warn(`Time cheio! Não foi possível adicionar ${character.name}.`);
-        return;
-    }
-    team.push(character);
-    
-    // Chama as funções de desenho
-    updateSquad(character);
-}
+

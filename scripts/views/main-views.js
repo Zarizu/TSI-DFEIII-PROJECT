@@ -2,6 +2,8 @@ const inimgo = new Enemy('Xuxo',{atk: 2,con: 3,int:1});
 
 //num de rodadas
 const roundNumber = document.getElementById('round-number');
+
+const phaseNumber = document.getElementById('phase-number');
 //moedas atuais
 const goldAmount = document.getElementById('gold-amount');
 // Painel Esquerdo
