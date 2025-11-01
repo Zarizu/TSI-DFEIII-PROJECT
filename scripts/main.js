@@ -5,6 +5,7 @@ goldAmount.textContent = PLAYER_MANAGER.getGold();
 
 /*
 fazer sistema de rodadas
+
 */
 
 let team = [];

@@ -104,6 +104,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    position: relative;
 }
 
 /* Área dos Inimigos (Topo) */
@@ -497,21 +498,39 @@ body.shop-is-open #player-gold-display {
     right: 320px; 
 }
 
-#round-display {
-    position: absolute; 
-    top: 20px;          
-    left: 50%;          
+#Phase-display {
+    position: absolute;
+    top: 20px; 
+    left: 50%;
     transform: translateX(-50%); 
+    z-index: 10;
+    text-transform: uppercase;
 
-    background-color: rgba(0, 0, 0, 0.4); 
-    padding: 8px 25px;
-    border-radius: 12px;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 10px 15px;
+    border-radius: 15px;
     border: 1px solid var(--border-color);
     
-    font-size: 1.4em;
+    font-size: 1.4em; 
     font-weight: bold;
-    color: var(--gold-color);
+    color: var(--gold-color); 
     text-shadow: 0 0 5px rgba(0,0,0,0.7);
-    
+}
+
+#round-display {
+    position: absolute;
+    top: 80px; 
+    left: 50%;
+    transform: translateX(-50%); 
     z-index: 10;
+    text-transform: capitalize;
+    
+    background-color: transparent; 
+    padding: 5px 15px;
+    border: none;
+    
+    font-size: 1.2em; 
+    font-weight: bold;
+    color: var(--text-color); 
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
 }
