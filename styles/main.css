@@ -1,3 +1,15 @@
+/*animacao cards float*/
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+    }
 /* =================================
     Configurações Globais e Layout
 ==================================== */
@@ -258,7 +270,7 @@ body {
     justify-content: center;
     gap: 8px;
     width: 100%;
-    margin-bottom: 5px; /* Espaço entre os ícones e o nome */
+    margin-bottom: 5px; 
 }
 
 .action-icon {
@@ -267,7 +279,7 @@ body {
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    border: 2px solid transparent; /* Borda para o 'selected' */
+    border: 3px solid transparent;
     transition: all 0.2s ease;
 }
 
@@ -280,6 +292,14 @@ body {
     box-shadow: 0 0 10px var(--gold-color);
     transform: scale(1.1);
 }
+
+.action-icon.action-defined {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.3);
+    box-shadow: 0 0 10px #4CAF50;
+    transform: scale(1.1);
+}
+
 /* Container (para Barras de HP e Mana) */
 .stat-bar-container {
     width: 100%;
@@ -625,27 +645,6 @@ body.targeting-active {
     cursor: not-allowed !important;
 }
 
-/* O cursor VIRA a mira quando está sobre um inimigo */
-body.targeting-active .enemy-card {
-    cursor: crosshair !important; 
-}
-
-body.targeting-active .enemy-card:hover {
-    box-shadow: 0 0 25px var(--hp-color); 
-    border-color: var(--hp-color);
-    transform: translateY(-5px) scale(1.05);
-}
-
-body.targeting-active .player-card {
-    opacity: 0.7;
-    transition: opacity 0.2s, box-shadow 0.2s;
-}
-
-body.targeting-active .player-card.is-targeting {
-    opacity: 1;
-    box-shadow: 0 0 15px var(--gold-color);
-    border-color: var(--gold-color);
-}
 /* POPUP de acao*/
 #battle-message-popup {
     position: absolute; 
@@ -675,8 +674,80 @@ body.targeting-active .player-card.is-targeting {
     
 }
 
-/* O estado "visível" que o JS vai adicionar */
 #battle-message-popup.show {
     opacity: 1;
     top: 0;
+}
+
+#blur-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100; 
+    
+    
+    backdrop-filter: blur(4px);
+    
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#blur-backdrop.is-active {
+    opacity: 1;
+    pointer-events: auto; 
+}
+
+body.targeting-enemy #blur-backdrop {
+    cursor: not-allowed !important; 
+}
+
+body.targeting-enemy .enemy-card {
+    cursor: crosshair !important; 
+}
+
+body.targeting-enemy .enemy-card {
+    position: relative;
+    z-index: 101; 
+    animation: float 1.5s ease-in-out infinite;
+}
+
+body.targeting-enemy .enemy-card:hover {
+    background-color: #5e2a2a; 
+    border-color: var(--hp-color);
+    box-shadow: 0 0 25px var(--hp-color);
+    transform: translateY(-5px) scale(1.05);
+}
+
+body.targeting-ally #blur-backdrop {
+    cursor: not-allowed !important;
+}
+
+body.targeting-ally .player-card {
+    cursor: cell !important; 
+}
+
+body.targeting-ally .player-card {
+    position: relative;
+    z-index: 101; 
+    animation: float 3s ease-in-out infinite;
+}
+
+body.targeting-ally .player-card:hover {
+    background-color: #2a5e3a; 
+    border-color: #4CAF50;
+    box-shadow: 0 0 20px #4CAF50;
+}
+
+body.targeting-enemy .player-card.is-targeting,
+body.targeting-ally .player-card.is-targeting {
+    position: relative;
+    z-index: 101;
+    opacity: 1;
+    box-shadow: 0 0 15px var(--gold-color);
+    border-color: var(--gold-color);
 }

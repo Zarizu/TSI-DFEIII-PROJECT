@@ -1,37 +1,19 @@
-//popup para cancelar acao
 const battleMessagePopup = document.getElementById('battle-message-popup');
-
-//botao comecar batalha
-const startBattleButton = document.getElementById('start-battle-btn')
-
-//num das rodadas e das fases atuais
+const startBattleButton = document.getElementById('start-battle-btn');
 const roundNumber = document.getElementById('round-number');
 const phaseNumber = document.getElementById('phase-number');
-
-//moedas atuais
 const goldAmount = document.getElementById('gold-amount');
-
-// Painel Esquerdo
 const teamRoster = document.getElementById('team-roster');
 const skillsIcon = document.getElementById('skills-icon');
 const teamPanelTitle = document.querySelector('#team-panel .panel-title');
-
-// Área de Batalha
 const enemyArea = document.getElementById('enemy-area');
 const playerArea = document.getElementById('player-area');
-
-// botões interativos
 const recruitIcon = document.getElementById('recruit-icon');
-
-// Painéis Ocultos
 const recruitPanel = document.getElementById('recruit-panel');
 const skillsPanel = document.getElementById('skills-panel');
 const enemyTooltip = document.getElementById('enemy-tooltip');
-
-// Botões de Fechar
 const closeButtons = document.querySelectorAll('.close-panel-btn');
-
-
+const blurBackdrop = document.getElementById('blur-backdrop');
 
 //add menu lateral esquerdo
 const MAX_TEAM_SIZE = 6;
@@ -51,49 +33,73 @@ for (let i = 0; i < MAX_TEAM_SIZE; i++) {
 startBattleButton.addEventListener('click', executeRound);
 
 playerArea.addEventListener('click', (event) => {
-
-    // Se estamos em modo de mira, clicar na área do jogador CANCELA a mira.
-    if (BATTLE_MANAGER.isCurrentlyTargeting()) {
-        console.log("[Main] Mira cancelada (clique na área do time)");
-        BATTLE_MANAGER.resetTargeting(true); // Chama o método do gerenciador
-        return;
-    }
     
-    // Verifica se o clique foi em um ícone de ação
+    if (BATTLE_MANAGER.isCurrentlyTargeting()) {
+        
+        if (BATTLE_MANAGER.skillTargetType === 'ally') {
+            
+            const clickedAllyCard = event.target.closest('.player-card');
+            
+            if (clickedAllyCard) {
+                
+                const allyId = clickedAllyCard.dataset.id;
+                console.log(`[Main] Alvo aliado ${allyId} confirmado.`);
+                
+                
+                BATTLE_MANAGER.confirmTarget(allyId); 
+            } else {
+                
+                console.log("[Main] Mira cancelada (clique na área do time)");
+                BATTLE_MANAGER.resetTargeting(true);
+            }
+        } else {
+            
+            console.log("[Main] Mira cancelada (clique na área do time)");
+            BATTLE_MANAGER.resetTargeting(true);
+        }
+        return; 
+    }
+
     const clickedIcon = event.target.closest('.action-icon');
     if (!clickedIcon) return; 
 
-    // Pega o card e o ID do personagem
     const card = clickedIcon.closest('.player-card');
-    const characterId = card.dataset.id;
+    const characterId = card.dataset.id; 
     const actionType = clickedIcon.dataset.actionType;
 
-    // Atualiza a UI (remove 'selected' de todos, adiciona no clicado)
     card.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
+        icon.classList.remove('action-defined'); 
     });
-
     delete window.playerActions[characterId];
-
-    if (actionType === 'rest') {
-        // descanso
-        const character = window.team.find(char => char.id == characterId);
-        const charName = character ? character.name : `ID ${characterId}`;
-
-        console.log(`[DEBUG]: Personagem ${characterId}:${charName} escolheu Descansar`);
-        window.playerActions[characterId] = { type: 'rest' };
-        clickedIcon.classList.add('selected');
-        checkBattleReady();
-    } else {
-        // melee ou skill
-        BATTLE_MANAGER.startTargeting(characterId, card, actionType);
-    }
     
-    // (Lógica futura: se clicar em "Habilidades" 📜,
-    //  você abriria um modal de skills aqui)
+    const charIdNum = parseInt(characterId, 10);
+    const character = window.team.find(char => char.id === charIdNum);
+    
+    if (!character) {
+        console.error(`[Main] Erro: Não foi possível encontrar o personagem com ID ${characterId}`);
+        return;
+    }
 
-    checkBattleReady();
+    if (actionType === 'melee') {
+        
+        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'melee', 'enemy');
+
+    } else if (actionType === 'skill') {
+        // Inicia a mira (vamos simular cura em aliado)
+        console.log(`Abrir modal de skills para ${character.name}`);
+        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'skill', 'ally');
+
+    } else if (actionType === 'rest') {
+        console.log(`[Main] Personagem ${character.name} escolheu Descansar`);
+        window.playerActions[characterId] = { type: 'rest' };
+        
+        clickedIcon.classList.add('action-defined');
+        
+        checkBattleReady();
+    }
 });
+
 // Abrir o Painel de Recrutamento
 recruitIcon.addEventListener('click', () => {
     recruitPanel.classList.add('is-open');
@@ -119,17 +125,17 @@ closeButtons.forEach(button => {
 });
 
 enemyArea.addEventListener('click', (event) => {
-    // Só funciona se o gerenciador estiver no modo de mira
-    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    if (!BATTLE_MANAGER.isCurrentlyTargeting() || BATTLE_MANAGER.skillTargetType !== 'enemy') {
+        return;
+    }
 
     const enemyCard = event.target.closest('.enemy-card');
-    
     if (enemyCard) {
         const enemyId = enemyCard.dataset.id;
-        const enemyName = enemyCard.dataset.name;
         BATTLE_MANAGER.confirmTarget(enemyId);
     }
 });
+
 // Interatividade do Tooltip do Inimigo
 enemyArea.addEventListener('mouseover', (event) => {
     const enemyCard = event.target.closest('.enemy-card');
@@ -144,7 +150,7 @@ enemyArea.addEventListener('mouseover', (event) => {
         // 3. Se encontrou o inimigo, preenche o tooltip com seus dados
         if (enemy) {
             document.getElementById('tooltip-name').textContent = enemy.name;
-            document.getElementById('tooltip-desc').textContent = enemy.description; // <-- USANDO A DESCRIÇÃO!
+            document.getElementById('tooltip-desc').textContent = enemy.description; 
             document.getElementById('tooltip-hp').textContent = `${enemy.currentStats.hp}/${enemy.stats.hp}`;
             document.getElementById('tooltip-atk').textContent = enemy.currentStats.damage;
             
@@ -176,7 +182,20 @@ document.getElementById('battlefield').addEventListener('click', (event) => {
     if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
     
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
-        console.log("[Main] Mira cancelada (clique no fundo)");
+        console.log("[DEBUG] Mira cancelada (clique no fundo)");
         BATTLE_MANAGER.resetTargeting(true); 
     }
 });
+
+document.getElementById('battlefield').addEventListener('click', cancelTargetingHandler);
+document.getElementById('blur-backdrop').addEventListener('click', cancelTargetingHandler);
+
+function cancelTargetingHandler(event) {
+    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    
+    // Se o clique foi no fundo (NÃO em um inimigo ou card de jogador), cancele.
+    if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
+        console.log("[Main] Mira cancelada (clique no fundo)");
+        BATTLE_MANAGER.resetTargeting(true); 
+    }
+}

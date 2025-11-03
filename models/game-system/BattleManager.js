@@ -7,32 +7,45 @@ function BattleManager(popupElement) {
 
     this.popup = popupElement;
     this.skillTargetType = null;
+
+    this.backdrop = document.getElementById('blur-backdrop');
 }
 
-BattleManager.prototype.startTargeting = function(characterId, cardElement, actionType) {
-    // Se já estávamos mirando com outro personagem, cancele a ação anterior
+BattleManager.prototype.startTargeting = function(characterId, characterName, cardElement, actionType, skillTargetType) {
     if (this.isTargeting) {
         this.resetTargeting(true);
     }
 
-    console.log(`[BattleManager] Personagem ${characterId} iniciando mira com ${actionType}`);
-    
-    // Define o estado interno
+    console.log(`[BattleManager] Personagem ${characterId}:${characterName} iniciando mira com ${actionType}`);
+
     this.isTargeting = true;
     this.targetingCharacterId = characterId;
     this.targetingActionType = actionType;
     this.targetingCardElement = cardElement;
+    this.skillTargetType = skillTargetType;
 
-    // Atualiza a UI global
-    document.body.classList.add('targeting-active');
-    // Destaca o card que está mirando
+    if (skillTargetType === 'enemy') {
+        document.body.classList.add('targeting-enemy');
+    } else if (skillTargetType === 'ally') {
+        document.body.classList.add('targeting-ally');
+    }
+
+    const actionIcon = cardElement.querySelector(`.action-icon[data-action-type="${actionType}"]`);
+    if (actionIcon) {
+        actionIcon.classList.add('selected');
+    }
+
     cardElement.classList.add('is-targeting');
-    
+
+    if (this.backdrop) {
+        this.backdrop.classList.add('is-active');
+    }
+
+
     if (this.popup) {
-        this.popup.querySelector('p').textContent = "Clique em um inimigo ou fora para cancelar";
+        this.popup.querySelector('p').textContent = "Clique em um alvo válido ou fora para cancelar";
         this.popup.classList.add('show');
     }
-    // (Lógica futura: se actionType === 'skill', abra o modal de skills aqui)
 }
 
 BattleManager.prototype.confirmTarget = function(enemyId) {
@@ -40,47 +53,49 @@ BattleManager.prototype.confirmTarget = function(enemyId) {
 
     console.log(`[BattleManager] Personagem ${this.targetingCharacterId} mirou no inimigo ${enemyId}`);
 
-    // Define a ação final no 'playerActions' global
     window.playerActions[this.targetingCharacterId] = {
         type: this.targetingActionType,
-        targetId: enemyId // Salva o ID do alvo!
+        targetId: enemyId
     };
     
-    // Atualiza a UI: marca o ícone (👊 ou 📜) como selecionado
     const actionIcon = this.targetingCardElement.querySelector(`.action-icon[data-action-type="${this.targetingActionType}"]`);
     if (actionIcon) {
-        actionIcon.classList.add('selected');
+        actionIcon.classList.remove('selected');
+        actionIcon.classList.add('action-defined'); 
     }
 
-    //Reseta a mira (sem limpar o ícone 'selected')
     this.resetTargeting(false);
+
+    checkBattleReady();
 }
 
 BattleManager.prototype.resetTargeting = function(clearSelectedIcon = true) {
     if (clearSelectedIcon && this.targetingCardElement) {
-        // Remove a ação do "cérebro"
         delete window.playerActions[this.targetingCharacterId];
         
-        // Limpa a UI do card
         this.targetingCardElement.querySelectorAll('.action-icon').forEach(icon => {
             icon.classList.remove('selected');
+            icon.classList.remove('action-defined'); 
         });
     }
 
-    // Limpa a classe do card que estava mirando
     if (this.targetingCardElement) {
         this.targetingCardElement.classList.remove('is-targeting');
     }
 
-    // Reseta as variáveis internas
     this.isTargeting = false;
     this.targetingCharacterId = null;
     this.targetingActionType = null;
     this.targetingCardElement = null;
+    this.skillTargetType = null;
     
-    // Limpa a classe do body (muda o cursor de volta)
-    document.body.classList.remove('targeting-active');
+    document.body.classList.remove('targeting-enemy');
+    document.body.classList.remove('targeting-ally');
     
+    if (this.backdrop) {
+        this.backdrop.classList.remove('is-active');
+    }
+
     if (this.popup) {
         this.popup.classList.remove('show');
     }

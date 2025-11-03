@@ -1,11 +1,10 @@
 //logica e sistemas
 
 function checkBattleReady() {
-    const actionsSet = Object.keys(playerActions).length;
+    const actionsSet = Object.keys(window.playerActions).length;
     const teamSize = window.team.length;
     
-    // Só permite começar se o time tiver membros
-    if (actionsSet === teamSize) {
+    if (teamSize > 0 && actionsSet === teamSize) {
         startBattleButton.disabled = false;
         startBattleButton.textContent = "Começar Batalha!";
     } else {
@@ -30,9 +29,10 @@ function executeRound() {
     roundNumber.textContent = GAME_MANAGER.passRound();
     
     // Limpa as ações para o próximo round
-    playerActions = {};
+    window.playerActions = {};
     playerArea.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
+        icon.classList.remove('action-defined'); 
     });
 
     // Desabilita o botão novamente
