@@ -1,4 +1,3 @@
-
 function BattleManager(popupElement) {
     this.isTargeting = false;
     this.targetingCharacterId = null;

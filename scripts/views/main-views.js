@@ -15,6 +15,7 @@ const enemyTooltip = document.getElementById('enemy-tooltip');
 const closeButtons = document.querySelectorAll('.close-panel-btn');
 const blurBackdrop = document.getElementById('blur-backdrop');
 
+
 //add menu lateral esquerdo
 const MAX_TEAM_SIZE = 6;
 for (let i = 0; i < MAX_TEAM_SIZE; i++) {
@@ -60,6 +61,7 @@ playerArea.addEventListener('click', (event) => {
         return; 
     }
 
+
     const clickedIcon = event.target.closest('.action-icon');
     if (!clickedIcon) return; 
 
@@ -98,6 +100,35 @@ playerArea.addEventListener('click', (event) => {
         
         checkBattleReady();
     }
+});
+
+playerArea.addEventListener('mouseover', (event) => {
+    if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
+
+    const playerCard = event.target.closest('.player-card');
+    if (!playerCard) return;
+
+    const characterId = playerCard.dataset.id;
+
+    const action = window.playerActions[characterId];
+
+    if (action && action.targetId) {
+        const targetCard = 
+            enemyArea.querySelector(`.enemy-card[data-id="${action.targetId}"]`) ||
+            playerArea.querySelector(`.player-card[data-id="${action.targetId}"]`);
+
+        if (targetCard) {
+            targetCard.classList.add('is-being-targeted');
+        }
+    }
+});
+
+playerArea.addEventListener('mouseout', (event) => {
+    if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
+
+    document.querySelectorAll('.is-being-targeted').forEach(card => {
+        card.classList.remove('is-being-targeted');
+    });
 });
 
 // Abrir o Painel de Recrutamento

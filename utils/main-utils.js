@@ -35,7 +35,11 @@ function executeRound() {
         icon.classList.remove('action-defined'); 
     });
 
-    // Desabilita o botão novamente
+    document.querySelectorAll('.is-being-targeted').forEach(card => {
+    card.classList.remove('is-being-targeted')
+    });
+
+
     checkBattleReady();
 }
 
