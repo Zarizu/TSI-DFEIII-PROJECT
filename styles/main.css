@@ -761,3 +761,43 @@ body.targeting-ally .player-card.is-targeting {
     
     transform: translateY(-5px) scale(1.05) !important; 
 }
+#skill-popup {
+    position: absolute;
+    width: 180px;
+    background-color: var(--panel-bg);
+    border: 2px solid var(--gold-color);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 110;
+    
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+#skill-popup.show {
+    opacity: 1;
+    pointer-events: auto; 
+}
+
+.skill-popup-item {
+    padding: 10px 15px;
+    color: var(--text-color);
+    cursor: pointer;
+    font-weight: bold;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+.skill-popup-item:last-child {
+    border-bottom: none;
+}
+
+.skill-popup-item:hover {
+    background-color: var(--card-bg);
+}
+
+.skill-popup-item.disabled {
+    color: #777;
+    cursor: not-allowed;
+    background-color: transparent;
+}

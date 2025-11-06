@@ -14,7 +14,9 @@ const skillsPanel = document.getElementById('skills-panel');
 const enemyTooltip = document.getElementById('enemy-tooltip');
 const closeButtons = document.querySelectorAll('.close-panel-btn');
 const blurBackdrop = document.getElementById('blur-backdrop');
+const skillPopup = document.getElementById('skill-popup');
 
+let skillPopupTimeout = null;
 
 //add menu lateral esquerdo
 const MAX_TEAM_SIZE = 6;
@@ -83,16 +85,13 @@ playerArea.addEventListener('click', (event) => {
         return;
     }
 
+    if (actionType === 'skill') return;
+
     if (actionType === 'melee') {
         
         BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'melee', 'enemy');
 
-    } else if (actionType === 'skill') {
-        // Inicia a mira (vamos simular cura em aliado)
-        console.log(`Abrir modal de skills para ${character.name}`);
-        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'skill', 'ally');
-
-    } else if (actionType === 'rest') {
+    }else if (actionType === 'rest') {
         console.log(`[Main] Personagem ${character.name} escolheu Descansar`);
         window.playerActions[characterId] = { type: 'rest' };
         
@@ -103,6 +102,23 @@ playerArea.addEventListener('click', (event) => {
 });
 
 playerArea.addEventListener('mouseover', (event) => {
+    const skillIcon = event.target.closest('.action-icon[data-action-type="skill"]');
+    if(skillIcon){
+        clearTimeout(skillPopupTimeout);
+
+        const card = skillIcon.closest('.player-card');
+        if (skillPopup.classList.contains('show') && skillPopup.dataset.cardId === card.dataset.id) {
+            return;
+        }
+
+        const characterId = card.dataset.id;
+        const charIdNum = parseInt(characterId, 10);
+        const character = window.team.find(char => char.id === charIdNum);
+        
+        if (character) {
+            showSkillPopup(character, card, skillIcon);
+        }
+    }
     if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
 
     const playerCard = event.target.closest('.player-card');
@@ -126,9 +142,51 @@ playerArea.addEventListener('mouseover', (event) => {
 playerArea.addEventListener('mouseout', (event) => {
     if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
 
+    if (event.target.closest('.action-icon[data-action-type="skill"]')) {
+        skillPopupTimeout = setTimeout(hideSkillPopup, 300);
+    }
+
     document.querySelectorAll('.is-being-targeted').forEach(card => {
         card.classList.remove('is-being-targeted');
     });
+});
+
+//skills acao popup
+skillPopup.addEventListener('mouseover', () => {
+    clearTimeout(skillPopupTimeout);
+});
+skillPopup.addEventListener('mouseout', () => {
+    skillPopupTimeout = setTimeout(hideSkillPopup, 300);
+});
+
+skillPopup.addEventListener('click', (event) => {
+    const selectedSkillItem = event.target.closest('.skill-popup-item');
+    
+    if (selectedSkillItem && !selectedSkillItem.classList.contains('disabled')) {
+        
+        const skillId = selectedSkillItem.dataset.skillId;
+        const characterId = skillPopup.dataset.characterId;
+        const card = playerArea.querySelector(`.player-card[data-id="${characterId}"]`);
+        
+        const charIdNum = parseInt(characterId, 10);
+        const character = window.team.find(char => char.id === charIdNum);
+        const skill = character.skills.find(s => s.id === skillId);
+        
+        if (!character || !skill || !card) {
+            console.error("Erro ao selecionar a skill. Dados não encontrados.");
+            return;
+        }
+
+        // 3. Limpa seleções antigas
+        card.querySelectorAll('.action-icon').forEach(icon => {
+            icon.classList.remove('selected');
+            icon.classList.remove('action-defined'); 
+        });
+        delete window.playerActions[characterId];
+        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'skill', skill.targetType, skill);
+        
+        hideSkillPopup();
+    }
 });
 
 // Abrir o Painel de Recrutamento
@@ -213,7 +271,6 @@ document.getElementById('battlefield').addEventListener('click', (event) => {
     if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
     
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
-        console.log("[DEBUG] Mira cancelada (clique no fundo)");
         BATTLE_MANAGER.resetTargeting(true); 
     }
 });
@@ -226,7 +283,6 @@ function cancelTargetingHandler(event) {
     
     // Se o clique foi no fundo (NÃO em um inimigo ou card de jogador), cancele.
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
-        console.log("[Main] Mira cancelada (clique no fundo)");
         BATTLE_MANAGER.resetTargeting(true); 
     }
 }

@@ -22,6 +22,7 @@ class Character {
         this.name = name;
         this.lvl = lvl;
         this.attributes = attributes;
+        this.class = 'default';
 
         this.modifiers = null; 
         this.stats = null;

@@ -8,20 +8,23 @@ function BattleManager(popupElement) {
     this.skillTargetType = null;
 
     this.backdrop = document.getElementById('blur-backdrop');
+
+    this.targetingSkill = null;
 }
 
-BattleManager.prototype.startTargeting = function(characterId, characterName, cardElement, actionType, skillTargetType) {
+BattleManager.prototype.startTargeting = function(characterId, characterName, cardElement, actionType, skillTargetType, skillObject = null) {
     if (this.isTargeting) {
         this.resetTargeting(true);
     }
 
-    console.log(`[BattleManager] Personagem ${characterId}:${characterName} iniciando mira com ${actionType}`);
+    console.log(`[BattleManager] Personagem ${characterId}: ${characterName} iniciando mira com ${actionType}`);
 
     this.isTargeting = true;
     this.targetingCharacterId = characterId;
     this.targetingActionType = actionType;
     this.targetingCardElement = cardElement;
     this.skillTargetType = skillTargetType;
+    this.targetingSkill = skillObject;
 
     if (skillTargetType === 'enemy') {
         document.body.classList.add('targeting-enemy');
@@ -48,9 +51,9 @@ BattleManager.prototype.startTargeting = function(characterId, characterName, ca
 }
 
 BattleManager.prototype.confirmTarget = function(enemyId) {
-    if (!this.isTargeting) return; // Checagem de segurança
+    if (!this.isTargeting) return;
 
-    console.log(`[BattleManager] Personagem ${this.targetingCharacterId} mirou no inimigo ${enemyId}`);
+    console.log(`[BattleManager] Personagem ${this.targetingCharacterId} mirou no personagem ${enemyId}`);
 
     window.playerActions[this.targetingCharacterId] = {
         type: this.targetingActionType,
@@ -61,6 +64,11 @@ BattleManager.prototype.confirmTarget = function(enemyId) {
     if (actionIcon) {
         actionIcon.classList.remove('selected');
         actionIcon.classList.add('action-defined'); 
+    }
+
+    if (this.targetingActionType === 'skill' && this.targetingSkill) {
+        window.playerActions[this.targetingCharacterId].skillId = this.targetingSkill.id;
+        window.playerActions[this.targetingCharacterId].skillName = this.targetingSkill.name;
     }
 
     this.resetTargeting(false);
@@ -87,6 +95,7 @@ BattleManager.prototype.resetTargeting = function(clearSelectedIcon = true) {
     this.targetingActionType = null;
     this.targetingCardElement = null;
     this.skillTargetType = null;
+    this.targetingSkill = null;
     
     document.body.classList.remove('targeting-enemy');
     document.body.classList.remove('targeting-ally');

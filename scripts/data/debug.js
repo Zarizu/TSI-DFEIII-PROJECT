@@ -26,6 +26,22 @@ function debugInit(){
             { name: 'Envenenado', icon: '☠️', duration: 2 },
             { name: 'Escudo', icon: '🛡️', duration: 0 } 
         ];
+        if (character.name === 'Mago') {
+            character.skills = [
+                { id: 'fireball', name: 'Bola de Fogo', targetType: 'enemy' },
+                { id: 'ice_shield', name: 'Escudo de Gelo', targetType: 'ally' }
+            ];
+        } else if (character.name === 'Clérigo') {
+            character.skills = [
+                { id: 'heal', name: 'Cura Leve', targetType: 'ally' },
+                { id: 'smite', name: 'Golpe Divino', targetType: 'enemy' }
+            ];
+        } else {
+            // Outros personagens (por enquanto)
+            character.skills = [
+                { id: 'placeholder', name: 'Sem Habilidades', targetType: 'none' }
+            ];
+        }
     updateSquad(character);
     })
 
@@ -42,6 +58,7 @@ function debugInit(){
                 { name: 'Envenenado', icon: '☠️', duration: 0 },
                 { name: 'Escudo', icon: '🛡️', duration: 2 } 
             ];
+
         updateEnemySquad(enemy);
     });
 };

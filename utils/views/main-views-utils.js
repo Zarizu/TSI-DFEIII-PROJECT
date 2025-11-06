@@ -182,3 +182,50 @@ function drawEnemy(enemy) {
 function updateEnemySquad(enemy){
     drawEnemy(enemy);
 }
+function showSkillPopup(character, card, iconElement) {
+    skillPopup.innerHTML = '';
+    
+    if (character.skills && character.skills.length > 0) {
+        character.skills.forEach(skill => {
+            const item = document.createElement('div');
+            item.classList.add('skill-popup-item');
+            item.textContent = skill.name;
+            item.dataset.skillId = skill.id;
+            
+            // Trava skills sem alvo
+            if (skill.targetType === 'none') {
+                item.classList.add('disabled');
+            }
+            skillPopup.appendChild(item);
+        });
+    } else {
+        // Caso o personagem não tenha skills
+        const item = document.createElement('div');
+        item.classList.add('skill-popup-item', 'disabled');
+        item.textContent = '(Sem Habilidades)';
+        skillPopup.appendChild(item);
+    }
+
+    skillPopup.dataset.characterId = character.id;
+    skillPopup.dataset.cardId = card.dataset.id; 
+
+    const iconRect = iconElement.getBoundingClientRect();
+    skillPopup.classList.remove('hidden');
+    
+    const cardRect = card.getBoundingClientRect();
+    const popupWidth = skillPopup.offsetWidth;
+    const cardCenterX = cardRect.left + (cardRect.width / 2);
+    const popupLeft = cardCenterX - (popupWidth / 2);
+    
+    skillPopup.style.left = `${popupLeft}px`;
+    skillPopup.style.top = `${iconRect.top}px`;
+    skillPopup.style.transform = `translateY(calc(-100% - 10px))`;
+    skillPopup.classList.add('show');
+}
+
+function hideSkillPopup() {
+    skillPopup.classList.remove('show');
+    setTimeout(() => {
+        skillPopup.classList.add('hidden');
+    }, 200);
+}
