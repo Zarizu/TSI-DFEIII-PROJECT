@@ -229,3 +229,25 @@ function hideSkillPopup() {
         skillPopup.classList.add('hidden');
     }, 200);
 }
+function drawTurnOrder() {
+    turnOrderList.innerHTML = '';
+
+    if (!window.combatOrder || window.combatOrder.length === 0) return;
+
+    window.combatOrder.forEach((combatant) => {
+        const item = document.createElement('div');
+        item.classList.add('turn-order-item');
+        
+        item.dataset.id = combatant.id;
+
+        if (combatant instanceof PCharacter) {
+            item.classList.add('ally');
+        } else {
+            item.classList.add('enemy');
+        }
+        //imagem futura
+        item.textContent = combatant.name.charAt(0);
+
+        turnOrderList.appendChild(item);
+    });
+}

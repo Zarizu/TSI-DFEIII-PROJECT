@@ -15,6 +15,8 @@ const enemyTooltip = document.getElementById('enemy-tooltip');
 const closeButtons = document.querySelectorAll('.close-panel-btn');
 const blurBackdrop = document.getElementById('blur-backdrop');
 const skillPopup = document.getElementById('skill-popup');
+const turnOrderList = document.getElementById('turn-order-list');
+const turnOrderTooltip = document.getElementById('turn-order-tooltip');
 
 let skillPopupTimeout = null;
 
@@ -281,8 +283,44 @@ document.getElementById('blur-backdrop').addEventListener('click', cancelTargeti
 function cancelTargetingHandler(event) {
     if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
     
-    // Se o clique foi no fundo (NÃO em um inimigo ou card de jogador), cancele.
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
         BATTLE_MANAGER.resetTargeting(true); 
     }
 }
+
+turnOrderList.addEventListener('mouseover', (event) => {
+    const turnItem = event.target.closest('.turn-order-item');
+    if (turnItem) {
+        const charId = parseInt(turnItem.dataset.id, 10);
+        
+        // 2. Encontra o combatente no array 'combatOrder'
+        const combatant = window.combatOrder.find(c => c.id === charId);
+
+        if (combatant) {
+            const tooltipHTML = `
+                <span class="tooltip-turn-name">${combatant.name}</span>
+                <span class="tooltip-turn-stat">Iniciativa: ${combatant.stats.initiative}</span>
+            `;
+            
+            turnOrderTooltip.innerHTML = tooltipHTML;
+            turnOrderTooltip.classList.remove('hidden');
+            turnOrderTooltip.style.left = `${event.pageX + 10}px`;
+            turnOrderTooltip.style.top = `${event.pageY + 10}px`;
+        }
+    }
+});
+
+turnOrderList.addEventListener('mouseout', (event) => {
+    // Esconde o tooltip quando o mouse sai do ícone
+    if (event.target.closest('.turn-order-item')) {
+        turnOrderTooltip.classList.add('hidden');
+    }
+});
+
+turnOrderList.addEventListener('mousemove', (event) => {
+    // Move o tooltip junto com o mouse
+    if (!turnOrderTooltip.classList.contains('hidden')) {
+        turnOrderTooltip.style.left = `${event.pageX + 10}px`;
+        turnOrderTooltip.style.top = `${event.pageY + 10}px`;
+    }
+});

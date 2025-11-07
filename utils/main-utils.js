@@ -14,7 +14,8 @@ function checkBattleReady() {
 }
 
 function executeRound() {
-    let combatOrder = calculateCombatOrder();
+    window.combatOrder = calculateCombatOrder();
+    drawTurnOrder();
 
     console.log("--- Ordem de Combate ---");
     combatOrder.forEach((char, index) => {
