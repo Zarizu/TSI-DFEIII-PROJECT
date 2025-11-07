@@ -42,9 +42,9 @@ class Character {
         this.currentMana = JSON.parse(JSON.stringify(this.stats.mana));
     }
 
-    _calculateStat(modifierName, attributeName) {
+    _calculateStat(modifierName, attributeName , atrWeight = 1) {
         const modifier = this.modifiers[modifierName];
-        const attribute = this.attributes[attributeName];
+        const attribute = this.attributes[attributeName] * atrWeight;
         
         return modifier + (attribute * this.tier);
     }
@@ -53,46 +53,46 @@ class Character {
 
         this.modifiers = {
             // Força
-            "damage": 2 + this.lvl,
-            "critical_multiplier": 1 + this.lvl,
+            "damage": 2 * this.lvl,
+            "critical_multiplier": 0.25 * this.lvl,
             // Agilidade
-            "initiative" : 1 + this.lvl,
-            "evasion": 0.5 + (this.lvl * 0.5),
-            "critical_chance": 0.5 + (this.lvl * 0.5),
+            "initiative" : 1 * this.lvl,
+            "evasion": 0.75 * this.lvl,
+            "critical_chance": 1.25 * this.lvl,
             // Constituição
-            "hp": 5 + this.lvl,
-            "armor": 1 + this.lvl,
+            "hp": 5 * this.lvl,
+            "armor": 1 * this.lvl,
             // Inteligência
-            "mana": 2 + this.lvl,
-            "skill": 1 + this.lvl,
+            "mana": 3 * this.lvl,
+            "skill": 1 * this.lvl,
             // Sabedoria
-            "magic_resist": 1 + this.lvl,
-            "mana_regen": 1 + (this.lvl),
-            "hp_regen": 2 + (this.lvl)
+            "magic_resist": 1 * this.lvl,
+            "mana_regen": 1 * (this.lvl),
+            "hp_regen": 3 * (this.lvl)
         };
 
         this.stats = {
             // FOR
-            "damage": this._calculateStat("damage", "str"),
-            "critical_multiplier": Math.floor((this.attributes.str + this.modifiers.critical_multiplier) /2) * this.tier,
+            "damage": this._calculateStat("damage", "str",2),
+            "critical_multiplier": (this.attributes.str  *0.5) + this.modifiers.critical_multiplier + (this.tier * 0.75),
             
             // AGI
             "initiative": this._calculateStat("initiative", "agi"),
-            "evasion": this._calculateStat("evasion", "agi"),
-            "critical_chance": this._calculateStat("critical_chance", "agi"),
+            "evasion": this._calculateStat("evasion", "agi",2),
+            "critical_chance": this._calculateStat("critical_chance", "agi",2),
 
             // CON
-            "hp": this._calculateStat("hp", "con"),
+            "hp": this._calculateStat("hp", "con", 5),
             "armor": this._calculateStat("armor", "con"),
 
             // INT
-            "mana": this._calculateStat("mana", "int"),
-            "skill": this._calculateStat("skill", "int"),
+            "mana": this._calculateStat("mana", "int",2),
+            "skill": this._calculateStat("skill", "int",2),
 
             // SAB
             "magic_resist": this._calculateStat("magic_resist", "wis"),
             "mana_regen": this._calculateStat("mana_regen", "wis"),
-            "hp_regen": this._calculateStat("hp_regen", "wis"),
+            "hp_regen": this._calculateStat("hp_regen", "wis",2),
         };
     }
     getAttributes(){
@@ -114,8 +114,10 @@ class Character {
     }
 
     meleeAttack(target) {
+
+        console.log(Math.floor(Math.random() * 101));
         // esquiva
-        if (Math.random() * 100 < target.stats.evasion) {
+        if (Math.floor(Math.random() * 101) < target.stats.evasion) {
             console.log(`%c${this.name} ataca ${target.name}, mas ${target.name} se esquiva!`, "color: #999; font-style: italic;");
             return 0;
         }
@@ -124,11 +126,11 @@ class Character {
         let isCritical = false;
 
         // critico
-        // compara um número aleatório (0-99) com a chance de crítico do atacante
-        if (Math.random() * 100 < this.stats.critical_chance) {
+        // compara um número aleatório (0-100) com a chance de crítico do atacante
+        if (Math.floor(Math.random() * 101) < this.stats.critical_chance) {
             isCritical = true;
             
-            damage = this.stats.damage * this.stats.critical_multiplier; 
+            damage = Math.round(this.stats.damage * this.stats.critical_multiplier); 
         }
 
         // reducao de dano pela armadura

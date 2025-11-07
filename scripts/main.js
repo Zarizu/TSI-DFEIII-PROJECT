@@ -11,7 +11,6 @@ firstCharData = JSON.parse(firstCharData);
     localStorage.setItem(ID_COUNTER_KEY,1);
     let attributes = firstCharData.attributes
     
-    // 2. [A CORREÇÃO] Crie o array na ordem correta
     const attributesArray = [
         attributes.str,
         attributes.con,

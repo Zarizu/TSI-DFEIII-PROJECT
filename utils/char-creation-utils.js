@@ -1,5 +1,5 @@
-function _calculateStatPreview(modifier, attribute, tier) {
+function _calculateStatPreview(modifier, attribute, tier, atrWeight = 1) {
 
-    return modifier + (attribute * tier);
+    return modifier + ((attribute * atrWeight) * tier);
 }
 

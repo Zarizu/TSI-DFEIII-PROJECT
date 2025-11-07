@@ -69,19 +69,19 @@ const statHighlightMap = {
 const VOCATIONS = {
     default: {
         name: "Aventureiro",
-        desc: "Equilibrado. Consegue fazer de tudo um pouco e de um pouco tudo."
+        desc: "Perfeitamente equilibrado."
     },
     str: {
         name: "Porradeiro",
-        desc: "Ataca primeiro, pergunta depois."
+        desc: "A escolha mais fácil, ataca primeiro, pergunta depois."
     },
     con: {
         name: "Tanque",
-        desc: "Um soco em você é uma massagem tailandesa."
+        desc: "Resiste a mais danos que o habitual, um soco em você é massagem."
     },
     agi: {
         name: "Assassino",
-        desc: "É conhecido por ser rapidinho."
+        desc: "Tem fama por sua imprevisibilidade, Também é conhecido por ser rapidinho."
     },
     int: {
         name: "Especialista",
@@ -89,12 +89,12 @@ const VOCATIONS = {
     },
     wis: {
         name: "Sábio",
-        desc: "Resiste a magias e regenera mana. A calmaria encarnada."
+        desc: "Resiste a magias e regenera mana e vida. Viva a vida na calmaria."
     }
 };
 
 const MAX_POINTS = 5;
-const MAX_PER_STAT = 5;
+const MAX_PER_STAT = 4;
 const MIN_PER_STAT = 1;
 let totalPoints = MAX_POINTS;
 
