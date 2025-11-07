@@ -21,11 +21,9 @@ function debugInit(){
     console.log(`DEBUG: Criação de time padrão para testes de desenvolvimento:`);
 
     window.team.forEach(character => {
-    character.effects = [
-            { name: 'Buff de Ataque', icon: '⚔️', duration: 3 },
-            { name: 'Envenenado', icon: '☠️', duration: 2 },
-            { name: 'Escudo', icon: '🛡️', duration: 0 } 
-        ];
+
+    getEffect('Envenenado').applyEffect(character,2);
+        
         //hard coded
         if (character.name === 'Mago') {
             character.skills = [
@@ -54,11 +52,7 @@ function debugInit(){
     ];
 
     window.enemyTeam.forEach(enemy => {
-        enemy.effects = [
-                { name: 'Buff de Ataque', icon: '⚔️', duration: 0 },
-                { name: 'Envenenado', icon: '☠️', duration: 0 },
-                { name: 'Escudo', icon: '🛡️', duration: 2 } 
-            ];
+        getEffect('Buff de Ataque').applyEffect(enemy,1);
 
         updateEnemySquad(enemy);
     });

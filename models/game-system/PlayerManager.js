@@ -1,6 +1,7 @@
 //vou usar funcao construtora por conta dos requisitos do professor
 function PlayerManager(){
-    this.gold = 0; 
+    this.gold = 0;
+    this.inventory = []; 
 }
 
 PlayerManager.prototype.getGold = function(){

@@ -22,7 +22,6 @@ class Character {
         this.name = name;
         this.lvl = lvl;
         this.tier = tier;
-        this.class = 'default';
 
         this.attributes = {
             str: str,

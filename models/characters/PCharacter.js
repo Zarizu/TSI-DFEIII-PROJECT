@@ -1,13 +1,22 @@
 // essa classe é especifica de personagens jogaveis, não é um personagem genérico.
 class PCharacter extends Character {
-    constructor(name, attributes, lvl,tier) {
+    constructor(name, attributes, lvl,tier,vocation) {
         super(name, attributes, lvl, tier); 
 
+        //kit inicial
+        this.vocation = vocation;
+
         this.experience = 0;
-        this.inventory = [];
+
+        this.weapon = {};
+        this.equipment = {};
+
         this.skills = [];
 
         this.experienceGap = this.lvl * 100;
+
+        //chance do inimigo escolher atacar ele
+        this.enemyPriority = 1;
     }
 
     gainExperience(amount) {
