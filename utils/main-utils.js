@@ -14,21 +14,14 @@ function checkBattleReady() {
 }
 
 function executeRound() {
+    let combatOrder = [];
+
     if (startBattleButton.disabled) return;
 
     console.log("Batalha Iniciada! Ações:", playerActions);
     
-    // --- LÓGICA DO JOGO (FUTURO) ---
-    //chamaria a lógica de processar as 'playerActions'
-    //chamaria a IA para as ações inimigas
-    //atualizaria o 'team' (HP, mana, efeitos)
-    //chamaria a 'refreshAllUI()' para redesenhar tudo
-    //
-
-    // sistema de round
     roundNumber.textContent = GAME_MANAGER.passRound();
     
-    // Limpa as ações para o próximo round
     window.playerActions = {};
     playerArea.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
@@ -80,7 +73,7 @@ function removeCharfromSquad(character) {
 }
 //squad inimigo
 
-function addEnemyToSquad(enemy) {
+function addEnemyFromSquad(enemy) {
     if(enemyTeam.includes(enemy)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${enemy.name}.`);
         return;
@@ -93,4 +86,18 @@ function addEnemyToSquad(enemy) {
     
     // Chama as funções de desenho
     updateEnemySquad(enemy);
+}
+
+function removeEnemyFromSquad(enemy) {
+    if (!window.enemyTeam.includes(enemy)) {
+        console.warn(`Não existe no time! Não há como remover ${enemy.name}.`);
+        return;
+    }
+
+    window.enemyTeam = window.enemyTeam.filter(member => member.id !== enemy.id);
+
+    const enemyCard = enemyArea.querySelector(`.enemy-card[data-id="${enemy.id}"]`);
+    if (enemyCard) {
+        enemyCard.remove();
+    }
 }
