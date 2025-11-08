@@ -70,6 +70,7 @@ BattleViewManager.prototype.confirmTarget = function(enemyId) {
     if (this.targetingActionType === 'skill' && this.targetingSkill) {
         window.playerActions[this.targetingCharacterId].skillId = this.targetingSkill.id;
         window.playerActions[this.targetingCharacterId].skillName = this.targetingSkill.name;
+        window.playerActions[this.targetingCharacterId].skillTargetType = this.skillTargetType;
     }
 
     this.resetTargeting(false);

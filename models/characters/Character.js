@@ -113,7 +113,7 @@ class Character {
     }
 
     meleeAttack(target) {
-
+        if(!target || target.currentHP <1 ) return;
         // esquiva
         // compara um número aleatório (0-100) com a chance de esquiva do alvo
         if (Math.floor(Math.random() * 101) < target.stats.evasion) {
@@ -135,7 +135,11 @@ class Character {
         let finalDamage = damage - target.stats.armor;
         if (finalDamage < 1) finalDamage = 1;
 
-        target.currentHP -= finalDamage;
+        if(target.currentHP >=finalDamage)target.currentHP -= finalDamage
+        else{
+            target.currentHP = 0;
+        }
+
         
         //DEBUG TEMPORARIO
         if (isCritical) {

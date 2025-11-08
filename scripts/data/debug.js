@@ -22,7 +22,7 @@ function debugInit(){
 
     window.team.forEach(character => {
 
-    getEffect('Envenenado').applyEffect(character,2);
+    EFFECTS.POISON.applyEffect(character,3);
         
         //hard coded
         if (character.name === 'Mago') {
@@ -35,15 +35,8 @@ function debugInit(){
                 { id: 'heal', name: 'Cura Leve', targetType: 'ally' },
                 { id: 'smite', name: 'Golpe Divino', targetType: 'enemy' }
             ];
-        } else {
-            // Outros personagens (por enquanto)
-            character.skills = [
-                { id: 'placeholder', name: 'Sem Habilidades', targetType: 'none' }
-            ];
         }
-    updateSquad(character);
     });
-
 
     window.enemyTeam = [
         new Enemy('Goblin', [2, 1, 2, 0, 0], 1, 1, "Fraco contra fogo. Rápido."),
@@ -52,9 +45,7 @@ function debugInit(){
     ];
 
     window.enemyTeam.forEach(enemy => {
-        getEffect('Buff de Ataque').applyEffect(enemy,1);
-
-        updateEnemySquad(enemy);
+        EFFECTS.ATTACK_BUFF.applyEffect(enemy,2);
     });
 
     //DEBUG
@@ -63,7 +54,11 @@ function debugInit(){
     roundNumber.textContent = GAME_MANAGER.getRound();
     phaseNumber.textContent = GAME_MANAGER.getPhase();
     goldAmount.textContent = PLAYER_MANAGER.getGold();
+    
+    refreshAllUI();
+    executeRound();
 };
+
 
 
 

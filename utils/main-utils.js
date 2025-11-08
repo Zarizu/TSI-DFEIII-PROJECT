@@ -18,9 +18,32 @@ function executeRound() {
     drawTurnOrder();
     
     if (startBattleButton.disabled) return;
-    window.combatTime = 500 /combatOrder.length;
+    window.turnCombatTime = 5000 /window.combatOrder.length;
     BATTLE_MANAGER.processActions();
+}
 
+//funcoes auxiliares
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+function calculateCombatOrder() {
+    const allCombatants = [...window.team, ...window.enemyTeam];
+
+    allCombatants.sort((a, b) => {
+        return b.stats.initiative - a.stats.initiative;
+    });
+
+    return allCombatants;
+    
+}
+
+function endRound() {
+    window.playerActions = {};
+    
+    playerArea.querySelectorAll('.action-icon').forEach(icon => {
+        icon.classList.remove('selected');
+        icon.classList.remove('action-defined'); 
+        icon.style.pointerEvents = 'auto'; 
+    });
     roundNumber.textContent = GAME_MANAGER.passRound();
 
     window.playerActions = {};
@@ -28,19 +51,19 @@ function executeRound() {
     removeActionsSelection();
     refreshAllUI();
     checkBattleReady();
+    checkBattleReady();
 }
-
 //squad
 function addCharToSquad(character) {
-    if(team.includes(character)){
+    if(window.team.includes(character)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
         return;
     }
-    if (team.length >= 6) {
+    if (window.team.length >= 6) {
         console.warn(`Time cheio! Não foi possível adicionar ${character.name}.`);
         return;
     }
-    team.push(character);
+    window.team.push(character);
     
     // Chama as funções de desenho
     updateSquad(character);
@@ -68,15 +91,15 @@ function removeCharfromSquad(character) {
 //squad inimigo
 
 function addEnemyFromSquad(enemy) {
-    if(enemyTeam.includes(enemy)){
+    if(window.enemyTeam.includes(enemy)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${enemy.name}.`);
         return;
     }
-    if (enemyTeam.length >= 6) {
+    if (window.enemyTeam.length >= 6) {
         console.warn(`Time cheio! Não foi possível adicionar ${enemy.name}.`);
         return;
     }
-    enemyTeam.push(enemy);
+    window.enemyTeam.push(enemy);
     
     // Chama as funções de desenho
     updateEnemySquad(enemy);
@@ -96,14 +119,3 @@ function removeEnemyFromSquad(enemy) {
     }
 }
 
-//funcoes auxiliares
-function calculateCombatOrder() {
-    const allCombatants = [...window.team, ...window.enemyTeam];
-
-    allCombatants.sort((a, b) => {
-        return b.stats.initiative - a.stats.initiative;
-    });
-
-    return allCombatants;
-    
-}

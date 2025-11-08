@@ -11,6 +11,7 @@ GameManager.prototype.getPhase = function(){
 
 GameManager.prototype.passPhase = function(){
     this.phase +=1;
+    this.round = 1;
     return this.phase;
 }
 
