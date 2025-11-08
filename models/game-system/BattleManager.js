@@ -42,4 +42,27 @@ BattleManager.prototype.processAllyActions = function(character){
     
 }
 
+BattleManager.prototype.processAllEffects= function(){
+    const allCombatants = [...window.team, ...window.enemyTeam];
+
+    allCombatants.forEach(character => {
+        for (let i = character.effects.length - 1; i >= 0; i--) {
+            const effect = character.effects[i];
+            
+            effect.onTick(character);
+            
+            effect.duration--;
+            
+            if (effect.duration <= 0) {
+                
+                if (typeof effect.onRemove === 'function') {
+                    effect.onRemove(character);
+                }
+                
+                character.effects.splice(i, 1);
+            }
+        }
+    });
+}
+
 BATTLE_MANAGER = new BattleManager();

@@ -1,5 +1,5 @@
 
 const SKILLS = {
-    SKILL_FUTURA:          new SKILL('Poder', ':)', 'é uma habilidade.'),
+    SKILL_FUTURA:   new Skill('Poder', ':)', 'é uma habilidade.'),
     
 };

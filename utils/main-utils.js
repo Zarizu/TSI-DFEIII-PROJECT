@@ -44,10 +44,13 @@ function endRound() {
         icon.classList.remove('action-defined'); 
         icon.style.pointerEvents = 'auto'; 
     });
+
     roundNumber.textContent = GAME_MANAGER.passRound();
 
     window.playerActions = {};
 
+    BATTLE_MANAGER.processAllEffects();
+    
     removeActionsSelection();
     refreshAllUI();
     checkBattleReady();
