@@ -39,9 +39,9 @@ startBattleButton.addEventListener('click', executeRound);
 
 playerArea.addEventListener('click', (event) => {
     
-    if (BATTLE_MANAGER.isCurrentlyTargeting()) {
+    if (BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) {
         
-        if (BATTLE_MANAGER.skillTargetType === 'ally') {
+        if (BATTLE_VIEW_MANAGER.skillTargetType === 'ally') {
             
             const clickedAllyCard = event.target.closest('.player-card');
             
@@ -51,16 +51,16 @@ playerArea.addEventListener('click', (event) => {
                 console.log(`[Main] Alvo aliado ${allyId} confirmado.`);
                 
                 
-                BATTLE_MANAGER.confirmTarget(allyId); 
+                BATTLE_VIEW_MANAGER.confirmTarget(allyId); 
             } else {
                 
                 console.log("[Main] Mira cancelada (clique na área do time)");
-                BATTLE_MANAGER.resetTargeting(true);
+                BATTLE_VIEW_MANAGER.resetTargeting(true);
             }
         } else {
             
             console.log("[Main] Mira cancelada (clique na área do time)");
-            BATTLE_MANAGER.resetTargeting(true);
+            BATTLE_VIEW_MANAGER.resetTargeting(true);
         }
         return; 
     }
@@ -91,7 +91,7 @@ playerArea.addEventListener('click', (event) => {
 
     if (actionType === 'melee') {
         
-        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'melee', 'enemy');
+        BATTLE_VIEW_MANAGER.startTargeting(character.id, character.name, card, 'melee', 'enemy');
 
     }else if (actionType === 'rest') {
         console.log(`[Main] Personagem ${character.name} escolheu Descansar`);
@@ -121,7 +121,7 @@ playerArea.addEventListener('mouseover', (event) => {
             showSkillPopup(character, card, skillIcon);
         }
     }
-    if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    if (BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) return;
 
     const playerCard = event.target.closest('.player-card');
     if (!playerCard) return;
@@ -142,7 +142,7 @@ playerArea.addEventListener('mouseover', (event) => {
 });
 
 playerArea.addEventListener('mouseout', (event) => {
-    if (BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    if (BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) return;
 
     if (event.target.closest('.action-icon[data-action-type="skill"]')) {
         skillPopupTimeout = setTimeout(hideSkillPopup, 300);
@@ -185,7 +185,7 @@ skillPopup.addEventListener('click', (event) => {
             icon.classList.remove('action-defined'); 
         });
         delete window.playerActions[characterId];
-        BATTLE_MANAGER.startTargeting(character.id, character.name, card, 'skill', skill.targetType, skill);
+        BATTLE_VIEW_MANAGER.startTargeting(character.id, character.name, card, 'skill', skill.targetType, skill);
         
         hideSkillPopup();
     }
@@ -216,14 +216,14 @@ closeButtons.forEach(button => {
 });
 
 enemyArea.addEventListener('click', (event) => {
-    if (!BATTLE_MANAGER.isCurrentlyTargeting() || BATTLE_MANAGER.skillTargetType !== 'enemy') {
+    if (!BATTLE_VIEW_MANAGER.isCurrentlyTargeting() || BATTLE_VIEW_MANAGER.skillTargetType !== 'enemy') {
         return;
     }
 
     const enemyCard = event.target.closest('.enemy-card');
     if (enemyCard) {
         const enemyId = enemyCard.dataset.id;
-        BATTLE_MANAGER.confirmTarget(enemyId);
+        BATTLE_VIEW_MANAGER.confirmTarget(enemyId);
     }
 });
 
@@ -270,10 +270,10 @@ enemyArea.addEventListener('mousemove', (event) => {
 
 
 document.getElementById('battlefield').addEventListener('click', (event) => {
-    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    if (!BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) return;
     
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
-        BATTLE_MANAGER.resetTargeting(true); 
+        BATTLE_VIEW_MANAGER.resetTargeting(true); 
     }
 });
 
@@ -281,10 +281,10 @@ document.getElementById('battlefield').addEventListener('click', cancelTargeting
 document.getElementById('blur-backdrop').addEventListener('click', cancelTargetingHandler);
 
 function cancelTargetingHandler(event) {
-    if (!BATTLE_MANAGER.isCurrentlyTargeting()) return;
+    if (!BATTLE_VIEW_MANAGER.isCurrentlyTargeting()) return;
     
     if (!event.target.closest('.enemy-card') && !event.target.closest('.player-card')) {
-        BATTLE_MANAGER.resetTargeting(true); 
+        BATTLE_VIEW_MANAGER.resetTargeting(true); 
     }
 }
 
