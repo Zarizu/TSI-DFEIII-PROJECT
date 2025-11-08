@@ -251,3 +251,15 @@ function drawTurnOrder() {
         turnOrderList.appendChild(item);
     });
 }
+function removeActionsSelection() {
+    playerArea.querySelectorAll('.action-icon').forEach(icon => {
+        icon.classList.remove('selected');
+        icon.classList.remove('action-defined'); 
+    });
+
+    document.querySelectorAll('.is-being-targeted').forEach(card => {
+    card.classList.remove('is-being-targeted')
+    });
+
+
+}

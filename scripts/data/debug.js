@@ -63,8 +63,6 @@ function debugInit(){
     roundNumber.textContent = GAME_MANAGER.getRound();
     phaseNumber.textContent = GAME_MANAGER.getPhase();
     goldAmount.textContent = PLAYER_MANAGER.getGold();
-
-    executeRound();
 };
 
 

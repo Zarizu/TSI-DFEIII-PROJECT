@@ -114,8 +114,8 @@ class Character {
 
     meleeAttack(target) {
 
-        console.log(Math.floor(Math.random() * 101));
         // esquiva
+        // compara um número aleatório (0-100) com a chance de esquiva do alvo
         if (Math.floor(Math.random() * 101) < target.stats.evasion) {
             console.log(`%c${this.name} ataca ${target.name}, mas ${target.name} se esquiva!`, "color: #999; font-style: italic;");
             return 0;
@@ -125,7 +125,6 @@ class Character {
         let isCritical = false;
 
         // critico
-        // compara um número aleatório (0-100) com a chance de crítico do atacante
         if (Math.floor(Math.random() * 101) < this.stats.critical_chance) {
             isCritical = true;
             
@@ -144,7 +143,7 @@ class Character {
         } else {
             console.log(`${this.name} ataca ${target.name} causando ${finalDamage} de dano.`);
         }
-        
+        refreshAllUI();
         return finalDamage;
     }
 }

@@ -16,26 +16,17 @@ function checkBattleReady() {
 function executeRound() {
     window.combatOrder = calculateCombatOrder();
     drawTurnOrder();
-    BATTLE_MANAGER.processActions();
+    
     if (startBattleButton.disabled) return;
+    window.combatTime = 500 /combatOrder.length;
+    BATTLE_MANAGER.processActions();
 
-    
-
-    console.log("Batalha Iniciada! Ações:", playerActions);
-    
     roundNumber.textContent = GAME_MANAGER.passRound();
-    
+
     window.playerActions = {};
-    playerArea.querySelectorAll('.action-icon').forEach(icon => {
-        icon.classList.remove('selected');
-        icon.classList.remove('action-defined'); 
-    });
 
-    document.querySelectorAll('.is-being-targeted').forEach(card => {
-    card.classList.remove('is-being-targeted')
-    });
-
-
+    removeActionsSelection();
+    refreshAllUI();
     checkBattleReady();
 }
 
