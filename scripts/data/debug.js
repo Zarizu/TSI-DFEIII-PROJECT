@@ -32,7 +32,7 @@ function debugInit(){
             ];
         } else if (character.name === 'Clérigo') {
             character.skills = [
-                //{ id: 'heal', name: 'Cura Leve', targetType: 'ally' },
+                SKILLS.HEAL,
                 SKILLS.SMITE,
             ];
         }

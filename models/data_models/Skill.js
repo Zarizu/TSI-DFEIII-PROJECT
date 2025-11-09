@@ -60,7 +60,10 @@ DamageSkill.prototype.execute = function(caster, target) {
     let finalDamage = damage - target.stats.magic_resist;
     if (finalDamage < 1) finalDamage = 1;
 
-    target.currentHP -= finalDamage;
+    if(target.currentHP >= finalDamage)target.currentHP -= finalDamage
+        else{
+            target.currentHP = 0;
+        }
     
     console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name} causando ${finalDamage} de dano!`, "color: #ff8c00;");
 }

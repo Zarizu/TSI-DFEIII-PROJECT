@@ -227,7 +227,7 @@ function hideSkillPopup() {
     skillPopup.classList.remove('show');
     setTimeout(() => {
         skillPopup.classList.add('hidden');
-    }, 200);
+    }, 100);
 }
 function drawTurnOrder() {
     turnOrderList.innerHTML = '';

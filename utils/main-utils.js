@@ -44,7 +44,11 @@ function endRound() {
         icon.classList.remove('action-defined'); 
         icon.style.pointerEvents = 'auto'; 
     });
-
+    BATTLE_VIEW_MANAGER.resetTargeting();
+    
+    document.querySelectorAll('.is-being-targeted').forEach(card => {
+        card.classList.remove('is-being-targeted');
+    });
     roundNumber.textContent = GAME_MANAGER.passRound();
 
     window.playerActions = {};
