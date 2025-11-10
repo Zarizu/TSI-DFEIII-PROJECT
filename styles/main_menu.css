@@ -1,0 +1,151 @@
+/* --- Variáveis CSS para cores e tamanhos --- */
+:root {
+    --primary-bg-color: rgba(18, 24, 37, 0.9);
+    --border-color: #007bff; 
+    --shadow-color: rgba(0, 123, 255, 0.5); 
+    --light-text-color: #eee;
+    --dark-text-color: #333;
+    --success-color: #4CAF50; 
+    --success-hover-color: #45a049;
+    --secondary-btn-color: #666; 
+    --secondary-btn-hover-color: #777;
+    --gold-color: #ffd700; 
+    --max-width: 1000px; 
+    --max-width-box: 600px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #222222ab;
+    color: var(--light-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto; 
+    position: relative;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+/* Animação de fundo */
+.background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+@keyframes fallAndFade {
+    0% {
+        transform: translateY(-100px) rotate(0deg) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(calc(100vh + 100px)) rotate(720deg) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.background-animation span::before {
+    content: ''; 
+    position: absolute;
+    font-size: 2em; 
+    animation: fallAndFade 15s linear infinite; 
+    pointer-events: none; 
+    opacity: 0;
+}
+
+#central-box {
+    background-color: var(--primary-bg-color);
+    border: 3px solid var(--border-color);
+    border-radius: 15px;
+    padding: 30px;
+    width: 90%;
+    max-width: var(--max-width-box);
+    box-shadow: 0 0 20px var(--shadow-color);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    box-sizing: border-box;
+    justify-content: flex-start; 
+    position: relative;
+}
+
+#logo {
+    margin-bottom: 20px;
+}
+
+#game-logo {
+    max-width: 200px; /* Tamanho da logo */
+}
+
+.box-title {
+    font-size: 2em;
+    color: #fff;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.navigation-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.nav-btn {
+    padding: 12px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: var(--success-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.nav-btn:hover {
+    background-color: var(--success-hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+    background-color: #555;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    #central-box {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+    }
+
+    .nav-btn {
+        width: 100%;
+    }
+}

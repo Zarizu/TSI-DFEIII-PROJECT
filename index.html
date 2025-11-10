@@ -1,153 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criação de Personagem</title>
-
-    <script src="./scripts/views/char_creation-views.js" defer></script>
-    <script src="./utils/views/char_creation-views-utils.js" defer></script>
-    <script src="./utils/char-creation-utils.js" defer></script>
-    <script src="./scripts/char_creation.js" defer></script>
-
-    <script src="./models/characters/Character.js" defer></script>
-    <script src="./models/characters/PCharacter.js" defer></script>
-
-    <link rel="stylesheet" href="styles/char_creation.css">
+    <title>Menu Principal do Jogo</title>
+    <link rel="stylesheet" href="/styles/main_menu.css">
+    <script src="/scripts/views/main_menu-views.js" defer></script>
 </head>
 <body>
-    <div class="background-animation"></div>
-    
-    <main class="main-container"> 
-        <div id="central-box"> 
-            
-            <div id="step-1-name">
-                <h2 class="box-title">Crie Seu Héroi</h2>
-                <input type="text" id="char-name-input" placeholder="Digite o nome" maxlength="20" autocomplete="off">
-                <button id="next-step-btn" disabled>Próximo</button>
-            </div>
-            <div id="step-2-attributes" class="hidden">
-                <h2 class="box-title">Distribua seus Pontos</h2>
+    <div class="background-animation">
+        <span></span><span></span><span></span><span></span>
+    </div>
 
-                <div id="vocation-display">
-                    Vocação: <span id="vocation-name">Aprendiz</span>
-                    <div id="vocation-tooltip">
-                        Passe o mouse sobre um atributo para ver sua vocação.
-                    </div>
-                </div>
-                
-                <div id="points-remaining">
-                    <h3>Pontos restantes: <span id="points-value">3</span></h3>
-                </div>
+    <div id="central-box">
+        <div id="logo">
+            <img src="/logo.png" alt="Logo do Jogo" id="game-logo">
+        </div>
+        <div class="navigation-buttons">
+            <button id="start-btn" class="nav-btn">Jogar</button>
+            <button id="settings-btn" class="nav-btn">Configurações</button>
+            <button id="credits-btn" class="nav-btn">Créditos</button>
 
-                <div id="step-2-content-wrapper">
+        </div>
+    </div>
 
-                    <div id="preview-panel">
-                        <h3 class="panel-subtitle">Prévia dos status</h3>
-                        <div id="preview-stats-list">
-                            <div class="preview-stat" id="prev-stat-damage">
-                                <span>Dano</span><span id="prev-damage">0</span>
-                                <span class="stat-tooltip">Dano físico causado por ataques corpo-a-corpo.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-critical_multiplier">
-                                <span>Mult. Crítico</span><span id="prev-critical_multiplier">0X</span>
-                                <span class="stat-tooltip">O multiplicador do seu dano em um acerto crítico.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-hp">
-                                <span>Vida</span><span id="prev-hp">0</span>
-                                <span class="stat-tooltip">Pontos de Vida. Se chegar a 0, você morre.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-armor">
-                                <span>Armadura</span><span id="prev-armor">0</span>
-                                <span class="stat-tooltip">Reduz o dano físico recebido.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-initiative">
-                                <span>Iniciativa</span><span id="prev-initiative">0</span>
-                                <span class="stat-tooltip">Determina quem ataca primeiro no combate.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-evasion">
-                                <span>Esquiva</span><span id="prev-evasion">0</span>
-                                <span class="stat-tooltip">Chance de evitar completamente um ataque físico.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-critical_chance">
-                                <span>Chance Crítica</span><span id="prev-critical_chance">0</span>
-                                <span class="stat-tooltip">Chance de causar um acerto crítico.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-mana">
-                                <span>Mana</span><span id="prev-mana">0</span>
-                                <span class="stat-tooltip">Pontos de Mana. Usados para conjurar habilidades.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-magic_resist">
-                                <span>Res. Mágica</span><span id="prev-magic_resist">0</span>
-                                <span class="stat-tooltip">Reduz o dano mágico recebido.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-skill">
-                                <span>Poder Mágico</span><span id="prev-skill">0</span>
-                                <span class="stat-tooltip">Aumenta o efeito de suas habilidades.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-mana_regen">
-                                <span>Regen. Mana</span><span id="prev-mana_regen">0</span>
-                                <span class="stat-tooltip">Mana recuperada ao descansar.</span>
-                            </div>
-                            <div class="preview-stat" id="prev-stat-hp_regen">
-                                <span>Rec. HP</span><span id="prev-hp_regen">0</span>
-                                <span class="stat-tooltip">Vida recuperada ao descansar.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="allocation-panel">
-                        <h3 class="panel-subtitle">Atributos</h3>
-                        <div id="char-stats-list">
-                            <div class="char-stats" data-vocation-hover="str">
-                                <h3 class="title">Força</h3>
-                                <div class="stat-controls">
-                                    <button class="stat-btn minus" data-stat="str" disabled>-</button>
-                                    <span class="value" id="str-value">1</span>
-                                    <button class="stat-btn plus" data-stat="str">+</button>
-                                </div>
-                            </div>
-                            <div class="char-stats" data-vocation-hover="con">
-                                <h3 class="title">Constituição</h3>
-                                <div class="stat-controls">
-                                    <button class="stat-btn minus" data-stat="con" disabled>-</button>
-                                    <span class="value" id="con-value">1</span>
-                                    <button class="stat-btn plus" data-stat="con">+</button>
-                                </div>
-                            </div>
-                            <div class="char-stats" data-vocation-hover="agi">
-                                <h3 class="title">Agilidade</h3>
-                                <div class="stat-controls">
-                                    <button class="stat-btn minus" data-stat="agi" disabled>-</button>
-                                    <span class="value" id="agi-value">1</span>
-                                    <button class="stat-btn plus" data-stat="agi">+</button>
-                                </div>
-                            </div>
-                            <div class="char-stats" data-vocation-hover="int">
-                                <h3 class="title">Inteligência</h3>
-                                <div class="stat-controls">
-                                    <button class="stat-btn minus" data-stat="int" disabled>-</button>
-                                    <span class="value" id="int-value">1</span>
-                                    <button class="stat-btn plus" data-stat="int">+</button>
-                                </div>
-                            </div>
-                            <div class="char-stats" data-vocation-hover="wis">
-                                <h3 class="title">Sabedoria</h3>
-                                <div class="stat-controls">
-                                    <button class="stat-btn minus" data-stat="wis" disabled>-</button>
-                                    <span class="value" id="wis-value">1</span>
-                                    <button class="stat-btn plus" data-stat="wis">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> </div> <div class="navigation-buttons">
-                    <button id="prev-step-btn">Voltar</button>
-                    <button id="main-start" disabled>Começar</button>
-                </div>
-            </div>
-            
-
-        </div> 
-    </main>
 </body>
 </html>
