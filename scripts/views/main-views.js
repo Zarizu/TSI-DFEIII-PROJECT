@@ -17,6 +17,7 @@ const blurBackdrop = document.getElementById('blur-backdrop');
 const skillPopup = document.getElementById('skill-popup');
 const turnOrderList = document.getElementById('turn-order-list');
 const turnOrderTooltip = document.getElementById('turn-order-tooltip');
+const combatTextPopup = document.getElementById('combat-text-popup');
 
 let skillPopupTimeout = null;
 

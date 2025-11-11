@@ -34,8 +34,17 @@ BattleManager.prototype.processAllyActions = function(character){
         const target = window.combatOrder.find(enemy => enemy.id == targetId);
         if (!target) return;
 
-        if(target)character.meleeAttack(target);
+        const attackerCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`);
+        const targetCard = enemyArea.querySelector(`.enemy-card[data-id="${target.id}"]`);
+        
+        playAnimation(attackerCard, 'is-attacking-melee', 500);
 
+        setTimeout(() => {
+            const attackResult = character.meleeAttack(target);
+            
+            animate(attackResult, targetCard);
+
+        }, 250);
     }
     else if(charActions.type === 'skill'){
         const targetId = Number.parseInt(charActions.targetId);
@@ -45,6 +54,8 @@ BattleManager.prototype.processAllyActions = function(character){
         const skillId = charActions.skillId;
         const skillToUse = character.skills.find(s => s.id == skillId);
 
+
+        //add animacao para skill
         if (skillToUse) {
             skillToUse.useSkill(character, target);
         } else {

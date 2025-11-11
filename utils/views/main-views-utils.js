@@ -260,6 +260,67 @@ function removeActionsSelection() {
     document.querySelectorAll('.is-being-targeted').forEach(card => {
     card.classList.remove('is-being-targeted')
     });
-
-
 }
+
+function playAnimation(targetCard, animationClass, duration) {
+    if (!targetCard) return;
+
+    targetCard.classList.add(animationClass);
+    
+    setTimeout(() => {
+        if (targetCard) {
+            targetCard.classList.remove(animationClass);
+        }
+    }, duration);
+}
+
+function showCombatText(targetCard, text, type) {
+    const combatTextMold = document.getElementById('combat-text-popup');
+    
+    if (!targetCard || !combatTextMold) {
+        console.error("Alvo ou Molde do popup de combate não encontrado!");
+        return;
+    }
+    
+    const popup = combatTextMold.cloneNode(true);
+    
+    const rect = targetCard.getBoundingClientRect();
+    const battlefieldRect = battlefield.getBoundingClientRect();
+    const x = rect.left + (rect.width / 2) - battlefieldRect.left;
+    const y = rect.top - battlefieldRect.top;
+
+    popup.id = ''; 
+    popup.textContent = text;
+    popup.className = ''; 
+    popup.classList.add('combat-text-popup'); 
+    popup.classList.add(type); 
+    popup.style.left = `${x}px`;
+    popup.style.top = `${y}px`;
+
+    battlefield.appendChild(popup);
+    
+    requestAnimationFrame(() => {
+        popup.classList.add('show');
+    });
+    
+    setTimeout(() => {
+        if (popup) {
+            popup.remove();
+        }
+    }, 3500); 
+}
+
+function animate(attackResult, targetCard){
+
+            if (attackResult.didEvade) {
+                showCombatText(targetCard, "ESQUIVA!", "miss");
+                playAnimation(targetCard, 'is-taking-damage', 300);
+            } else if (attackResult.isCritical) {
+                showCombatText(targetCard, `${attackResult.damage} !`, "crit");
+                playAnimation(targetCard, 'is-taking-damage', 300);
+            } else {
+                showCombatText(targetCard, attackResult.damage, "damage");
+                playAnimation(targetCard, 'is-taking-damage', 300);
+            }
+            refreshAllUI(); 
+        }

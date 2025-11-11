@@ -8,7 +8,7 @@ EnemyAI.prototype.processEnemyAI = function(enemy){
 
     const didHeal = this.verifyIntegrity(enemy);
 
-    if (didHeal) return;
+    if (didHeal){refreshAllUI(); return};
 
     const target = ENEMY_AI.findWeakness(enemy, window.team);
 
@@ -103,6 +103,17 @@ EnemyAI.prototype.findWeakness = function(enemy, targetList) {
 };
 
 EnemyAI.prototype.execute = function(enemy, target){
+    const attackerCard = enemyArea.querySelector(`.enemy-card[data-id="${enemy.id}"]`);
+    const targetCard = playerArea.querySelector(`.player-card[data-id="${target.id}"]`);
+
+    playAnimation(attackerCard, 'is-attacking-melee', 500);
+
+    setTimeout(() => {
+        const attackResult = enemy.meleeAttack(target);
+
+        animate(attackResult,targetCard);
+    }, 250);
+
     enemy.meleeAttack(target);
 }
 
