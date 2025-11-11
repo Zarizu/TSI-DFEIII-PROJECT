@@ -59,7 +59,7 @@ function drawCrew(character) {
     if (character.effects && Array.isArray(character.effects)) {
         character.effects.forEach(effect => {
             if (effect.duration > 0) {
-                effectsHTML += `<div class="effect-icon" title="${effect.name} ${effect.duration} turno(s)">
+                effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
                     ${effect.icon}
                 </div>`;
             }

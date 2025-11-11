@@ -34,7 +34,7 @@ EnemyAI.prototype.verifyIntegrity = function(enemy){
         return true;
     }
 
-        const injuriedTeammate = window.enemyTeam.find((e) => e.currentHP < (e.stats.hp * 0.25));
+        const injuriedTeammate = window.enemyTeam.find((e) => e.currentHP < (e.stats.hp * 0.50));
 
         if(injuriedTeammate){
         lightHeal.useSkill(enemy,injuriedTeammate);
@@ -63,6 +63,13 @@ EnemyAI.prototype.findWeakness = function(enemy, targetList) {
     //calculo de média ponderada e aleatoridade para ataque da IA
     let totalScore = 0;
     const weightedTargets = targetPool.map(target => {
+
+        //se o inimigo conseguir matar um do time aliado com um ataque só, tem altas chances de escolher ele
+        if(target.currentHP < enemy.stats.damage ){ return {
+            target: target,
+            score: 10000
+        };}
+
         //padrao
         const baseScore = 1;
 

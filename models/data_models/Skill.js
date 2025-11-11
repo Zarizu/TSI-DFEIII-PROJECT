@@ -13,7 +13,7 @@ function getNextSkillId() {
 
     return nextId;
 }
-function Skill(name, icon, description, targetType, manaCost){
+function Skill(name, icon, description, targetType, manaCost, rarity ='common'){
         
     this.id = getNextSkillId();
     this.name = name;
@@ -21,6 +21,7 @@ function Skill(name, icon, description, targetType, manaCost){
     this.description = description;
     this.targetType = targetType;
     this.manaCost = manaCost;
+    this.rarity = rarity;
 
 }
 
@@ -45,8 +46,8 @@ Skill.prototype.useSkill = function(caster, target){
 
 Skill.prototype.execute = function(caster,target){console.error(`A Skill ${this.name} não tem um método 'execute' implementado!`);}
 
-function DamageSkill(name, icon, description, manaCost, targetType, basePower) {
-    Skill.call(this, name, icon, description, targetType, manaCost);
+function DamageSkill(name, icon, description, manaCost, targetType, basePower, rarity) {
+    Skill.call(this, name, icon, description, targetType, manaCost, rarity);
     
     this.basePower = basePower;
 }
@@ -68,8 +69,8 @@ DamageSkill.prototype.execute = function(caster, target) {
     console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name} causando ${finalDamage} de dano!`, "color: #ff8c00;");
 }
 
-function ApplyEffectSkill(name, icon, description, manaCost, targetType, effectToApply, duration) {
-    Skill.call(this, name, icon, description, targetType, manaCost);
+function ApplyEffectSkill(name, icon, description, manaCost, targetType, effectToApply, duration, rarity) {
+    Skill.call(this, name, icon, description, targetType, manaCost, rarity);
     
     this.effectToApply = effectToApply;
     this.duration = duration;
@@ -81,5 +82,5 @@ ApplyEffectSkill.prototype.constructor = ApplyEffectSkill;
 ApplyEffectSkill.prototype.execute = function(caster, target) {
     console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name}!`, "color: #3498db;");
     
-    this.effectToApply.applyTo(target, this.duration);
+    this.effectToApply.applyEffect(target, this.duration);
 }

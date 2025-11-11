@@ -4,10 +4,10 @@ function BattleManager(){
 BattleManager.prototype.processActions = async function(){
 
     const turnDelay = window.turnCombatTime;
-
     startBattleButton.disabled = true;
 
     for (const character of window.combatOrder) {
+            refreshAllUI();
             if (character instanceof PCharacter) {
             
             BATTLE_MANAGER.processAllyActions(character);

@@ -40,6 +40,9 @@ class Character {
 
         this.currentHP = JSON.parse(JSON.stringify(this.stats.hp));
         this.currentMana = JSON.parse(JSON.stringify(this.stats.mana));
+        
+        //habilidades passivas, geralmente com relacao a classe
+        this.passive_skills = [];
     }
 
     _calculateStat(modifierName, attributeName , atrWeight = 1) {

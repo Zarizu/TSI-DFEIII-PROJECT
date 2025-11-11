@@ -34,15 +34,16 @@ Effect.prototype.applyEffect = function(target, duration) {
         return;
     }
 
-    const newEffectInstance = new Effect(
-        this.name,
-        this.icon,
-        this.description
-    );
+    const newInstance = Object.create(Object.getPrototypeOf(this));
+    Object.assign(newInstance, this);
 
-    newEffectInstance.duration = duration;
+    newInstance.duration = duration;
     
-    target.effects.push(newEffectInstance);
+    target.effects.push(newInstance);
+
+    if (typeof newInstance.onApply === 'function') {
+        newInstance.onApply(target);
+    }
 }
 
 //Métodos virtuais (placeholders para efeitos especificos)
@@ -73,10 +74,10 @@ DamageOverTimeEffect.prototype.constructor = DamageOverTimeEffect;
 
 // override de método
 DamageOverTimeEffect.prototype.onTick = function(target) {
-    console.log(`%c[Efeito] ${target.name} sofre ${this.damagePerTick} de dano de ${this.name}!`);
+    console.log(`[Efeito] ${target.name} sofre ${this.damagePerTick} de dano de ${this.name}!`);
+    if(target.currentHP <= 0)return;    
     target.currentHP -= this.damagePerTick;
 
-    // No futuro, checar se target.currentHP < 0
 }
 
 //Buff de stat

@@ -18,7 +18,7 @@ function executeRound() {
     drawTurnOrder();
     
     if (startBattleButton.disabled) return;
-    window.turnCombatTime = 5000 /window.combatOrder.length;
+    window.turnCombatTime = 4000 / window.combatOrder.length;
     BATTLE_MANAGER.processActions();
 }
 
@@ -37,6 +37,13 @@ function calculateCombatOrder() {
 }
 
 function endRound() {
+    console.log('[endRound](LOG):Fim da rodada');
+    
+    BATTLE_MANAGER.processAllEffects();
+
+    refreshAllUI();
+
+    roundNumber.textContent = GAME_MANAGER.passRound();
     window.playerActions = {};
     
     playerArea.querySelectorAll('.action-icon').forEach(icon => {
@@ -44,20 +51,8 @@ function endRound() {
         icon.classList.remove('action-defined'); 
         icon.style.pointerEvents = 'auto'; 
     });
-    BATTLE_VIEW_MANAGER.resetTargeting();
-    
-    document.querySelectorAll('.is-being-targeted').forEach(card => {
-        card.classList.remove('is-being-targeted');
-    });
-    roundNumber.textContent = GAME_MANAGER.passRound();
 
-    window.playerActions = {};
-
-    BATTLE_MANAGER.processAllEffects();
-    
     removeActionsSelection();
-    refreshAllUI();
-    checkBattleReady();
     checkBattleReady();
 }
 //squad

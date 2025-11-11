@@ -8,6 +8,8 @@ function debugInit(){
     localStorage.setItem(ID_COUNTER_KEY_SKILL,1);
     localStorage.setItem(ID_COUNTER_KEY_EFFECT,1);
     localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
+    localStorage.setItem(ID_COUNTER_KEY_VOCATION_SKILL,1);
+
     localStorage.removeItem('FirstCharData');
     console.warn(`Falha ao carregar dados. Criando time de DEBUG com 6 membros.`);
 
@@ -21,7 +23,6 @@ function debugInit(){
     ];
 
     window.team.forEach(character => {
-
     EFFECTS.POISON.applyEffect(character,3);
         
         //hard coded
@@ -41,12 +42,17 @@ function debugInit(){
     window.enemyTeam = [
         new Enemy('Goblin', [2, 1, 2, 0, 0], 1, 1, "Fraco contra fogo. Rápido."),
         new Enemy('Lobo', [3, 1, 3, 0, 0], 1, 1,"Ataca em bando. Alto dano."),
-        new Enemy('Berga Boy', [3, 3, 1, 1, 3], 1, 1, 'Ama bergamotas.')
+        new Enemy('Berga Boy', [3, 3, 1, 1, 3], 1, 1, 'Ama bergamotas.'),
+        new Enemy('Xamã',[1,1,1,5,3],1,1,"Suporte")
+
     ];
 
     window.enemyTeam.forEach(enemy => {
         EFFECTS.ATTACK_BUFF.applyEffect(enemy,2);
     });
+
+    window.enemyTeam[3].skills.push(SKILLS.HEAL);
+
 
     //DEBUG
 
