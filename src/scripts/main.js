@@ -8,7 +8,7 @@ let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData != null){
 firstCharData = JSON.parse(firstCharData);
     //debug
-    localStorage.setItem(ID_COUNTER_KEY,1);
+    localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
     let attributes = firstCharData.attributes
     
     const attributesArray = [

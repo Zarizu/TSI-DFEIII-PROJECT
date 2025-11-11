@@ -52,7 +52,7 @@ startButton.addEventListener('click', () => {
 
     localStorage.setItem('FirstCharData', firstCharFormatted);
     
-    window.location.href = './pages/main.html';
+    window.location.href = './main.html';
 });
 
 function updateUI() {
