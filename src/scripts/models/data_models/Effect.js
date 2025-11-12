@@ -29,12 +29,16 @@ function Effect(name, icon, description,effectType, rarity = 'common'){
     this.duration = 0;    
 }
 
-Effect.prototype.applyEffect = function(target, duration) {
+Effect.prototype.applyEffect = function(caster, target, duration) {
     const existingEffect = target.effects.find(e => e.name === this.name);
     
-    //caso o alvo já tenha o efeito, apenas reseta a duração (quero mudar isso depois, podendo stackar efeitos)
+    //caso o alvo já tenha o efeito, apenas reseta a duração
     if (existingEffect) {
         existingEffect.duration = duration;
+
+        if (typeof existingEffect.onApply === 'function') {
+        newInstance.onApply(caster ,target);
+        }
         return;
     }
 
@@ -42,39 +46,47 @@ Effect.prototype.applyEffect = function(target, duration) {
     Object.assign(newInstance, this);
 
     newInstance.duration = duration;
-    
-    target.effects.push(newInstance);
+    newInstance.id = getNextEffectId();
 
     if (typeof newInstance.onApply === 'function') {
-        newInstance.onApply(target);
+        newInstance.onApply(caster, target);
     }
+
+    target.effects.push(newInstance);
 }
 
 //Métodos virtuais (placeholders para efeitos especificos)
 
 // Chamado no momento em que o efeito é aplicado
-Effect.prototype.onApply = function(target) {}
-
+Effect.prototype.onApply = function(caster, target) {}
 // Chamado a cada turno que o efeito está ativo
 Effect.prototype.onTick = function(target) {}
-
 // Chamado quando a duração chega a 0 e o efeito é removido
 Effect.prototype.onRemove = function(target) {}
-
 
 //classes especificas de efeito (Classes-filho)
 
 //Efeitos que causam dano por Turno
-function DamageOverTimeEffect(name, icon, description, damagePerTick, rarity = 'common') {
+function DamageOverTimeEffect(name, icon, description, baseDamage, scalingStat, rarity = 'common') {
     //heranca
     Effect.call(this, name, icon, description,'debuff', rarity);
-    
-    this.damagePerTick = damagePerTick;
+
+    this.baseDamage = baseDamage;
+    this.scalingStat = scalingStat;
+
+    this.damagePerTick = 0;
 }
 
 //heranca prototípica
 DamageOverTimeEffect.prototype = Object.create(Effect.prototype);
 DamageOverTimeEffect.prototype.constructor = DamageOverTimeEffect;
+
+DamageOverTimeEffect.prototype.onApply = function(caster, target){
+    const casterStatValue = caster.stats[this.scalingStat];
+
+    //dano base + stat
+    this.damagePerTick = Math.round(this.baseDamage * casterStatValue);
+}
 
 // override de método
 DamageOverTimeEffect.prototype.onTick = function(target) {
@@ -88,7 +100,7 @@ DamageOverTimeEffect.prototype.onTick = function(target) {
 function StatBuffEffect(name, icon, description, statToBuff, amount, rarity = 'common') {
     Effect.call(this, name, icon, description,'buff',rarity);
     
-    this.stat = statToBuff;
+    this.statToBuff = statToBuff;
     this.amount = amount;
 }
 
@@ -99,9 +111,17 @@ StatBuffEffect.prototype.onApply = function(target) {
     console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.stat}!`, "color: #4CAF50;");
     
     if (target.stats[this.stat] !== undefined) {
+        console.log(target.stats[this.stat]);
+        console.log(this.amount);
+        
+        
         target.stats[this.stat] += this.amount;
 
-        //  atualizar o currentStat se for hp atual ou mana atual
+        if (this.stat === 'hp') {
+            target.currentHP += this.amount;
+        } else if (this.stat === 'mana') {
+            target.currentMana += this.amount;
+        }
     }
 }
 
@@ -111,18 +131,32 @@ StatBuffEffect.prototype.onRemove = function(target) {
     if (target.stats[this.stat] !== undefined) {
         target.stats[this.stat] -= this.amount;
     }
+
+    if (this.stat === 'hp' && target.currentHP > target.stats.hp) {
+            target.currentHP = target.stats.hp;
+        }
+        if (this.stat === 'mana' && target.currentMana > target.stats.mana) {
+            target.currentMana = target.stats.mana;
+        }
 }
 
 // Cura com o tempo
-function HealOverTimeEffect(name, icon, description, healPerTick, rarity = 'common') {
+function HealOverTimeEffect(name, icon, description, baseHeal, scalingStat, rarity = 'common') {
     Effect.call(this, name, icon, description,'buff',rarity);
 
-    this.healPerTick = healPerTick;
+    this.baseHeal = baseHeal;
+    this.scalingStat = scalingStat;
+
+    this.healPerTick = 0;
 }
 
 HealOverTimeEffect.prototype = Object.create(Effect.prototype);
 HealOverTimeEffect.prototype.constructor = HealOverTimeEffect;
 
+HealOverTimeEffect.prototype.onApply= function(caster, target){
+    const casterStatValue = caster.stats[this.scalingStat];
+    this.healPerTick = caster.stat['hp_regen'] / this.duration;
+}
 HealOverTimeEffect.prototype.onTick = function(target) {
     console.log(`%c[Efeito] ${target.name} recupera ${this.healPerTick} de HP de ${this.name}!`, "color: #4CAF50;");
     

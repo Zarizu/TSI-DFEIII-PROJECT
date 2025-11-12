@@ -80,7 +80,7 @@ ApplyEffectSkill.prototype.constructor = ApplyEffectSkill;
 ApplyEffectSkill.prototype.execute = function(caster, target) {
     console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name}!`, "color: #3498db;");
     
-    this.effectToApply.applyEffect(target, this.duration);
+    this.effectToApply.applyEffect(caster, target, this.duration);
 
     return { type: 'effect', effect: this.effectToApply };
 }

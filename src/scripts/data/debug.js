@@ -23,7 +23,7 @@ function debugInit(){
     ];
 
     window.team.forEach(character => {
-    EFFECTS.POISON.applyEffect(character,3);
+    EFFECTS.POISON.applyEffect(character,character,3);
         
         //hard coded
         if (character.name === 'Mago') {
@@ -46,7 +46,7 @@ function debugInit(){
     ];
 
     window.enemyTeam.forEach(enemy => {
-        EFFECTS.ATTACK_BUFF.applyEffect(enemy,2);
+        EFFECTS.ATTACK_BUFF.applyEffect(enemy,enemy,2);
     });
 
     window.enemyTeam[3].skills.push(SKILLS.HEAL);
@@ -60,7 +60,6 @@ function debugInit(){
     goldAmount.textContent = PLAYER_MANAGER.getGold();
     
     refreshAllUI();
-    executeRound();
 };
 
 
