@@ -110,12 +110,12 @@ StatBuffEffect.prototype.constructor = StatBuffEffect;
 StatBuffEffect.prototype.onApply = function(target) {
     console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
-    if (target.stats[this.stat] !== undefined) {
-        console.log(target.stats[this.stat]);
+    if (target.stats[this.statToBuff] !== undefined) {
+        console.log(target.stats[this.statToBuff]);
         console.log(this.amount);
         
         
-        target.stats[this.stat] += this.amount;
+        target.stats[this.statToBuff] += this.amount;
 
         if (this.stat === 'hp') {
             target.currentHP += this.amount;
@@ -128,14 +128,14 @@ StatBuffEffect.prototype.onApply = function(target) {
 StatBuffEffect.prototype.onRemove = function(target) {
     console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.stat}!`, "color: #4CAF50;");
     
-    if (target.stats[this.stat] !== undefined) {
-        target.stats[this.stat] -= this.amount;
+    if (target.stats[this.statToBuff] !== undefined) {
+        target.stats[this.statToBuff] -= this.amount;
     }
 
-    if (this.stat === 'hp' && target.currentHP > target.stats.hp) {
+    if (this.statToBuff === 'hp' && target.currentHP > target.stats.hp) {
             target.currentHP = target.stats.hp;
         }
-        if (this.stat === 'mana' && target.currentMana > target.stats.mana) {
+        if (this.statToBuff === 'mana' && target.currentMana > target.stats.mana) {
             target.currentMana = target.stats.mana;
         }
 }
