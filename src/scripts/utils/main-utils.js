@@ -22,6 +22,25 @@ function executeRound() {
     BATTLE_MANAGER.processActions();
 }
 
+function checkPhaseEnd() {
+    console.log("%c--- FASE CONCLUÍDA! ---", "color: #ffd700; font-size: 1.2em;");
+    
+    // 1. Avança a Fase
+    phaseNumber.textContent = GAME_MANAGER.passPhase();
+    
+    // 2. Limpa o campo (remove aliados mortos, se houver)
+    refreshAllUI(); 
+
+    // 3. Reseta a rodada para 1
+    roundNumber.textContent = GAME_MANAGER.resetRound();
+    
+    // 4. Gera novos inimigos
+    spawnNewEnemies();
+
+    // 5. Prepara o botão de batalha para a nova fase
+    endRoundCleanup();
+}
+
 //funcoes auxiliares
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 

@@ -2,18 +2,21 @@ function BattleManager(){
 
 }
 BattleManager.prototype.processActions = async function(){
-
     const turnDelay = window.turnCombatTime;
     startBattleButton.disabled = true;
 
     for (const character of window.combatOrder) {
+
+            if (character.currentHP <= 0) {
+                continue;
+            }
             refreshAllUI();
             if (character instanceof PCharacter) {
             
-            BATTLE_MANAGER.processAllyActions(character);
+                await BATTLE_MANAGER.processAllyActions(character);
             
             }else if (character instanceof Enemy){
-                ENEMY_AI.processEnemyAI(character);
+                await ENEMY_AI.processEnemyAI(character);
         }
 
         await wait(turnDelay);

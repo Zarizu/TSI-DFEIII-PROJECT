@@ -108,7 +108,7 @@ StatBuffEffect.prototype = Object.create(Effect.prototype);
 StatBuffEffect.prototype.constructor = StatBuffEffect;
 
 StatBuffEffect.prototype.onApply = function(target) {
-    console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.stat}!`, "color: #4CAF50;");
+    console.log(`%c[Efeito] ${target.name} ganha ${this.amount} de ${this.statToBuff}!`, "color: #4CAF50;");
     
     if (target.stats[this.stat] !== undefined) {
         console.log(target.stats[this.stat]);
@@ -155,7 +155,7 @@ HealOverTimeEffect.prototype.constructor = HealOverTimeEffect;
 
 HealOverTimeEffect.prototype.onApply= function(caster, target){
     const casterStatValue = caster.stats[this.scalingStat];
-    this.healPerTick = caster.stat['hp_regen'] / this.duration;
+    this.healPerTick = Math.round(caster.stats['hp_regen'] / this.duration);
 }
 HealOverTimeEffect.prototype.onTick = function(target) {
     console.log(`%c[Efeito] ${target.name} recupera ${this.healPerTick} de HP de ${this.name}!`, "color: #4CAF50;");
