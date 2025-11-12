@@ -46,6 +46,7 @@ EnemyAI.prototype.verifyIntegrity = function(enemy){
 
 } 
 
+//ataque inimigo inteligente
 EnemyAI.prototype.findWeakness = function(enemy, targetList) {
     
     const aliveTargets = targetList.filter(target => target.currentHP > 0);
@@ -67,7 +68,7 @@ EnemyAI.prototype.findWeakness = function(enemy, targetList) {
         //se o inimigo conseguir matar um do time aliado com um ataque só, tem altas chances de escolher ele
         if(target.currentHP < enemy.stats.damage ){ return {
             target: target,
-            score: 10000
+            score: 200
         };}
 
         //padrao
@@ -80,7 +81,7 @@ EnemyAI.prototype.findWeakness = function(enemy, targetList) {
         const woundedBonus = (1 - hpPercent) * 10; 
 
         // Multiplicador de Prioridade de habilidades
-        const priorityMultiplier = target.enemyPriority || 1;
+        const priorityMultiplier = target.enemyPriority;
         
         // Fórmula Final: (Base + Bônus de Ferido) * Prioridade
         const finalScore = (baseScore + woundedBonus) * priorityMultiplier;

@@ -15,7 +15,7 @@ class PCharacter extends Character {
 
         //chance do inimigo escolher atacar ele
         this.enemyPriority = 1;
-        if(this.vocation === 'tanque') this.enemyPriority += 1;
+        if(this.vocation === 'tanque') this.enemyPriority =10;
     }
 
     gainExperience(amount) {

@@ -251,6 +251,7 @@ function drawTurnOrder() {
         turnOrderList.appendChild(item);
     });
 }
+
 function removeActionsSelection() {
     playerArea.querySelectorAll('.action-icon').forEach(icon => {
         icon.classList.remove('selected');
@@ -303,24 +304,25 @@ function showCombatText(targetCard, text, type) {
         popup.classList.add('show');
     });
     
+
     setTimeout(() => {
         if (popup) {
             popup.remove();
         }
-    }, 3500); 
+    }, 1000); 
 }
 
 function animate(attackResult, targetCard){
 
             if (attackResult.didEvade) {
                 showCombatText(targetCard, "ESQUIVA!", "miss");
-                playAnimation(targetCard, 'is-taking-damage', 300);
+                playAnimation(targetCard, 'is-taking-damage', 500);
             } else if (attackResult.isCritical) {
                 showCombatText(targetCard, `${attackResult.damage} !`, "crit");
-                playAnimation(targetCard, 'is-taking-damage', 300);
+                playAnimation(targetCard, 'is-taking-damage', 500);
             } else {
                 showCombatText(targetCard, attackResult.damage, "damage");
-                playAnimation(targetCard, 'is-taking-damage', 300);
+                playAnimation(targetCard, 'is-taking-damage', 500);
             }
             refreshAllUI(); 
         }

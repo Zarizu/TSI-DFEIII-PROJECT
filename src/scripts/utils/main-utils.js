@@ -18,7 +18,7 @@ function executeRound() {
     drawTurnOrder();
     
     if (startBattleButton.disabled) return;
-    window.turnCombatTime = 4000 / window.combatOrder.length;
+    window.turnCombatTime = 8000 / window.combatOrder.length;
     BATTLE_MANAGER.processActions();
 }
 

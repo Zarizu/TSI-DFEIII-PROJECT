@@ -162,7 +162,7 @@ class Character {
     }
 
     meleeAttack(target) {
-        if(!target || target.currentHP <1 ) return {damage: 0, didEvade: false, isCritical: false };
+        if(!target || target.currentHP <1 ) return {damage: 0, didEvade: true, isCritical: false };
 
         // esquiva
         // compara um número aleatório (0-100) com a chance de esquiva do alvo
