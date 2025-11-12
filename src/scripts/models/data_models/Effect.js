@@ -15,13 +15,17 @@ function getNextEffectId() {
 }
 //funcao construtora
 //classe generica
-function Effect(name, icon, description){
+function Effect(name, icon, description,effectType, rarity = 'common'){
     
     this.id = getNextEffectId();
     this.name = name;
     this.icon = icon;
     this.description = description;
+
+    //buff, debuff
+    this.effectType = effectType;
     
+    this.rarity = rarity;
     this.duration = 0;    
 }
 
@@ -61,9 +65,9 @@ Effect.prototype.onRemove = function(target) {}
 //classes especificas de efeito (Classes-filho)
 
 //Efeitos que causam dano por Turno
-function DamageOverTimeEffect(name, icon, description, damagePerTick) {
+function DamageOverTimeEffect(name, icon, description, damagePerTick, rarity = 'common') {
     //heranca
-    Effect.call(this, name, icon, description);
+    Effect.call(this, name, icon, description,'debuff', rarity);
     
     this.damagePerTick = damagePerTick;
 }
@@ -81,8 +85,8 @@ DamageOverTimeEffect.prototype.onTick = function(target) {
 }
 
 //Buff de stat
-function StatBuffEffect(name, icon, description, statToBuff, amount) {
-    Effect.call(this, name, icon, description);
+function StatBuffEffect(name, icon, description, statToBuff, amount, rarity = 'common') {
+    Effect.call(this, name, icon, description,'buff',rarity);
     
     this.stat = statToBuff;
     this.amount = amount;
@@ -110,8 +114,8 @@ StatBuffEffect.prototype.onRemove = function(target) {
 }
 
 // Cura com o tempo
-function HealOverTimeEffect(name, icon, description, healPerTick) {
-    Effect.call(this, name, icon, description);
+function HealOverTimeEffect(name, icon, description, healPerTick, rarity = 'common') {
+    Effect.call(this, name, icon, description,'buff',rarity);
 
     this.healPerTick = healPerTick;
 }

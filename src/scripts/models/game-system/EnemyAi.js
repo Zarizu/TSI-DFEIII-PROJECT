@@ -17,7 +17,7 @@ EnemyAI.prototype.processEnemyAI = function(enemy){
     } else {
         console.log(`[IA] ${enemy.name} não tem alvos para atacar.`);
     }
-
+    return;
 }
 
 EnemyAI.prototype.verifyIntegrity = function(enemy){
@@ -122,7 +122,7 @@ EnemyAI.prototype.execute = function(enemy, target){
         animate(attackResult,targetCard);
     }, 250);
 
-    enemy.meleeAttack(target);
+    return;
 }
 
 ENEMY_AI = new EnemyAI(); 

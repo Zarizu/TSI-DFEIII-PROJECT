@@ -164,6 +164,9 @@ class Character {
     meleeAttack(target) {
         if(!target || target.currentHP <1 ) return {damage: 0, didEvade: true, isCritical: false };
 
+        console.log(`${this.name} ataca`);
+        
+
         // esquiva
         // compara um número aleatório (0-100) com a chance de esquiva do alvo
         if (Math.floor(Math.random() * 101) < target.stats.evasion) {

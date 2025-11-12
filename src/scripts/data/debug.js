@@ -32,10 +32,8 @@ function debugInit(){
                 //{ id: 'ice_shield', name: 'Escudo de Gelo', targetType: 'ally' }
             ];
         } else if (character.name === 'Clérigo') {
-            character.skills = [
-                SKILLS.HEAL,
-                SKILLS.SMITE,
-            ];
+            character.skills.push(SKILLS.SMITE);
+            character.skills.push(SKILLS.HEAL);
         }
     });
 

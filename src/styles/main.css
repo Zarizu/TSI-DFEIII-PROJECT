@@ -931,8 +931,12 @@ body.targeting-ally .player-card.is-targeting {
     z-index: 95;
 }
 
+/*animcoes de batalha */
 .is-attacking-melee {
     animation: lurch-forward 0.5s ease-out;
+}
+.is-casting {
+    animation: lurch-forward 2s ease-out;
 }
 
 .is-taking-damage {
@@ -986,3 +990,24 @@ body.targeting-ally .player-card.is-targeting {
     font-style: italic;
 }
 
+.combat-text-popup.heal {
+    color: greenyellow;
+    font-size: 1.6em;
+}
+
+.combat-text-popup.mana {
+    color: var(--mana-color); 
+    font-size: 1.6em;
+}
+
+.combat-text-popup.buff {
+    color: rgb(47, 85, 255);
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.combat-text-popup.debuff {
+    color: #e04024; 
+    font-style: italic;
+    font-size: 1.1em;
+}
