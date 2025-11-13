@@ -65,7 +65,7 @@ const statHighlightMap = {
     con: ['hp', 'armor'],
     agi: ['initiative', 'evasion', 'critical_chance'],
     int: ['mana', 'skill'],
-    wis: ['magic_resist', 'mana_regen','hp_regen' ]
+    wis: ['magic_resist', 'mana_regen','hp_regen','mana' ]
 };
 const VOCATIONS = {
     default: {

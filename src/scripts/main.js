@@ -30,7 +30,7 @@ firstCharData = JSON.parse(firstCharData);
 debugInit();
 }
 
-/*
-fazer sistema de rodadas
-
-*/
+spawnNewEnemies(); 
+refreshAllUI();
+checkBattleReady();
+executeRound();

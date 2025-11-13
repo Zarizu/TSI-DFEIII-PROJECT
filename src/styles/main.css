@@ -931,8 +931,12 @@ body.targeting-ally .player-card.is-targeting {
     z-index: 95;
 }
 
+/*animcoes de batalha */
 .is-attacking-melee {
     animation: lurch-forward 0.5s ease-out;
+}
+.is-casting {
+    animation: lurch-forward 2s ease-out;
 }
 
 .is-taking-damage {
@@ -947,21 +951,15 @@ body.targeting-ally .player-card.is-targeting {
     }
     100% {
         opacity: 0;
-        transform: translate(-50%, -60px); /* Sobe 60px */
+        transform: translate(-50%, -60px);
     }
 }
 
-/* O "molde" que está no seu HTML (ex: no <body>)
-   Ele fica escondido e serve apenas para ser clonado.
-*/
 #combat-text-popup {
     display: none;
     opacity: 0;
 }
 
-/* [A CORREÇÃO]
-   Este é o estilo para os CLONES (usa a CLASSE)
-*/
 .combat-text-popup {
     position: absolute;
     z-index: 105; 
@@ -972,23 +970,59 @@ body.targeting-ally .player-card.is-targeting {
     opacity: 0; /* Começa invisível */
 }
 
-/* Quando o JS adiciona a classe .show ao clone */
 .combat-text-popup.show {
-    animation: fade-up-out 1.2s ease-out forwards;
+    animation: fade-up-out 1.75s ease-out forwards;
 }
 
-/* Estilos específicos (baseados na classe) */
 .combat-text-popup.damage {
     color: white; 
 }
 .combat-text-popup.crit {
     color: var(--orange-color); 
-    font-size: 2.2em; 
+    font-size: 2.5em; 
     transform: translate(-50%, -10px); 
+    font-style: oblique;
 }
 .combat-text-popup.miss {
-    color: #647b91; 
-    font-size: 1.2em;
+    color: #8897c0;
+    font-size: 2.0em;
+    transform: translate(-50%, -15px); 
     font-style: italic;
 }
 
+.combat-text-popup.heal {
+    color: greenyellow;
+    font-size: 1.6em;
+}
+
+.combat-text-popup.mana {
+    color: var(--mana-color); 
+    font-size: 1.6em;
+}
+
+.combat-text-popup.buff {
+    color: rgb(47, 85, 255);
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+.combat-text-popup.debuff {
+    color: #e04024; 
+    font-style: italic;
+    font-size: 1.1em;
+}
+@keyframes fade-out-and-fall {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(40px) scale(0.8);
+        opacity: 0;
+    }
+}
+
+.is-dead {
+    animation: fade-out-and-fall 0.5s ease-out forwards;
+    z-index: 1 !important; 
+}

@@ -39,9 +39,7 @@ Skill.prototype.useSkill = function(caster, target){
 
     caster.currentMana -= this.manaCost;
     
-    this.execute(caster, target);
-
-    refreshAllUI();
+    return this.execute(caster, target);
 }
 
 Skill.prototype.execute = function(caster,target){console.error(`A Skill ${this.name} não tem um método 'execute' implementado!`);}
@@ -66,7 +64,7 @@ DamageSkill.prototype.execute = function(caster, target) {
             target.currentHP = 0;
         }
     
-    console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name} causando ${finalDamage} de dano!`, "color: #ff8c00;");
+    return { type: 'damage', amount: finalDamage };
 }
 
 function ApplyEffectSkill(name, icon, description, manaCost, targetType, effectToApply, duration, rarity) {
@@ -82,5 +80,7 @@ ApplyEffectSkill.prototype.constructor = ApplyEffectSkill;
 ApplyEffectSkill.prototype.execute = function(caster, target) {
     console.log(`%c[SKILL] ${caster.name} usa ${this.name} em ${target.name}!`, "color: #3498db;");
     
-    this.effectToApply.applyEffect(target, this.duration);
+    this.effectToApply.applyEffect(caster, target, this.duration);
+
+    return { type: 'effect', effect: this.effectToApply };
 }

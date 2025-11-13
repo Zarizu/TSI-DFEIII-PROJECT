@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criação de Personagem</title>
 
+    <script src="../scripts/models/characters/Character.js" defer></script>
+    <script src="../scripts/models/characters/PCharacter.js" defer></script>
+
     <script src="../scripts/views/char_creation-views.js" defer></script>
     <script src="../scripts/utils/views/char_creation-views-utils.js" defer></script>
     <script src="../scripts/utils/char-creation-utils.js" defer></script>
@@ -79,10 +82,6 @@
                                 <span>Chance Crítica</span><span id="prev-critical_chance">0</span>
                                 <span class="stat-tooltip">Chance de causar um acerto crítico.</span>
                             </div>
-                            <div class="preview-stat" id="prev-stat-mana">
-                                <span>Mana</span><span id="prev-mana">0</span>
-                                <span class="stat-tooltip">Pontos de Mana. Usados para conjurar habilidades.</span>
-                            </div>
                             <div class="preview-stat" id="prev-stat-magic_resist">
                                 <span>Res. Mágica</span><span id="prev-magic_resist">0</span>
                                 <span class="stat-tooltip">Reduz o dano mágico recebido.</span>
@@ -91,13 +90,17 @@
                                 <span>Poder Mágico</span><span id="prev-skill">0</span>
                                 <span class="stat-tooltip">Aumenta o efeito de suas habilidades.</span>
                             </div>
+                            <div class="preview-stat" id="prev-stat-mana">
+                                <span>Mana</span><span id="prev-mana">0</span>
+                                <span class="stat-tooltip">Pontos de Mana. Usados para conjurar magias e habilidades.</span>
+                            </div>
                             <div class="preview-stat" id="prev-stat-mana_regen">
                                 <span>Regen. Mana</span><span id="prev-mana_regen">0</span>
                                 <span class="stat-tooltip">Mana recuperada ao descansar.</span>
                             </div>
                             <div class="preview-stat" id="prev-stat-hp_regen">
-                                <span>Rec. HP</span><span id="prev-hp_regen">0</span>
-                                <span class="stat-tooltip">Vida recuperada ao descansar.</span>
+                                <span>Fator curativo</span><span id="prev-hp_regen">0</span>
+                                <span class="stat-tooltip">Vida recuperada com habilidades e ao descansar.</span>
                             </div>
                         </div>
                     </div>

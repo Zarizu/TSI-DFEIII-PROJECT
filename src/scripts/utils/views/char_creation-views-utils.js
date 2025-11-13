@@ -111,55 +111,34 @@ function updateVocation() {
         vocationTooltipEl.textContent = 'Indefinido. Gaste todos prontos de atributo.';
     }
 }
-
 function updateStatsPreview() {
-    const lvl = 1; 
-    const tier = 1; 
     
-    const modifiers = {
-        "damage": 2 * lvl,
-        "critical_multiplier": 0.25 * lvl,
-        "initiative" : 1 * lvl,
-        "evasion": 0.75 * (lvl),
-        "critical_chance": 1.25 * (lvl),
-        "hp": 5 * lvl,
-        "armor": 1 * lvl,
-        "mana": 3 * lvl,
-        "skill": 1 * lvl,
-        "magic_resist": 1 * lvl,
-        "mana_regen": 1 * (lvl),
-        "hp_regen": 3 * (lvl)
-    };
+    const attributesArray = [
+        stats.str,
+        stats.con,
+        stats.agi,
+        stats.int,
+        stats.wis
+    ];
 
-    const finalStats = {
-        "damage": _calculateStatPreview(modifiers.damage, stats.str, tier,2),
-        "critical_multiplier": modifiers.critical_multiplier + (stats.str * 0.5) + (tier * 0.75),
-        
-        "initiative": _calculateStatPreview(modifiers.initiative, stats.agi, tier),
-        "evasion": _calculateStatPreview(modifiers.evasion, stats.agi, tier,1.75),
-        "critical_chance": _calculateStatPreview(modifiers.critical_chance, stats.agi, tier,2),
+    const tempChar = new PCharacter("preview", attributesArray);
 
-        "hp": _calculateStatPreview(modifiers.hp, stats.con, tier,5),
-        "armor": _calculateStatPreview(modifiers.armor, stats.con, tier),
-
-        "mana": _calculateStatPreview(modifiers.mana, stats.int, tier,2),
-        "skill": _calculateStatPreview(modifiers.skill, stats.int, tier,2),
-
-        "magic_resist": _calculateStatPreview(modifiers.magic_resist, stats.wis, tier),
-        "mana_regen": _calculateStatPreview(modifiers.mana_regen, stats.wis, tier),
-        "hp_regen": _calculateStatPreview(modifiers.hp_regen, stats.wis, tier,2),
-    };
+    const finalStats = tempChar.stats;
 
     for (const statName in finalStats) {
 
         if(statName == 'evasion' || statName == 'critical_chance'){
-            previewStatElements[statName].textContent = `${finalStats[statName]}%`;
+            if (previewStatElements[statName]) {
+                previewStatElements[statName].textContent = `${finalStats[statName].toFixed(2)}%`;
+            }
         }
         else if(statName == 'critical_multiplier'){
-            previewStatElements[statName].textContent = `${finalStats[statName].toFixed(2)}X`;
+            if (previewStatElements[statName]) {
+                previewStatElements[statName].textContent = `${finalStats[statName].toFixed(2)}X`;
+            }
         }
         else if (previewStatElements[statName]) {
-            previewStatElements[statName].textContent = finalStats[statName];
+            previewStatElements[statName].textContent = finalStats[statName].toFixed(2);
         }
     }
 }

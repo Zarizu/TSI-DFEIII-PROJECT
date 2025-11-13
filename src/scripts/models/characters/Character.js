@@ -41,89 +41,136 @@ class Character {
         this.currentHP = JSON.parse(JSON.stringify(this.stats.hp));
         this.currentMana = JSON.parse(JSON.stringify(this.stats.mana));
         
-        //habilidades passivas, geralmente com relacao a classe
+        //habilidades passivas, geralmente com relacao a vocacao(alidos) ou classe(time inimigo)
         this.passive_skills = [];
     }
 
-    _calculateStat(modifierName, attributeName , atrWeight = 1) {
+    _calculateModifier(weight = 1, op = '*'){
+
+        //comeca fraco e escalona muito late game
+            if(op === '*'){
+                return weight * this.lvl;
+
+            //comeca mais forte, mas escala menos late game
+            }else if(op === '+'){
+                return weight + this.lvl;
+                
+            }else{
+                throw new Error('Error: invalid operator');
+            }
+    }
+    _calculateStat(modifierName, attributeConfig , atrWeight = 1, op = '*', forceInt = true) {
         const modifier = this.modifiers[modifierName];
-        const attribute = this.attributes[attributeName] * atrWeight;
+        let attributeValue = 0;
+
+        if(typeof attributeConfig === 'string'){
+            attributeValue = this.attributes[attributeConfig] * atrWeight;
+        }else if (typeof attributeConfig === 'object' && attributeConfig !== null){
+            let totalValue = 0;
+            let totalWeight = 0;
+
+            for (const atr in attributeConfig) {
+                const weight = attributeConfig[atr];  
+                const atrValue = this.attributes[atr];
+                
+                if (atrValue !== undefined) {
+                    totalValue += atrValue * weight;
+                    totalWeight += weight;
+                }
+            }
+            
+            
+            attributeValue = (totalWeight > 0) ? (totalValue / totalWeight) : 0;
         
-        return modifier + (attribute * this.tier);
+        } else {
+            throw new Error('Tipo de atributo inválido: ' + attributeConfig);
+        }
+
+        //comeca fraco e escalona muito late game
+            if(op === '*'){
+                if(forceInt){return Math.round(modifier * (attributeValue * this.tier))};
+                return modifier * (attributeValue * this.tier);
+
+            //comeca mais forte, mas escala menos late game
+            }else if(op === '+'){
+                if(forceInt){return Math.round(modifier + (attributeValue * this.tier))};
+                
+                return modifier + (attributeValue * this.tier);
+                
+            }else{
+                throw new Error('Error: invalid operator');
+            }
     }
     
     recalculateAll() {
-
+        //peso nos stats p/ level
         this.modifiers = {
             // Força
-            "damage": 2 * this.lvl,
-            "critical_multiplier": 0.25 * this.lvl,
+            "damage": this._calculateModifier(2),
+            "critical_multiplier": 1 + (this.lvl*0.25), //especifiquei pra equilibrar pois esse stat aqui é bem forte
             // Agilidade
-            "initiative" : 1 * this.lvl,
-            "evasion": 0.75 * this.lvl,
-            "critical_chance": 1.25 * this.lvl,
+            "initiative" :this._calculateModifier(1),
+            "evasion": this._calculateModifier(0.5),
+            "critical_chance": this._calculateModifier(1),
             // Constituição
-            "hp": 5 * this.lvl,
-            "armor": 1 * this.lvl,
+            "hp": this._calculateModifier(5),
+            "armor": this._calculateModifier(1),
             // Inteligência
-            "mana": 3 * this.lvl,
-            "skill": 1 * this.lvl,
+            "mana": this._calculateModifier(2,"+"),
+            "skill": this._calculateModifier(1),
             // Sabedoria
-            "magic_resist": 1 * this.lvl,
-            "mana_regen": 1 * (this.lvl),
-            "hp_regen": 3 * (this.lvl)
+            "magic_resist": this._calculateModifier(1),
+            "mana_regen": this._calculateModifier(2),
+            "hp_regen": this._calculateModifier(2),
         };
-
+        //peso por atributo
         this.stats = {
             // FOR
             "damage": this._calculateStat("damage", "str",2),
-            "critical_multiplier": (this.attributes.str  *0.5) + this.modifiers.critical_multiplier + (this.tier * 0.75),
+            "critical_multiplier": this._calculateStat("critical_multiplier","str",0.25,'+',false),
             
             // AGI
             "initiative": this._calculateStat("initiative", "agi"),
-            "evasion": this._calculateStat("evasion", "agi",2),
-            "critical_chance": this._calculateStat("critical_chance", "agi",2),
+            "evasion": this._calculateStat("evasion", "agi",1.5,'*',false),
+            "critical_chance": this._calculateStat("critical_chance", "agi",1.5,'*',false),
 
             // CON
-            "hp": this._calculateStat("hp", "con", 5),
-            "armor": this._calculateStat("armor", "con"),
+            "hp": this._calculateStat("hp", "con", 3),
+            "armor": this._calculateStat("armor", "con",),
 
             // INT
-            "mana": this._calculateStat("mana", "int",2),
+            "mana": this._calculateStat("mana", {"int":6,"wis":3},1,"*"),
             "skill": this._calculateStat("skill", "int",2),
 
             // SAB
             "magic_resist": this._calculateStat("magic_resist", "wis"),
             "mana_regen": this._calculateStat("mana_regen", "wis"),
-            "hp_regen": this._calculateStat("hp_regen", "wis",2),
+            "hp_regen": this._calculateStat("hp_regen", "wis",5),
         };
+
+        if(this.stats['evasion'] >= 40){
+            this.stats['evasion'] = 40;
+        }
+
+        if(this.stats['critical_chance'] >= 85){
+            this.stats['critical_chance'] = 85
+        }   
     }
+
     getAttributes(){
-        return [this.str, this.con, this.agi, this.int, this.wis]
-    }
-    
-    showAttributes() {
-        console.log(`--- Atributos de ${this.name} ---`);
-        Object.keys(this.attributes).forEach(key => {
-            console.log(`${key}: ${this.attributes[key]}`); 
-        });
+        return this.attributes;
     }
 
-    showStats() {
-        console.log(`--- Stats de ${this.name} ---`);
-        Object.keys(this.stats).forEach(key => {
-            console.log(`${key}: ${this.stats[key]}`); 
-        });
-    }
-
-    meleeAttack(target) {
-        if(!target || target.currentHP <1 ) return {damage: 0, didEvade: false, isCritical: false };
-
+    meleeAttack(target) {        
+        if(!target || target.currentHP <1 ){return {damage: 0, didEvade: true, isCritical: false , didKill:false }};
+        let didKill = false;
+        console.log(`${this.name} ataca`);
+        
         // esquiva
         // compara um número aleatório (0-100) com a chance de esquiva do alvo
         if (Math.floor(Math.random() * 101) < target.stats.evasion) {
 
-            return{ damage: 0, didEvade: true, isCritical: false };
+            return{ damage: 0, didEvade: true, isCritical: false, didKill:false  };
         }
 
         let damage = this.stats.damage;
@@ -142,10 +189,11 @@ class Character {
 
         if(target.currentHP >=finalDamage)target.currentHP -= finalDamage
         else{
+            didKill = true;
+            console.log('passo')
             target.currentHP = 0;
         }
-
-        return{ damage: finalDamage, didEvade: false, isCritical: isCritical };
+        return{ damage: finalDamage, didEvade: false, isCritical: isCritical, didKill:didKill };
     }
     rest(){
         //rec. de hp
