@@ -30,24 +30,23 @@ function Effect(name, icon, description,effectType, rarity = 'common'){
 }
 
 Effect.prototype.applyEffect = function(caster, target, duration) {
-    const existingEffect = target.effects.find(e => e.name === this.name);
+    let existingEffect = target.effects.find(e => e.name === this.name);
     
-    //caso o alvo já tenha o efeito, apenas reseta a duração
-    if (existingEffect) {
-        existingEffect.duration = duration;
-
-        if (typeof existingEffect.onApply === 'function') {
-        newInstance.onApply(caster ,target);
-        }
-        return;
-    }
-
     const newInstance = Object.create(Object.getPrototypeOf(this));
     Object.assign(newInstance, this);
 
     newInstance.duration = duration;
     newInstance.id = getNextEffectId();
 
+    newInstance.casterId = caster.id;
+    if (existingEffect) {
+        existingEffect = newInstance;
+
+        if (typeof existingEffect.onApply === 'function') {
+        newInstance.onApply(caster ,target);
+        }
+        return;
+    }
     if (typeof newInstance.onApply === 'function') {
         newInstance.onApply(caster, target);
     }

@@ -54,6 +54,7 @@ DamageSkill.prototype = Object.create(Skill.prototype);
 DamageSkill.prototype.constructor = DamageSkill;
 
 DamageSkill.prototype.execute = function(caster, target) {
+    let didKill = false;
     let damage = this.basePower + caster.stats.skill;
     
     let finalDamage = damage - target.stats.magic_resist;
@@ -61,10 +62,11 @@ DamageSkill.prototype.execute = function(caster, target) {
 
     if(target.currentHP >= finalDamage)target.currentHP -= finalDamage
         else{
+            didKill = true;
             target.currentHP = 0;
         }
     
-    return { type: 'damage', amount: finalDamage };
+    return { type: 'damage', amount: finalDamage ,didKill: didKill};
 }
 
 function ApplyEffectSkill(name, icon, description, manaCost, targetType, effectToApply, duration, rarity) {
