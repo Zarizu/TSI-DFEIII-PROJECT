@@ -6,7 +6,7 @@ class ConnectionAPI {
         this.url = base_url + seed_query;
     }
 
-    async fetchUsers(amount) {
+    async getInfo(amount) {
         if (amount > 5000) {
             console.error('[API] Aviso: Limite máximo de 5000 usuários por requisição.');
             return;

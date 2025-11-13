@@ -12,6 +12,7 @@
 
     <script src="../scripts/models/characters/Character.js" defer></script>
     <script src="../scripts/models/characters/PCharacter.js" defer></script>
+    <script src="../scripts/models/api/ConnectionAPI.js" defer></script>
 
     <link rel="stylesheet" href="../styles/char_creation.css">
 </head>
@@ -20,9 +21,14 @@
     
     <main class="main-container"> 
         <div id="central-box"> 
-            
             <div id="step-1-name">
                 <h2 class="box-title">Crie Seu Héroi</h2>
+                <input type="file" id="char-avatar-input" accept="image/*">
+                <div class="avatar-area">
+                    <label for="char-avatar-input" id="avatar-preview"></label>
+                    <button id="avatar-random-btn">⟳</button>
+                </div>
+
                 <input type="text" id="char-name-input" placeholder="Digite o nome" maxlength="20" autocomplete="off">
                 <button id="next-step-btn" disabled>Próximo</button>
             </div>

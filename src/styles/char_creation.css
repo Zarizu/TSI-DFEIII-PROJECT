@@ -175,6 +175,53 @@ body {
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+#char-avatar-input {
+  display: none;
+}
+.avatar-area {
+  position: relative;
+  width: 10em;
+  height: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#avatar-preview {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: #e5e7eb url('https://cdn-icons-png.flaticon.com/512/149/149071.png') center/60% no-repeat;
+  border: 2px dashed #cbd5e1;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: block;
+}
+#avatar-preview:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+#avatar-random-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.1s;
+}
+#avatar-random-btn:hover {
+  background: #2563eb;
+  transform: rotate(20deg);
+}
 #char-name-input {
     width: 90%;
     padding: 10px;
