@@ -15,7 +15,7 @@ function getNextCharacterId() {
 }
 // personagem generico
 class Character {
-    constructor(name, [str, con, agi, int, wis], lvl = 1, tier = 1) {
+    constructor(name, attributesInput, lvl = 1, tier = 1) {
         //id universal
         this.id = getNextCharacterId();
 
@@ -23,14 +23,22 @@ class Character {
         this.lvl = lvl;
         this.tier = tier;
 
-        this.attributes = {
-            str: str,
-            con: con,
-            agi: agi,
-            int: int,
-            wis: wis
-        };
-        
+        if (Array.isArray(attributesInput)) {
+            const [str, con, agi, int, wis] = attributesInput;
+            this.attributes = {
+                str: str,
+                con: con,
+                agi: agi,
+                int: int,
+                wis: wis
+            }
+        }else if (typeof attributesInput === 'object' && attributesInput !== null) {
+            this.attributes = { ...attributesInput }; 
+        } else {
+
+            console.error(`Atributos inválidos para ${name}!`, attributesInput);
+            this.attributes = { str: 1, con: 1, agi: 1, int: 1, wis: 1 };
+        }
         this.modifiers = null; 
         this.stats = null;
         this.effects = [];
@@ -178,7 +186,7 @@ class Character {
         let finalDamage = damage - target.stats.armor;
         if (finalDamage < 1) finalDamage = 1;
 
-        if(target.currentHP >=finalDamage)target.currentHP -= finalDamage
+        if(target.currentHP > finalDamage)target.currentHP -= finalDamage
         else{
             didKill = true;
             console.log('passo')

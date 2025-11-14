@@ -1,29 +1,28 @@
-//var globais
-window.team = [];
-window.enemyTeam = [];
-window.playerActions = {};
-
-//importação do personagem
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData != null){
-firstCharData = JSON.parse(firstCharData);
-    //debug
-    localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
-    let attributes = firstCharData.attributes
+    // ... (JSON.parse, etc.)
+    firstCharData = JSON.parse(firstCharData);
     
-    const attributesArray = [
-        attributes.str,
-        attributes.con,
-        attributes.agi,
-        attributes.int,
-        attributes.wis
-    ];
+    // 1. 'attributesObject' é o {str: 2, con: 2, ...}
+    let attributesObject = firstCharData.attributes;
     
-    const firstChar = new PCharacter(firstCharData.name, attributesArray);
+    // 2. [CORREÇÃO] Não precisa mais do 'attributesArray'
+    //    Passe o OBJETO diretamente.
+    const firstChar = new PCharacter(
+        firstCharData.name, 
+        attributesObject, // <-- PASSA O OBJETO
+        firstCharData.lvl,
+        firstCharData.tier,
+        firstCharData.vocation
+    );
     
+    // 3. (Restaura o estado)
+    firstChar.currentHP = firstCharData.currentHP;
+    firstChar.currentMana = firstCharData.currentMana;
+    // ... (etc.)
+
     addCharToSquad(firstChar);
-    console.log(firstChar);
-    
+    console.log("Personagem carregado:", firstChar);
     
 } else {
 //caso o acesso seja feito sem a criação de um personagem(MODO DEBUG para testes de desenvolvimento)

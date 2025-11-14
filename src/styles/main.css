@@ -1026,3 +1026,62 @@ body.targeting-ally .player-card.is-targeting {
     animation: fade-out-and-fall 0.5s ease-out forwards;
     z-index: 1 !important; 
 }
+.level-up-icon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--gold-color);
+    color: var(--dark-text-color);
+    border-radius: 50%;
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 24px; 
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--gold-color);
+    animation: float 1.5s ease-in-out infinite;
+}
+
+.level-up-icon:hover {
+    transform: scale(1.1);
+}
+
+.team-member-portrait {
+    position: relative; 
+}
+
+#lvlup-points-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--success-color);
+}
+#lvlup-points-display span {
+    font-size: 1.5em;
+}
+
+#lvlup-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.levelup-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--card-bg);
+    border-radius: 5px;
+}
+.levelup-stat-row span {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.levelup-stat-row .stat-controls {
+    gap: 15px;
+}

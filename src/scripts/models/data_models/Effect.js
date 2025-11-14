@@ -167,7 +167,7 @@ HealOverTimeEffect.prototype.constructor = HealOverTimeEffect;
 
 HealOverTimeEffect.prototype.onApply= function(caster, target){
     const casterStatValue = caster.stats[this.scalingStat];
-    this.healPerTick = Math.round(caster.stats['hp_regen'] / this.duration);
+    this.healPerTick = Math.round(casterStatValue / this.duration);
     this.power = this.healPerTick;
 }
 HealOverTimeEffect.prototype.onTick = function(target) {

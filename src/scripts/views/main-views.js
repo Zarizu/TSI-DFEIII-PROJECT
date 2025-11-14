@@ -18,8 +18,13 @@ const skillPopup = document.getElementById('skill-popup');
 const turnOrderList = document.getElementById('turn-order-list');
 const turnOrderTooltip = document.getElementById('turn-order-tooltip');
 const combatTextPopup = document.getElementById('combat-text-popup');
-
+const levelUpModal = document.getElementById('level-up-modal');
+let activeLevelUpCharacter = null;
 let skillPopupTimeout = null;
+
+window.team = [];
+window.enemyTeam = [];
+window.playerActions = {};
 
 //add menu lateral esquerdo
 const MAX_TEAM_SIZE = 6;
@@ -326,5 +331,43 @@ turnOrderList.addEventListener('mousemove', (event) => {
     if (!turnOrderTooltip.classList.contains('hidden')) {
         turnOrderTooltip.style.left = `${event.pageX + 10}px`;
         turnOrderTooltip.style.top = `${event.pageY + 10}px`;
+    }
+});
+
+teamRoster.addEventListener('click', (event) => {
+    const levelUpButton = event.target.closest('.level-up-icon');
+    
+    if (levelUpButton) {
+        const parentCard = levelUpButton.closest('.team-member-portrait');
+        const charId = parseInt(parentCard.dataset.id, 10);
+        const character = window.team.find(c => c.id === charId);
+        
+        if (character) {
+            openLevelUpModal(character);
+        }
+    }
+});
+
+levelUpModal.addEventListener('click', (event) => {
+    const plusButton = event.target.closest('.lvlup-plus-btn');
+    
+    if (plusButton) {
+        const statName = plusButton.dataset.stat;
+        
+        const success = activeLevelUpCharacter.spendAttributePoint(statName);
+        
+        if (success) {
+            refreshAllUI();
+            
+            if (activeLevelUpCharacter.unspentAttributePoints === 0) {
+                closeLevelUpModal();
+            } else {
+                openLevelUpModal(activeLevelUpCharacter);
+            }
+        }
+    }
+    
+    if (event.target.closest('.close-panel-btn')) {
+        closeLevelUpModal();
     }
 });

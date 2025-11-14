@@ -21,8 +21,12 @@ BattleManager.prototype.processActions = async function(){
     
         const alivePlayers = window.team.filter(char => char.currentHP > 0);
     if (alivePlayers.length === 0) {
-        await wait(turnDelay);
+        await wait(500);
         console.log("GAME OVER");
+        localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
+        localStorage.setItem(ID_COUNTER_KEY_EFFECT,1);
+        localStorage.setItem(ID_COUNTER_KEY_SKILL,1);
+
         //tela de Game Over
         return;
     }
@@ -30,7 +34,7 @@ BattleManager.prototype.processActions = async function(){
     //se inimigos estao derrotados, comeca outra fase
     const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
     if (aliveEnemies.length === 0) {
-        await wait(1000);
+        await wait(500);
         endRound();
         checkPhaseEnd(); 
     } else {
@@ -43,8 +47,9 @@ BattleManager.prototype.processAllyActions = function(character){
     return new Promise((resolve) => {
         const actions = window.playerActions;
         const charActions = actions[character.id];
+        if(!charActions)return;
 
-        if (!charActions || charActions.type === 'rest') {
+        if (charActions.type === 'rest') {
             const hpBefore = character.currentHP;
             const manaBefore = character.currentMana;
             
@@ -101,6 +106,7 @@ BattleManager.prototype.processAllyActions = function(character){
                         removeEnemyFromSquad(target);
                     });
                 }
+
                 resolve();
             }, 250);
             

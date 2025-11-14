@@ -107,6 +107,57 @@
         </div>
     </div>
 
+    <div id="level-up-modal" class="modal-panel hidden">
+        <div class="modal-content">
+            <div class="panel-title">
+                Level Up: <span id="lvlup-char-name">Nome</span>
+            </div>
+            
+            <div id="lvlup-points-display">
+                Pontos Restantes: <span id="lvlup-points-value">0</span>
+            </div>
+
+            <div id="lvlup-stats-list">
+                <div class="levelup-stat-row">
+                    <span>Força</span>
+                    <div class="stat-controls">
+                        <span class="value" id="lvlup-str-value">0</span>
+                        <button class="stat-btn plus lvlup-plus-btn" data-stat="str">+</button>
+                    </div>
+                </div>
+                <div class="levelup-stat-row">
+                    <span>Constituição</span>
+                    <div class="stat-controls">
+                        <span class="value" id="lvlup-con-value">0</span>
+                        <button class="stat-btn plus lvlup-plus-btn" data-stat="con">+</button>
+                    </div>
+                </div>
+                <div class="levelup-stat-row">
+                    <span>Agilidade</span>
+                    <div class="stat-controls">
+                        <span class="value" id="lvlup-agi-value">0</span>
+                        <button class="stat-btn plus lvlup-plus-btn" data-stat="agi">+</button>
+                    </div>
+                </div>
+                <div class="levelup-stat-row">
+                    <span>Inteligência</span>
+                    <div class="stat-controls">
+                        <span class="value" id="lvlup-int-value">0</span>
+                        <button class="stat-btn plus lvlup-plus-btn" data-stat="int">+</button>
+                    </div>
+                </div>
+                <div class="levelup-stat-row">
+                    <span>Sabedoria</span>
+                    <div class="stat-controls">
+                        <span class="value" id="lvlup-wis-value">0</span>
+                        <button class="stat-btn plus lvlup-plus-btn" data-stat="wis">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+            <button id="lvlup-close-btn" class="close-panel-btn" data-target-panel="level-up-modal">X</button>
+        </div>
     <div id="enemy-tooltip" class="hidden">
         <h4 id="tooltip-name">Nome do Inimigo</h4>
         <p id="tooltip-desc">Descrição dos status ou buffs/debuffs.</p>

@@ -2,6 +2,7 @@
 //draws (desenha os estados atuais na tela)
 
 function refreshAllUI() {
+    drawRoster();
     window.team.forEach(character => {
         updateSquad(character);
     });
@@ -11,20 +12,25 @@ function refreshAllUI() {
     })
 }
 function refreshRoster() {
+
     teamRoster.innerHTML = '';
 
     window.team.forEach(character => {
+        let levelUpIconHTML = '';
+        if (character.unspentAttributePoints > 0) {
+        levelUpIconHTML = `<div class="level-up-icon" title="Pontos disponíveis!">+</div>`;
+        }   
         const newPortraitHTML = `
-            <div class="portrait-image"></div>
-            <div class="portrait-info">
-                <span class="portrait-name">${character.name}</span>
-                <div class="portrait-stats">
-                    <span class="portrait-atk">⚔️ ${character.stats.damage}</span>
-                    <span class="portrait-hp">❤️ ${character.currentHP}/${character.stats.hp}</span>
-                    <span class="portrait-mana">🌀 ${character.currentMana}/${character.stats.mana}</span>
-                </div>
+        <div class="portrait-image"></div>
+        <div class="portrait-info">
+            <span class="portrait-name">${character.name}</span>
+            <div class="portrait-stats">
+                <span class="portrait-atk">⚔️ ${character.currentHP}</span>
+                <span class="portrait-hp">❤️ ${character.currentHP}/${character.stats.hp}</span>
+                <span class="portrait-mana">🌀 ${character.currentMana}/${character.stats.mana}</span>
             </div>
-        `;
+        </div>
+        ${levelUpIconHTML} `;
         
         const slot = document.createElement('div');
         slot.classList.add('team-member-portrait'); 
@@ -46,6 +52,30 @@ function refreshRoster() {
 }
 function drawRoster(character) {
     refreshRoster();
+}
+
+function openLevelUpModal(character) {
+    if (!character) return;
+    
+    activeLevelUpCharacter = character;
+
+    console.log(activeLevelUpCharacter);
+    
+    document.getElementById('lvlup-char-name').textContent = character.name;
+    document.getElementById('lvlup-points-value').textContent = character.unspentAttributePoints;
+    
+    document.getElementById('lvlup-str-value').textContent = character.attributes.str;
+    document.getElementById('lvlup-con-value').textContent = character.attributes.con;
+    document.getElementById('lvlup-agi-value').textContent = character.attributes.agi;
+    document.getElementById('lvlup-int-value').textContent = character.attributes.int;
+    document.getElementById('lvlup-wis-value').textContent = character.attributes.wis;
+
+    levelUpModal.classList.remove('hidden');
+}
+
+function closeLevelUpModal() {
+    levelUpModal.classList.add('hidden');
+    activeLevelUpCharacter = null;
 }
 
 function drawCrew(character) {
