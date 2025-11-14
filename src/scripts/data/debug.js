@@ -1,7 +1,6 @@
 //arquivo temporario de testes
-window.debugTeam = [
-    new PCharacter('Guerreador', [3, 2, 1, 1, 1]),
-    new PCharacter('Magro', [1, 2, 1, 3, 1]),
+window.debugEnemyTeam = [
+    
 ];
 
 function debugInit(){

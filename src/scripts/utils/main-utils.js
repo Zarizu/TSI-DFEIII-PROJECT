@@ -81,6 +81,7 @@ function endRoundCleanup() {
 }
 //squad
 function addCharToSquad(character) {
+    if(character instanceof PCharacter === false)return;
     if(window.team.includes(character)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${character.name}.`);
         return;
@@ -96,6 +97,7 @@ function addCharToSquad(character) {
 }
 
 function removeCharfromSquad(character) {
+    if(character instanceof PCharacter === false)return;
     if (!window.team.includes(character)) {
         console.warn(`Não existe no time! Não há como remover ${character.name}.`);
         return;
@@ -117,6 +119,7 @@ function removeCharfromSquad(character) {
 //squad inimigo
 
 function addEnemyFromSquad(enemy) {
+    if(enemy instanceof Enemy === false) return;
     if(window.enemyTeam.includes(enemy)){
         console.warn(`Já existe no time! Não há necessidade de adicionar ${enemy.name}.`);
         return;
@@ -131,6 +134,7 @@ function addEnemyFromSquad(enemy) {
 }
 
 function removeEnemyFromSquad(enemy) {
+    if(enemy instanceof Enemy === false) return;
     if (!window.enemyTeam.includes(enemy)) {
         console.warn(`Não existe no time! Não há como remover ${enemy.name}.`);
         return;
@@ -146,37 +150,16 @@ function removeEnemyFromSquad(enemy) {
 
 function spawnNewEnemies() {
     window.enemyTeam = [];
+    enemyArea.innerHTML = ''; 
 
-    enemyArea.innerHTML = '';
+    //a cada 5 fases aumenta 1 inimigo
+    const enemyCount = ENEMY_GENERATOR.calculateNumberOfEnemies();; 
 
-    const currentPhase = GAME_MANAGER.getPhase(); 
+    console.log(`Fase ${GAME_MANAGER.getPhase()}. Spawning ${enemyCount} inimigos...`);
 
-    const phaseData = PHASE_ENCOUNTERS[currentPhase];
-
-    if (!phaseData) {
-        console.log("VOCÊ VENCEU! Não há mais fases.");
-        return;
-    }
-
-    const spawnCount = phaseData.spawnCount;
-    const poolKeys = phaseData.pool;
-
-    console.log(`Iniciando Fase ${currentPhase}. Spawning ${spawnCount} inimigos...`);
-
-    for (let i = 0; i < spawnCount; i++) {
-        const randomKey = poolKeys[Math.floor(Math.random() * poolKeys.length)];
+    for (let i = 0; i < enemyCount; i++) {
         
-        const enemyMold = ENEMIES_MOLDS[randomKey];
-
-        const newEnemy = new Enemy(
-            enemyMold.name,
-            [enemyMold.attributes.str, enemyMold.attributes.con, enemyMold.attributes.agi, enemyMold.attributes.int, enemyMold.attributes.wis],
-            enemyMold.lvl,
-            enemyMold.tier,
-            enemyMold.description
-        );
-        
-        newEnemy.skills = [...enemyMold.skills];
+        const newEnemy = ENEMY_GENERATOR.generateEnemy();
         
         addEnemyFromSquad(newEnemy);
     }
