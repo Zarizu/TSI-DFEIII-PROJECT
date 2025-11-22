@@ -9,6 +9,7 @@ const step1 = document.getElementById('step-1-name');
 const step2 = document.getElementById('step-2-attributes');
 const charNameInput = document.getElementById('char-name-input');
 const charAvatarInput = document.getElementById('char-avatar-input');
+const avatarRandomBtn = document.getElementById('avatar-random-btn');
 const nextStepButton = document.getElementById('next-step-btn');
 const prevStepButton = document.getElementById('prev-step-btn');
 const startButton = document.getElementById('main-start');

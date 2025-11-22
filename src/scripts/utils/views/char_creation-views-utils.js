@@ -55,6 +55,10 @@ startButton.addEventListener('click', () => {
     window.location.href = './main.html';
 });
 
+avatarRandomBtn.addEventListener('click', () => {
+    APIConn.getAvatar().then();
+});
+
 function updateUI() {
     pointsValueEl.textContent = totalPoints;
 
@@ -142,3 +146,4 @@ function updateStatsPreview() {
         }
     }
 }
+

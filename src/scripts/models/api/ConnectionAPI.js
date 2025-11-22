@@ -1,6 +1,6 @@
 class ConnectionAPI {
-    constructor(rand_seed) {
-        this.seed = rand_seed;
+    constructor(seed) {
+        this.seed = seed;
         const base_url = 'https://randomuser.me/api/';
         const seed_query = `?seed=${encodeURIComponent(this.seed)}`;
         this.url = base_url + seed_query;
