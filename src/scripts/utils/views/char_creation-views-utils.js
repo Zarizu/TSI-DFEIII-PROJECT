@@ -56,8 +56,18 @@ startButton.addEventListener('click', () => {
 });
 
 avatarRandomBtn.addEventListener('click', () => {
-    APIConn.getAvatar().then();
+    APIConn.getAvatar().call()
+    .then(data => {
+        const pic = Array.isArray(data) ? data[0].picture.large : data.picture.large;
+        console.log("Avatar URL:", pic);
+
+        avatarPreview.style.backgroundImage = `url(${pic})`;
+        avatarPreview.style.backgroundSize = "cover";
+        avatarPreview.style.backgroundPosition = "center";
+    })
+    .catch(err => console.error(err));
 });
+
 
 function updateUI() {
     pointsValueEl.textContent = totalPoints;
