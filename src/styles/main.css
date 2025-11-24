@@ -1085,3 +1085,49 @@ body.targeting-ally .player-card.is-targeting {
 .levelup-stat-row .stat-controls {
     gap: 15px;
 }
+
+/* Estilos da Loja */
+.mercenary-for-hire {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.merc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.merc-name {
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 1.1em;
+}
+
+.merc-vocation {
+    font-size: 0.9em;
+    color: var(--gold-color);
+}
+
+.merc-stats-mini {
+    font-size: 0.85em;
+    color: #ccc;
+}
+
+.merc-buy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.mercenary-cost {
+    font-weight: bold;
+    color: var(--gold-color);
+}

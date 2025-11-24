@@ -204,6 +204,23 @@ recruitIcon.addEventListener('click', () => {
     recruitPanel.classList.add('is-open');
     document.body.classList.add('shop-is-open');
 });
+recruitPanel.addEventListener('click', (event) => {
+    if (event.target.classList.contains('recruit-btn')) {
+        const index = parseInt(event.target.dataset.index, 10);
+        
+        // Tenta comprar
+        const success = SHOP_MANAGER.buyMercenary(index);
+        
+        if (success) {
+            // Se comprou: atualiza ouro e redesenha a loja
+            goldAmount.textContent = PLAYER_MANAGER.getGold();
+            drawShop();
+        } else {
+            // (Opcional) Feedback visual de erro
+            alert("Não foi possível contratar (Sem ouro ou time cheio).");
+        }
+    }
+});
 // Fechar Painéis (Recrutar ou Habilidades)
 closeButtons.forEach(button => {
     button.addEventListener('click', () => {

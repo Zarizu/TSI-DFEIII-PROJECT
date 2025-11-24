@@ -369,3 +369,35 @@ function animate(attackResult, targetCard){
         }
     }, 500);
 }
+const recruitContent = document.querySelector('#recruit-panel .panel-content');
+
+function drawShop() {
+    recruitContent.innerHTML = ''; // Limpa a loja atual
+
+    if (SHOP_MANAGER.shopInventory.length === 0) {
+        recruitContent.innerHTML = '<div style="padding:10px; text-align:center;">Loja Esgotada!</div>';
+        return;
+    }
+
+    SHOP_MANAGER.shopInventory.forEach((merc, index) => {
+        // Cria o HTML do card de compra
+        const item = document.createElement('div');
+        item.classList.add('mercenary-for-hire');
+        
+        item.innerHTML = `
+            <div class="merc-info">
+                <span class="merc-name">${merc.name}</span>
+                <span class="merc-vocation">${merc.vocationName} (Nv.${merc.lvl})</span>
+                <div class="merc-stats-mini">
+                   ⚔️${merc.stats.damage} ❤️${merc.stats.hp} 🌀${merc.stats.mana}
+                </div>
+            </div>
+            <div class="merc-buy">
+                <span class="mercenary-cost">${merc.cost} 💰</span>
+                <button class="recruit-btn" data-index="${index}">Contratar</button>
+            </div>
+        `;
+
+        recruitContent.appendChild(item);
+    });
+}

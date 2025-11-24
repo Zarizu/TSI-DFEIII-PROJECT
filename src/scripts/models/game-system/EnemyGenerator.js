@@ -1,4 +1,3 @@
-// (Em models/game-system/EnemyGenerator.js)
 
 function EnemyGenerator() {
     // (O construtor fica vazio, pois usamos o protótipo)

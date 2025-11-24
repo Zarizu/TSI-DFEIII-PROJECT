@@ -26,4 +26,6 @@ debugInit();
 spawnNewEnemies(); 
 refreshAllUI();
 checkBattleReady();
+SHOP_MANAGER.generateShop();
+drawShop()
 executeRound();
