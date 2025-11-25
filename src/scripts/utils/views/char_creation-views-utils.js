@@ -48,11 +48,10 @@ startButton.addEventListener('click', () => {
         stats.wis
     ];
     
-    let firstChar = new PCharacter(charName, avatarObj, attributesArray);
+    let firstChar = new PCharacter(charName, attributesArray, avatarObj);
     const firstCharFormatted = JSON.stringify(firstChar);
 
     localStorage.setItem('FirstCharData', firstCharFormatted);
-    
     window.location.href = './main.html';
 });
 

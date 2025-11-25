@@ -3,10 +3,12 @@ if(firstCharData != null){
     firstCharData = JSON.parse(firstCharData);
 
     let attributesObject = firstCharData.attributes;
+    let avatarObj = firstCharData.avatar;
     
     const firstChar = new PCharacter(
         firstCharData.name, 
         attributesObject,
+        avatarObj,
         firstCharData.lvl,
         firstCharData.tier,
         firstCharData.vocation

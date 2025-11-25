@@ -1,6 +1,6 @@
 class Enemy extends Character {
-    constructor(name, avatar, attributesInput, lvl, tier, description = '') {
-        super(name, avatar, attributesInput, lvl, tier);
+    constructor(name, attributesInput, avatarObj, lvl, tier, description = '') {
+        super(name, attributesInput, avatarObj, lvl, tier);
         
         this.xpGiven = lvl * 100 * tier;
 
