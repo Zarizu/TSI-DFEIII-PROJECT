@@ -1,3 +1,4 @@
+/*
 const ID_COUNTER_KEY_CHARACTER = 'gameCharacterIdCounter';
 
 function getNextCharacterId() {
@@ -13,13 +14,16 @@ function getNextCharacterId() {
 
     return nextId;
 }
+*/
 // personagem generico
 class Character {
-    constructor(name, attributesInput, lvl = 1, tier = 1) {
+    static nextID = 0;
+    constructor(name, attributesInput, avatarObj = null, lvl = 1, tier = 1) {
         //id universal
-        this.id = getNextCharacterId();
+        this.id = Character.nextID++;
 
-        this.name = name;
+        this.name = this.#generateUniqueName(name);
+        this.avatar = typeof avatarObj === 'object' ? avatarObj : null;
         this.lvl = lvl;
         this.tier = tier;
 
@@ -32,7 +36,7 @@ class Character {
                 int: int,
                 wis: wis
             }
-        }else if (typeof attributesInput === 'object' && attributesInput !== null) {
+        } else if (typeof attributesInput === 'object' && attributesInput !== null) {
             this.attributes = { ...attributesInput }; 
         } else {
 
@@ -52,18 +56,95 @@ class Character {
         //habilidades passivas, geralmente com relacao a vocacao(alidos) ou classe(time inimigo)
         this.passive_skills = [];
     }
+    #generateUniqueName(nameObj, removeChance = 0.25, epicChance = 0.25) {
+        if (typeof nameObj === 'string') return nameObj;
 
+        const { title, first, last } = nameObj;
+
+        // --- PARTE 1: EMBARALHAMENTO DAS PARTES ---
+        let parts = [title, first, last];
+
+        for (let i = parts.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [parts[i], parts[j]] = [parts[j]], [parts[i]];
+        }
+
+        // --- PARTE 2: MIX DE SÍLABAS ---
+        const f1 = first.slice(0, Math.ceil(first.length / 2));
+        const f2 = first.slice(Math.ceil(first.length / 2));
+
+        const l1 = last.slice(0, Math.ceil(last.length / 2));
+        const l2 = last.slice(Math.ceil(last.length / 2));
+
+        const syllableOptions = [
+            f1 + l2,
+            l1 + f2,
+            f2 + l1,
+            l2 + f1
+        ];
+
+        const mixedFirst = syllableOptions[Math.floor(Math.random() * syllableOptions.length)];
+
+        // Substitui o nome principal embaralhado
+        parts = parts.map(p => (p === first ? mixedFirst : p));
+
+        // --- PARTE 3: CHANCE DE REMOVER UMA PARTE ---
+        if (Math.random() < removeChance) {
+            const indexToRemove = Math.floor(Math.random() * parts.length);
+            parts.splice(indexToRemove, 1);
+        }
+
+        // --- PARTE 4: FORMATOS ÉPICOS ALEATÓRIOS ---
+        if (Math.random() < epicChance) {
+            const baseName = mixedFirst;
+            const surname = last;
+            const originalFirst = first;
+
+            const epicFormats = [
+                // Name, the Title
+                () => `${baseName}, the ${title}`,
+
+                // Surname of Name
+                () => `${surname} of ${baseName}`,
+
+                // Title, Son of Name
+                () => `${title}, Son of ${originalFirst}`,
+
+                // Name the Brave / The Silent / etc.
+                () => `${baseName} the ${randomEpicWord()}`,
+
+                // Lastname the Red / the Swift etc.
+                () => `${surname} the ${randomEpicWord()}`,
+
+                // Title of the Fallen / Night / Storm
+                () => `${title} of the ${randomEpicWord()}`
+            ];
+
+            return epicFormats[Math.floor(Math.random() * epicFormats.length)]();
+        }
+
+        // Se não for épico, usa as partes embaralhadas
+        return parts.join(" ");
+
+        function randomEpicWord() {
+            const words = [
+                "Brave", "Silent", "Storm", "Night", "Red", "Radiant", "Shadow",
+                "Fallen", "Iron", "Swift", "Golden", "Ashen"
+            ];
+            return words[Math.floor(Math.random() * words.length)];
+        }
+    }
     _calculateModifier(weight = 1, op = '*'){
 
         //comeca fraco e escalona muito late game
-            if(op === '*'){
+            if(op === '*') {
                 return weight * this.lvl;
 
             //comeca mais forte, mas escala menos late game
-            }else if(op === '+'){
+            } else if(op === '+') {
                 return weight + this.lvl;
                 
-            }else{
+            } else {
                 throw new Error('Error: invalid operator');
             }
     }
@@ -73,7 +154,7 @@ class Character {
 
         if(typeof attributeConfig === 'string'){
             attributeValue = this.attributes[attributeConfig] * atrWeight;
-        }else if (typeof attributeConfig === 'object' && attributeConfig !== null){
+        } else if (typeof attributeConfig === 'object' && attributeConfig !== null){
             let totalValue = 0;
             let totalWeight = 0;
 
@@ -92,9 +173,9 @@ class Character {
             throw new Error('Tipo de atributo inválido: ' + attributeConfig);
         }
 
-                if(forceInt){return Math.round(modifier + (attributeValue * this.tier))};
-                
-                return modifier + (attributeValue * this.tier);
+        if(forceInt){return Math.round(modifier + (attributeValue * this.tier))};
+        
+        return modifier + (attributeValue * this.tier);
 
     }
     

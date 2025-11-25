@@ -20,7 +20,7 @@ class ConnectionAPI {
         return this;
     }
 
-    amountReq(amount = 1) {
+    setAmount(amount = 1) {
         if (amount > ConnectionAPI.#MAX_REQUESTS)
             throw new Error(`[API] Limite máximo de ${ConnectionAPI.#MAX_REQUESTS} requisições.`);
         

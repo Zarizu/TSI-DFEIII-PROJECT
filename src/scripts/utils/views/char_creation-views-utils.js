@@ -38,6 +38,7 @@ prevStepButton.addEventListener('click', () => {
 
 startButton.addEventListener('click', () => {
     const charName = charNameInput.value;
+    const avatarObj = JSON.parse(localStorage.getItem('playerAvatar'));
     
     const attributesArray = [
         stats.str,
@@ -47,7 +48,7 @@ startButton.addEventListener('click', () => {
         stats.wis
     ];
     
-    let firstChar = new PCharacter(charName, attributesArray);
+    let firstChar = new PCharacter(charName, avatarObj, attributesArray);
     const firstCharFormatted = JSON.stringify(firstChar);
 
     localStorage.setItem('FirstCharData', firstCharFormatted);
@@ -58,7 +59,11 @@ startButton.addEventListener('click', () => {
 avatarRandomBtn.addEventListener('click', () => {
     APIConn.getAvatar().call()
     .then(data => {
-        const pic = Array.isArray(data) ? data[0].picture.large : data.picture.large;
+        const PLAYER_AVATAR_OBJ = 'playerAvatar';
+        const pictureObj = Array.isArray(data) ? data[0].picture : data.picture;
+        localStorage.setItem(PLAYER_AVATAR_OBJ, JSON.stringify(pictureObj));
+
+        const pic = data.picture.large;
         console.log("Avatar URL:", pic);
 
         avatarPreview.style.backgroundImage = `url(${pic})`;
@@ -67,7 +72,6 @@ avatarRandomBtn.addEventListener('click', () => {
     })
     .catch(err => console.error(err));
 });
-
 
 function updateUI() {
     pointsValueEl.textContent = totalPoints;
