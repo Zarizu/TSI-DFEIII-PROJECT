@@ -24,6 +24,7 @@ minusButtons.forEach(button => {
 charNameInput.addEventListener('input', () => {
 
     nextStepButton.disabled = (charNameInput.value.trim() === '');
+    nextStepButton.disabled = (avatarPreview.style.backgroundImage.trim() === '');
 });
 
 nextStepButton.addEventListener('click', () => {
@@ -70,6 +71,10 @@ avatarRandomBtn.addEventListener('click', () => {
         avatarPreview.style.backgroundPosition = "center";
     })
     .catch(err => console.error(err));
+    
+    nextStepButton.disabled = (avatarPreview.style.backgroundImage.trim() === '');
+    nextStepButton.disabled = (charNameInput.value.trim() === '');
+    
 });
 
 function updateUI() {
