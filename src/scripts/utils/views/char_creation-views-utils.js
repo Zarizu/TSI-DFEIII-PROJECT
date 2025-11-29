@@ -57,6 +57,15 @@ startButton.addEventListener('click', () => {
 });
 
 avatarRandomBtn.addEventListener('click', () => {
+
+    avatarRandomBtn.disabled = true;
+
+    // Reabilita depois de meio segundo para evitar múltiplos cliques rápidos
+    setTimeout(() => {
+        avatarRandomBtn.disabled = false;
+    }, 500);
+
+
     APIConn.getAvatar().call()
     .then(data => {
         const PLAYER_AVATAR_OBJ = 'playerAvatar';
