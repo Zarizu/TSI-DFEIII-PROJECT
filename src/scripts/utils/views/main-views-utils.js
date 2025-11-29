@@ -124,13 +124,13 @@ function drawCrew(character) {
                     <span class="icon">⚔️</span> ${character.stats.damage}
                 </div>
                 <div class="c-stat" title="Chance Crítica">
-                    <span class="icon">🎯</span> ${character.stats.critical_chance.toFixed(1)}%
+                    <span class="icon">🎯</span> ${character.stats.critical_chance.toFixed(2)}%
                 </div>
                 <div class="c-stat" title="Multiplicador Crítico">
-                    <span class="icon">💥</span> ${character.stats.critical_multiplier.toFixed(1)}x
+                    <span class="icon">💥</span> ${character.stats.critical_multiplier.toFixed(2)}x
                 </div>
                 <div class="c-stat" title="Esquiva">
-                    <span class="icon">💨</span> ${Math.round(character.stats.evasion)}%
+                    <span class="icon">💨</span> ${character.stats.evasion.toFixed(2)}%
                 </div>
             </div>
 
