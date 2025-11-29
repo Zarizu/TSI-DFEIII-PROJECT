@@ -14,15 +14,12 @@ if(firstCharData != null){
         firstCharData.vocation
     );
     
-    firstChar.currentHP = firstCharData.currentHP;
-    firstChar.currentMana = firstCharData.currentMana;
-
     addCharToSquad(firstChar);
     console.log("Personagem carregado:", firstChar);
     
 } else {
-//caso o acesso seja feito sem a criação de um personagem(MODO DEBUG para testes de desenvolvimento)
-debugInit();
+//caso o acesso seja feito sem a criação de um personagem, redireciona para a página de criação
+window.location.href = "./char_creation.html";
 }
 
 spawnNewEnemies(); 
