@@ -126,7 +126,48 @@ function closeLevelUpModal() {
     levelUpModal.classList.add('hidden');
     activeLevelUpCharacter = null;
 }
+// Controle de Destrancar Loja
+function checkShopAvailability() {
+    const currentPhase = GAME_MANAGER.getPhase();
+    const currentRound = GAME_MANAGER.getRound();
 
+    // Destranca a cada 5 fases (5, 10, 15...)
+    const isShopPhase = currentPhase % 5 === 0;
+
+    if (isShopPhase && currentRound === 1) {
+
+        // LOJA ABERTA
+        recruitIcon.classList.remove('locked');
+        recruitIcon.removeAttribute('data-tooltip'); // Remove o tooltip de bloqueio
+        recruitIcon.title = "Abrir Loja"; // Tooltip nativo simples quando aberta
+        
+        drawShop();
+        
+    } else {
+
+        // LOJA TRANCADA
+        recruitIcon.classList.add('locked');
+        recruitIcon.removeAttribute('title');
+
+        // É a fase certa, mas o combate já começou
+        if (isShopPhase && currentRound > 1) {
+            recruitIcon.setAttribute('data-tooltip', `Loja fechada durante o combate.`);
+        } 
+        // A fase não é multiplo de 5
+        else {
+            const nextShopPhase = Math.ceil(currentPhase / 5) * 5;
+            // Se estamos na fase 5 (mas round > 1), a próxima é 10.
+            // Se estamos na fase 1, a próxima é 5.
+            const targetPhase = (currentPhase % 5 === 0) ? currentPhase + 5 : nextShopPhase;
+            
+            recruitIcon.setAttribute('data-tooltip', `Loja abre na fase: ${targetPhase}`);
+        }
+
+        // Garante que o painel feche se for trancado
+        recruitPanel.classList.remove('is-open');
+        document.body.classList.remove('shop-is-open');
+    }
+}
 function drawCrew(character) {
     if(!window.team.includes(character)){
         console.warn('Tentativa de adcionar personagem inexistente');
@@ -442,29 +483,68 @@ function animate(attackResult, targetCard){
 }
 
 function drawShop() {
+    const recruitContent = document.querySelector('#recruit-panel .panel-content');
     recruitContent.innerHTML = ''; 
 
     if (SHOP_MANAGER.shopInventory.length === 0) {
-        recruitContent.innerHTML = '<div style="padding:10px; text-align:center;">Loja Esgotada!</div>';
+        recruitContent.innerHTML = '<div style="padding:10px; text-align:center; color:#777;">Loja Esgotada!<br>Volte na próxima fase.</div>';
         return;
     }
 
     SHOP_MANAGER.shopInventory.forEach((merc, index) => {
-        // Cria o HTML do card de compra
         const item = document.createElement('div');
         item.classList.add('mercenary-for-hire');
         
+        // Trata a imagem (Avatar)
+        const avatarUrl = merc.avatar.large || ''; // Garante que não seja undefined
+        const avatarStyle = avatarUrl ? `background-image: url('${avatarUrl}');` : '';
+
+        // Prepara as Skills para o Tooltip
+        const skillCount = merc.skills.length;
+        let skillNames = "Nenhuma";
+        if (skillCount > 0) {
+            // Cria uma lista: "Bola de Fogo, Cura Leve"
+            skillNames = merc.skills.map(s => `• ${s.name}`).join('<br>');
+        }
+
+        // Monta o HTML
         item.innerHTML = `
-            <div class="merc-info">
-                <span class="merc-name">${merc.name}</span>
-                <span class="merc-vocation">${merc.vocationName} (Nv.${merc.lvl})</span>
-                <div class="merc-stats-mini">
-                    ⚔️${merc.stats.damage} ❤️${merc.stats.hp} 🌀${merc.stats.mana}
+            <div class="merc-header">
+                <div class="merc-avatar" style="${avatarStyle}"></div>
+                <div class="merc-header-info">
+                    <span class="merc-name">${merc.name}</span>
+                    <span class="merc-subtext">
+                        <span class="merc-tier">T${merc.tier}</span> | ${merc.vocation || merc.vocationName} | Nv.${merc.lvl}
+                    </span>
                 </div>
             </div>
-            <div class="merc-buy">
-                <span class="mercenary-cost">${merc.cost} 💰</span>
-                <button class="recruit-btn" data-index="${index}">Contratar</button>
+
+            <div class="merc-stats-grid">
+                <div class="merc-stat-item" data-stat="str">FOR: <span>${merc.attributes.str}</span></div>
+                <div class="merc-stat-item" data-stat="con">CON: <span>${merc.attributes.con}</span></div>
+                <div class="merc-stat-item" data-stat="agi">AGI: <span>${merc.attributes.agi}</span></div>
+                <div class="merc-stat-item" data-stat="int">INT: <span>${merc.attributes.int}</span></div>
+                <div class="merc-stat-item" data-stat="wis">SAB: <span>${merc.attributes.wis}</span></div>
+            </div>
+
+            <div class="merc-footer">
+                
+                <div class="merc-hp" style="font-size: 0.9em; color: var(--hp-color); font-weight: bold;">
+                    ❤️ ${merc.stats.hp} HP
+                </div>
+
+                <div class="merc-skills-container">
+                    📜 ${skillCount} Skill(s)
+                    <div class="merc-skills-tooltip">
+                        <strong>Habilidades:</strong><br>
+                        ${skillNames}
+                    </div>
+                </div>
+
+                <div class="merc-price-action">
+                    <span class="merc-cost">${merc.cost} 💰</span>
+                    <button class="recruit-btn" data-index="${index}">Contratar</button>
+                </div>
             </div>
         `;
 

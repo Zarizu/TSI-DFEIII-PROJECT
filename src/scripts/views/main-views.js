@@ -499,8 +499,7 @@ recruitPanel.addEventListener('click', (event) => {
         const success = SHOP_MANAGER.buyMercenary(index);
         if (success) {
             goldAmount.textContent = PLAYER_MANAGER.getGold();
-            SHOP_MANAGER.generateShop()
-            .then(() => drawShop()); // Redesenha a loja (reseta os botões))
+            drawShop();
         }
     }
 });

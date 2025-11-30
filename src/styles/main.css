@@ -635,12 +635,21 @@ background-color: rgba(255, 255, 255, 0.05);
 }
 
 .mercenary-for-hire {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--card-bg);
+    background-color: rgba(30, 30, 40, 0.95);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.mercenary-for-hire:hover {
+    border-color: var(--gold-color);
+    transform: translateX(-5px); /* Efeito de destaque */
 }
 .recruit-btn {
     background-color: var(--gold-color);
@@ -683,7 +692,7 @@ background-color: rgba(255, 255, 255, 0.05);
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    z-index: 49;
+    z-index: 200;
 
     transform: translateX(100%);
     
@@ -692,7 +701,7 @@ background-color: rgba(255, 255, 255, 0.05);
 
 .side-panel.is-open {
     transform: translateX(0); 
-    z-index: 51;
+    z-index: 200;
 }
 
 /*ouro do jogador*/
@@ -1219,16 +1228,28 @@ body.targeting-ally .player-card.is-targeting {
     gap: 15px;
 }
 
-/* Estilos da Loja */
-.mercenary-for-hire {
+.merc-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.merc-header-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.merc-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #333;
+    border: 2px solid var(--border-color);
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
 }
 
 .merc-info {
@@ -1239,10 +1260,9 @@ body.targeting-ally .player-card.is-targeting {
 
 .merc-name {
     font-weight: bold;
-    color: var(--text-color);
     font-size: 1.1em;
+    color: var(--text-color);
 }
-
 .merc-vocation {
     font-size: 0.9em;
     color: var(--gold-color);
@@ -1253,6 +1273,45 @@ body.targeting-ally .player-card.is-targeting {
     color: #ccc;
 }
 
+.merc-subtext {
+    font-size: 0.85em;
+    color: orange;
+}
+.merc-tier {
+    color: var(--gold-color);
+    font-weight: bold;
+}
+
+.merc-stats-grid {
+    display: flex;          
+    flex-wrap: wrap;        
+    justify-content: center;
+    gap: 5px;                 
+    
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 8px 5px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.merc-stat-item {
+    width: 31%; 
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    font-size: 0.85em;
+    color: #aaa;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 3px 5px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+.merc-stat-item span {
+    color: white;
+    font-weight: bold;
+}
 .merc-buy {
     display: flex;
     flex-direction: column;
@@ -1263,6 +1322,57 @@ body.targeting-ally .player-card.is-targeting {
 .mercenary-cost {
     font-weight: bold;
     color: var(--gold-color);
+}
+
+.merc-skills-container {
+    position: relative; /* Importante para o tooltip */
+    font-size: 0.9em;
+    cursor: help;
+    color: var(--mana-color);
+    border-bottom: 1px dashed var(--mana-color);
+}
+
+/* Tooltip de Skills */
+.merc-skills-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 200px;
+    background-color: #111;
+    border: 1px solid var(--mana-color);
+    padding: 8px;
+    border-radius: 5px;
+    z-index: 10;
+    color: #eee;
+    font-size: 0.85em;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+/* Mostra tooltip no hover */
+.merc-skills-container:hover .merc-skills-tooltip {
+    display: block;
+}
+
+/* cores especificas para cada atributo */
+
+.merc-stat-item[data-stat="str"] span { color: #e74c3c; }
+.merc-stat-item[data-stat="con"] span { color: #e67e22; }
+.merc-stat-item[data-stat="agi"] span { color: #f1c40f; }
+.merc-stat-item[data-stat="int"] span { color: #3498db; }
+.merc-stat-item[data-stat="wis"] span { color: #9b59b6; }
+
+.merc-price-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.merc-cost {
+    font-weight: bold;
+    color: var(--gold-color);
+    font-size: 1.1em;
 }
 
 /* botoes da loja */

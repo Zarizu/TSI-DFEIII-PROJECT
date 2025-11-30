@@ -28,11 +28,18 @@ function checkPhaseEnd() {
     
     refreshAllUI(); 
 
-        roundNumber.textContent = `${GAME_MANAGER.resetRound()} : Preparação`;
+    roundNumber.textContent = `${GAME_MANAGER.resetRound()} : Preparação`;
+
 
     setTimeout(() => {
+        const phase = GAME_MANAGER.getPhase();
             REWARD_MANAGER.showRewards();
             endRoundCleanup(); 
+            if (phase % 5 === 0) {
+            SHOP_MANAGER.generateShop().then(() => {
+                drawShop();
+            });
+        }
 
         }, 500);
 
@@ -175,43 +182,3 @@ async function spawnNewEnemies() {
 }
 
 
-// Controle de Destrancar Loja
-function checkShopAvailability() {
-    const currentPhase = GAME_MANAGER.getPhase();
-    const currentRound = GAME_MANAGER.getRound();
-
-    // Destranca a cada 5 fases (5, 10, 15...)
-    const isShopPhase = currentPhase % 5 === 0;
-
-    if (isShopPhase && currentRound === 1) {
-
-        // LOJA ABERTA
-        recruitIcon.classList.remove('locked');
-        recruitIcon.removeAttribute('data-tooltip'); // Remove o tooltip de bloqueio
-        recruitIcon.title = "Abrir Loja"; // Tooltip nativo simples quando aberta
-        
-        SHOP_MANAGER.generateShop().then(() => {
-        drawShop();
-        });
-        
-    } else {
-
-        // LOJA TRANCADA
-        recruitIcon.classList.add('locked');
-        
-        // Calcula a próxima fase múltipla de 5
-        // Ex: Fase 1 -> Teto(0.2) = 1 * 5 = 5
-        // Ex: Fase 6 -> Teto(1.2) = 2 * 5 = 10
-        const nextShopPhase = Math.ceil(currentPhase / 5) * 5;
-        
-        //  Define o texto no atributo para o CSS ler
-        recruitIcon.setAttribute('data-tooltip', `Loja abre na fase: ${nextShopPhase}`);
-        
-        // Remove o 'title' nativo para não ter dois tooltips um em cima do outro
-        recruitIcon.removeAttribute('title');
-
-        // Fecha o painel se estiver aberto
-        recruitPanel.classList.remove('is-open');
-        document.body.classList.remove('shop-is-open');
-    }
-}
