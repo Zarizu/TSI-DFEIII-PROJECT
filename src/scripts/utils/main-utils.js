@@ -237,13 +237,13 @@ async function getUniqueAvatar() {
         }
     }
 
-    // 3. Fallback (Se falhar 5x ou a internet cair)
+    // Fallback (Se falhar 5x ou a internet cair)
     if (!finalAvatarObj) {
         console.error("[Avatar] Falha total. Usando placeholder.");
         finalAvatarObj = {
-            large: "https://randomuser.me/api/portraits/lego/1.jpg",
-            medium: "https://randomuser.me/api/portraits/lego/1.jpg",
-            thumbnail: "https://randomuser.me/api/portraits/lego/1.jpg"
+            large: "../styles/img/avatar-placeholder.jpg",
+            medium: "../styles/img/avatar-placeholder.jpg",
+            thumbnail: "../styles/img/avatar-placeholder.jpg"
         };
     }
 
