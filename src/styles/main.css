@@ -995,7 +995,7 @@ body.targeting-ally .player-card.is-targeting {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #555; /* Placeholder para foto */
+    background-color: transparent;
     border: 2px solid #fff;
     display: flex;
     justify-content: center;

@@ -387,9 +387,12 @@ function drawTurnOrder() {
         } else {
             item.classList.add('enemy');
         }
-        //imagem futura
-        item.textContent = combatant.name.charAt(0);
 
+        item.style.backgroundImage = `url(${combatant.avatar.large})`;
+        item.style.backgroundSize = 'cover';
+        item.style.backgroundPosition = 'center';
+        item.style.backgroundRepeat = 'no-repeat';
+        
         turnOrderList.appendChild(item);
     });
 }
