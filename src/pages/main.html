@@ -53,28 +53,33 @@
 
     <main id="battlefield">
         <div id="turn-order-container">
-        <div id="turn-order-label"></div>
-        <div id="turn-order-list"></div>
-    </div>
+            <div id="turn-order-label">Turno:</div>
+            <div id="turn-order-list"></div>
+        </div>
 
-        <div id="phase-display">
-            Fase <span id="phase-number">1</span>
+        <div id="hud-info-container">
+            <div id="phase-display">
+                Fase <span id="phase-number">1</span>
+            </div>
+            <div id="round-display">
+                Rodada <span id="round-number">1 : Preparação</span>
+            </div>
         </div>
-        <div id="round-display">
-            Rodada <span id="round-number">1 : Preparação</span>
-        </div>
+
         <div id="top-right-ui">
-        <button id="start-battle-btn" disabled>
-            Selecione Ações
-        </button>
-        <div id="player-gold-display">
-            <span id="gold-amount">100</span> 💰
+            <button id="start-battle-btn" disabled>
+                Selecione Ações
+            </button>
+            <div id="player-gold-display">
+                <span id="gold-amount">100</span> 💰
+            </div>
         </div>
-    </div>
+
         <div id="enemy-area">
         </div>
+
         <div id="player-area">
-            </div>
+        </div>
     </main>
 
     <div id="recruit-icon" class="panel-icon" title="Recrutar">Recrutar 💰</div>
@@ -156,8 +161,6 @@
     <div id="enemy-tooltip" class="hidden">
         <h4 id="tooltip-name">Nome do Inimigo</h4>
         <p id="tooltip-desc">Descrição dos status ou buffs/debuffs.</p>
-        <p>HP: <span id="tooltip-hp">10/10</span></p>
-        <p>ATK: <span id="tooltip-atk">3</span></p>
     </div>
     <div id="turn-order-tooltip" class="hidden">
         </div>

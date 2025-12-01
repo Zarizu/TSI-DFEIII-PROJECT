@@ -220,7 +220,7 @@ function drawCrew(character) {
                     <span class="icon">💥</span> ${character.stats.critical_multiplier.toFixed(2)}x
                 </div>
                 <div class="c-stat" title="Esquiva">
-                    <span class="icon">💨</span> ${character.stats.evasion.toFixed(2)}%
+                    <span class="icon">💨</span> ${character.stats.evasion.toFixed(0)}%
                 </div>
             </div>
 
@@ -262,62 +262,88 @@ function updateSquad(character){
     drawRoster(character);
 }
 
-
 //enemy draws
 function drawEnemy(enemy) {
-    if(!window.enemyTeam.includes(enemy)){
-        
+    if (!window.enemyTeam.includes(enemy)) {
         console.warn('Tentativa de desenhar inimigo inexistente');
         return;
     }
-    
+
+    // Efeitos
     let effectsHTML = '';
     if (enemy.effects && Array.isArray(enemy.effects)) {
         enemy.effects.forEach(effect => {
             if (effect.duration > 0) {
-                effectsHTML += `<div class="effect-icon" title="${effect.name} (${effect.duration} turnos)">
-                    ${effect.icon}
-                </div>`;
+                effectsHTML += `<div class="effect-icon" title="${effect.name}">${effect.icon}</div>`;
             }
         });
     }
 
+    // Skills (rodapé)
+    let skillsHTML = '';
+    if (enemy.skills && enemy.skills.length > 0) {
+        const skillList = enemy.skills.map(s => `• ${s.name}`).join('<br>');
+        skillsHTML = `
+            <div class="enemy-skills-footer">
+                📜 ${enemy.skills.length} Habilidade(s)
+                <div class="enemy-skills-tooltip">
+                    <strong>Habilidades:</strong><br>${skillList}
+                </div>
+            </div>
+        `;
+    }
+
+    // Ícone da Classe (Baseado no nome da classe ou descrição)
+    let classIcon = enemy.classIcon || '👾' ;
+
     const existingCard = enemyArea.querySelector(`.enemy-card[data-id="${enemy.id}"]`);
+    
+    const avatarStyle = enemy.avatar && enemy.avatar.large ? `background-image: url('${enemy.avatar.large}');` : '';
 
     const newInnerCardHTML = `
+        <div class="enemy-class-icon" title="Classe: ${enemy.class}">${classIcon}</div>
+
         <div class="player-name">${enemy.name}</div>
-        <div class="player-sprite"><img src=${enemy.avatar.large}></div>
-        <div class="player-lvl">Lvl ${enemy.lvl}</div>
+        
+        <div class="player-sprite">
+            <img src="${enemy.avatar ? enemy.avatar.large : ''}" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+        </div>
+        
+        <div class="player-lvl">
+            <span style="color: #F1C40F; font-weight: bold;">T${enemy.tier}</span> 
+            <span style="margin: 0 5px; color: #666;">|</span> 
+            Lvl ${enemy.lvl}
+        </div>
+
         <div class="player-stats-area">
-            <div class="player-atk">
-                ATK: ${enemy.stats.damage}
+            <div class="enemy-stats-grid">
+                <div class="c-stat" title="Ataque"><span class="icon">⚔️</span> ${enemy.stats.damage}</div>
+                <div class="c-stat" title="Crítico"><span class="icon">🎯</span> ${(enemy.stats.critical_chance).toFixed(2)}%</div>
+                <div class="c-stat" title="Mult. Crítico"><span class="icon">💥</span> ${enemy.stats.critical_multiplier.toFixed(2)}x</div>
+                <div class="c-stat" title="Esquiva"><span class="icon">💨</span> ${Math.round(enemy.stats.evasion)}%</div>
             </div>
+
             <div class="stat-bar-container hp-bar">
-                <div class="bar-text hp-text">
-                    ${enemy.currentHP} / ${enemy.stats.hp}
-                </div>
-                <div class="armor-text">
-                    ${enemy.stats.armor}
-                </div>
+                <div class="bar-text hp-text">${enemy.currentHP} / ${enemy.stats.hp}</div>
+                <div class="armor-text">🛡️${enemy.stats.armor}</div>
                 <div class="hp-bar-fill" style="width: ${(enemy.currentHP / enemy.stats.hp) * 100}%"></div>
             </div>
-            
-            <div class="player-effects">
-                ${effectsHTML}
+
+            <div class="stat-bar-container mana-bar">
+                <div class="bar-text mana-text">${enemy.currentMana} / ${enemy.stats.mana}</div>
+                <div class="mana-bar-fill" style="width: ${(enemy.currentMana / enemy.stats.mana) * 100}%"></div>
             </div>
+            
+            <div class="player-effects">${effectsHTML}</div>
+            
+            ${skillsHTML}
         </div>
     `;
 
     if (existingCard) {
-        // update
         existingCard.innerHTML = newInnerCardHTML;
     } else {
-        // add
-        enemyArea.innerHTML += `
-            <div class="enemy-card" data-id="${enemy.id}">
-                ${newInnerCardHTML}
-            </div>
-        `;
+        enemyArea.innerHTML += `<div class="enemy-card" data-id="${enemy.id}">${newInnerCardHTML}</div>`;
     }
 }
 

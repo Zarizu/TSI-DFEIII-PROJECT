@@ -241,23 +241,32 @@ enemyArea.addEventListener('click', (event) => {
 
 // Interatividade do Tooltip do Inimigo
 enemyArea.addEventListener('mouseover', (event) => {
+    // Se o mouse estiver sobre o rodapé de skills, NÃO mostre o tooltip geral
+    if (event.target.closest('.enemy-skills-footer')) {
+        enemyTooltip.classList.add('hidden');
+        return;
+    }
+
     const enemyCard = event.target.closest('.enemy-card');
     
     if (enemyCard) {
-        // 1. Pega o ID do card do inimigo
         const enemyId = parseInt(enemyCard.dataset.id, 10);
-        
-        // 2. Encontra o objeto 'enemy' no array 'enemyTeam'
-        const enemy = enemyTeam.find(e => e.id === enemyId);
+        const enemy = window.enemyTeam.find(e => e.id === enemyId);
 
-        // 3. Se encontrou o inimigo, preenche o tooltip com seus dados
         if (enemy) {
             document.getElementById('tooltip-name').textContent = enemy.name;
-            document.getElementById('tooltip-desc').textContent = enemy.description; 
-            document.getElementById('tooltip-hp').textContent = `${enemy.currentHP}/${enemy.stats.hp}`;
-            document.getElementById('tooltip-atk').textContent = enemy.stats.damage;
+            document.getElementById('tooltip-desc').innerHTML = `
+                ${enemy.description}<br>
+                <hr style="border-color:#444; margin:5px 0;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; font-size:0.9em;">
+                    <span>FOR: ${enemy.attributes.str}</span>
+                    <span>CON: ${enemy.attributes.con}</span>
+                    <span>AGI: ${enemy.attributes.agi}</span>
+                    <span>INT: ${enemy.attributes.int}</span>
+                    <span>SAB: ${enemy.attributes.wis}</span>
+                </div>
+            `; 
             
-            // Posiciona e mostra o tooltip
             enemyTooltip.classList.remove('hidden');
             enemyTooltip.style.left = `${event.pageX + 10}px`;
             enemyTooltip.style.top = `${event.pageY + 10}px`;
@@ -267,7 +276,7 @@ enemyArea.addEventListener('mouseover', (event) => {
 
 // Esconde o tooltip quando o mouse sai da área do inimigo
 enemyArea.addEventListener('mouseout', (event) => {
-    if (event.target.closest('.enemy-card')) {
+    if (event.target.closest('.enemy-card') || event.target.closest('.enemy-skills-footer')) {
         enemyTooltip.classList.add('hidden');
     }
 });

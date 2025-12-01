@@ -13,6 +13,22 @@ body.battle-in-progress #start-battle-btn
     pointer-events: none !important; /* Impede qualquer clique ou hover */
 }
 
+#hud-info-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    gap: 5px;               
+    
+    width: 100%;
+    
+    margin-top: 5px; 
+    
+    margin-bottom: 20px; 
+    
+    z-index: 200; 
+    pointer-events: none;
+}
+
 body.battle-in-progress .player-action-bar {
     opacity: 0;
     transform: translateY(20px);
@@ -266,12 +282,16 @@ background-color: rgba(255, 255, 255, 0.05);
     justify-content: center;
     align-items: flex-end;
     gap: 30px;
-    height: 50%;
+    
+    flex-grow: 1; 
+    
+    min-height: 100px; 
 }
 
 .enemy-card {
     width: 150px;
-    height: 275px; 
+    height: 325px;
+    position: relative; 
     
     background-color: var(--card-bg);
     border: 2px solid var(--border-color);
@@ -281,13 +301,61 @@ background-color: rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px;
+    padding: 8px 8px 12px 8px;
     box-sizing: border-box;
 
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.enemy-class-icon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    background-color: var(--enemy-color);
+    border: 2px solid var(--enemy-shadow-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.enemy-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    width: 100%;
+    margin-bottom: 6px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.enemy-stats-grid .c-stat {
+    font-size: 0.75em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+}
+
+.enemy-skills-footer {
+    margin-top: auto;
+    width: 100%;
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--mana-color);
+    border-top: 1px dashed rgba(255,255,255,0.2);
+    padding-top: 4px;
+    cursor: help;
+    position: relative;
+}
 .enemy-effects {
     width: 100%;
     display: flex;
@@ -298,6 +366,26 @@ background-color: rgba(255, 255, 255, 0.05);
     margin-top: 8px; 
 }
 
+.enemy-skills-tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    background-color: #111;
+    border: 1px solid var(--mana-color);
+    padding: 8px;
+    border-radius: 5px;
+    z-index: 100;
+    color: #eee;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+}
+
+.enemy-skills-footer:hover .enemy-skills-tooltip {
+    display: block;
+}
 .enemy-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 15px var(--enemy-color);
@@ -722,15 +810,12 @@ body.shop-is-open #player-gold-display {
 }
 
 #phase-display {
-    position: absolute;
-    top: 80px; 
-    left: 50%;
-    transform: translateX(-50%); 
-    z-index: 10;
+    position: static; 
+    transform: none;
+    
     text-transform: uppercase;
-
     background-color: rgba(0, 0, 0, 0.4);
-    padding: 10px 15px;
+    padding: 5px 15px;
     border-radius: 15px;
     border: 1px solid var(--border-color);
     
@@ -741,13 +826,10 @@ body.shop-is-open #player-gold-display {
 }
 
 #round-display {
-    position: absolute;
-    top: 140px; 
-    left: 50%;
-    transform: translateX(-50%); 
-    z-index: 10;
-    text-transform: capitalize;
+    position: static;
+    transform: none;
     
+    text-transform: capitalize;
     background-color: transparent; 
     padding: 5px 15px;
     border: none;
@@ -755,7 +837,7 @@ body.shop-is-open #player-gold-display {
     font-size: 1.2em; 
     font-weight: bold;
     color: var(--text-color); 
-    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    text-shadow: var(--blue-decals);
 }
 #start-battle-btn {
     background-color: var(--hp-color); 
