@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Principal do Jogo</title>
+    <title>Menu Principal</title>
     <link rel="stylesheet" href="./src/styles/main_menu.css">
     <script src="./src/scripts/views/main_menu-views.js" defer></script>
-</head>
+    </head>
 <body>
 
-    <div id="central-box">
+    <div id="parallax-bg"></div>
+
+    <div id="central-box" class="glass-panel">
         <div id="logo">
             <img src="./src/styles/img/logo.png" alt="Logo do Jogo" id="game-logo">
         </div>
@@ -45,5 +47,22 @@
             <button class="nav-btn back-btn" data-target="credits-section">Voltar</button>
         </div>
     </div>
+
+
+    
+    <script>
+        document.addEventListener("mousemove", (e) => {
+            const bg = document.querySelector("#parallax-bg");
+            const box = document.querySelector("#central-box");
+            
+            // Calcula o movimento base (quanto maior o divisor, menor o movimento)
+            const x = (window.innerWidth - e.pageX * 2) / 90;
+            const y = (window.innerHeight - e.pageY * 2) / 90;
+
+            // Aplica o movimento: O fundo vai para um lado, a caixa para o outro
+            bg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+            box.style.transform = `translate(${-x}px, ${-y}px)`;
+        });
+    </script>
 </body>
 </html>
