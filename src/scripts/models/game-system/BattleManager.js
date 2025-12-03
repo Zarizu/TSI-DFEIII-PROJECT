@@ -20,14 +20,11 @@ BattleManager.prototype.processActions = async function(){
     }
     
         const alivePlayers = window.team.filter(char => char.currentHP > 0);
+        // GAME OVER
     if (alivePlayers.length === 0) {
-        await wait(500);
-        console.log("GAME OVER");
-        localStorage.setItem(ID_COUNTER_KEY_CHARACTER,1);
-        localStorage.setItem(ID_COUNTER_KEY_EFFECT,1);
-        localStorage.setItem(ID_COUNTER_KEY_SKILL,1);
 
-        //tela de Game Over
+        await wait(500);
+        triggerGameOver();
         return;
     }
 

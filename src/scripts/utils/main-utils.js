@@ -249,3 +249,55 @@ async function getUniqueAvatar() {
 
     return finalAvatarObj;
 }
+
+function triggerGameOver() {
+    // Pega a fase atual
+    const currentPhase = GAME_MANAGER.getPhase();
+    
+    // Pega o recorde salvo (ou 0 se não existir)
+    const savedRecord = parseInt(localStorage.getItem('rogue_best_phase') || '0', 10);
+    
+    const phaseText = document.getElementById('go-current-phase');
+    const recordDisplay = document.getElementById('go-record-display');
+    const modal = document.getElementById('game-over-modal');
+
+    // Atualiza texto da fase atual
+    phaseText.textContent = `Fase ${currentPhase}`;
+
+    //Lógica de Recorde
+    if (currentPhase > savedRecord) {
+        //É UM NOVO RECORDE
+        localStorage.setItem('rogue_best_phase', currentPhase.toString());
+        
+        // Mostra a comparação (Antigo vs Novo)
+        recordDisplay.className = 'game-over-record new-record-anim';
+        recordDisplay.innerHTML = `
+            <div class="record-comparison">
+                <div class="old-record-text">Recorde Anterior: Fase ${savedRecord}</div>
+                <div class="new-record-text">🏆 NOVO RECORDE! 🏆</div>
+            </div>
+        `;
+    } else {
+        // NÃO BATEU O RECORDE
+        recordDisplay.textContent = `Melhor Recorde: Fase ${savedRecord}`;
+        recordDisplay.className = 'game-over-record'; // Estilo normal
+    }
+
+    // Destrava a interface
+    document.body.classList.remove('battle-in-progress');
+
+    // Mostra o Modal
+    modal.classList.remove('hidden');
+}
+
+document.getElementById('restart-game-btn').addEventListener('click', () => {
+
+    // Limpa os dados da run atual (exceto o recorde)
+    localStorage.removeItem('FirstCharData');
+    localStorage.removeItem(ID_COUNTER_KEY_CHARACTER);
+    localStorage.removeItem(ID_COUNTER_KEY_EFFECT);
+    localStorage.removeItem(ID_COUNTER_KEY_SKILL);
+    localStorage.removeItem(ID_COUNTER_KEY_VOCATION_SKILL);
+    
+    window.location.href = './char_creation.html';
+});

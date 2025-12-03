@@ -1568,8 +1568,67 @@ body.targeting-ally .player-card.is-targeting {
     font-size: 1.1em;
 }
 
-/* Cores específicas para destaque */
 .c-stat[title="Ataque"] { color: var(--orange-color); font-weight: bold; }
-.c-stat[title="Chance Crítica"] { color: #ffeb3b; } /* Amarelo */
-.c-stat[title="Multiplicador Crítico"] { color: #ff5722; } /* Laranja Avermelhado */
-.c-stat[title="Esquiva"] { color: #00bcd4; } /* Ciano */
+.c-stat[title="Chance Crítica"] { color: #ffeb3b; } 
+.c-stat[title="Multiplicador Crítico"] { color: #ff5722; } 
+.c-stat[title="Esquiva"] { color: #00bcd4; }
+
+.game-over-title {
+    font-size: 3em;
+    color: var(--hp-color);
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+    letter-spacing: 5px;
+}
+
+.game-over-stats p {
+    color: #ccc;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+#go-current-phase {
+    font-size: 2.5em;
+    color: white;
+    margin: 10px 0 20px 0;
+}
+
+.game-over-record {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    display: inline-block;
+    min-width: 200px;
+}
+
+/* Animação suave para o "Novo Recorde" */
+.new-record-anim {
+    color: var(--gold-color);
+    animation: pulse 1s infinite;
+    border: 1px solid var(--gold-color);
+}
+
+.record-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Texto do Recorde Antigo*/
+.old-record-text {
+    font-size: 0.8em;
+    color: #888; /* Cinza */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Texto do Novo Recorde*/
+.new-record-text {
+    font-size: 1.3em;
+    color: var(--gold-color);
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
