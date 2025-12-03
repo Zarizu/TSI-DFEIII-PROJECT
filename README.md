@@ -27,7 +27,7 @@ O projeto foi desenvolvido inteiramente com tecnologias nativas da Web (Vanilla)
 * ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=flat-square&logo=css3&logoColor=white) **CSS3** (Flexbox, Grid, Animações)
 * ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=flat-square&logo=javascript&logoColor=%23F7DF1E) **JavaScript** (ES6+)
 
-### 📦 Como Rodar
+### Como Rodar
 
 1.  Clone ou baixe este repositório.
 2.  Navegue até a pasta do projeto.
