@@ -1,26 +1,39 @@
+/* --- Importando Fontes de RPG (Google Fonts) --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;800&family=Lato:wght@400;700&display=swap');
+
+/* --- Variáveis CSS (Tema RPG Místico) --- */
 :root {
-    /* Cores refinadas */
-    --primary-glass: rgba(18, 24, 37, 0.65); /* Mais transparência */
-    --accent-color: #00d2ff; /* Azul Ciano vibrante */
-    --accent-glow: rgba(0, 210, 255, 0.4);
-    --text-color: #ffffff;
-    --danger-color: #ff4757;
-    --success-color: #2ed573;
+    /* Cores do Tema RPG */
+    --primary-bg-color: rgba(18, 24, 37, 0.85);
+    --primary-glass: rgba(18, 24, 37, 0.75);
     
-    --card-bg: rgba(255, 255, 255, 0.05);
+    --accent-color: #3b82f6; /* Azul Mágico */
+    --accent-glow: rgba(59, 130, 246, 0.5);
+    
+    --gold-color: #fbbf24; /* Ouro */
+    --gold-glow: #f59e0b;
+    
+    --danger-color: #ef4444;
+    --success-color: #10b981;
+    
+    --text-color: #e2e8f0;
+    --muted-text-color: #94a3b8;
+    
+    --card-bg: rgba(0, 0, 0, 0.4);
+    --border-color: rgba(59, 130, 246, 0.3);
     --border-radius: 16px;
 }
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0b0e14; /* Fallback color */
+    font-family: 'Lato', sans-serif; /* Fonte padrão do corpo */
+    background-color: #020617;
     color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden; /* Impede scrollbars devido ao parallax */
+    overflow: hidden;
 }
 
 /* --- Background Animado e Parallax --- */
@@ -30,6 +43,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    /* Mantendo a imagem original do menu, mas com a vibe do tema novo */
     background: url('../styles/img/main_menu_bg.png') center;
     background-size: cover;
     z-index: -1;
@@ -38,12 +52,12 @@ body {
     animation: bg-drift 40s alternate infinite ease-in-out;
 }
 
-/* Opcional: Overlay escuro sobre a imagem para destacar o menu */
+/* Overlay Vignette (Estilo RPG Dark) */
 #parallax-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+    background: radial-gradient(circle at center, rgba(2, 6, 23, 0.3) 0%, rgba(2, 6, 23, 0.9) 100%);
 }
 
 @keyframes bg-drift {
@@ -51,14 +65,15 @@ body {
     100% { transform: scale(1.2); }
 }
 
-/* --- O Efeito Glassmorphism --- */
+/* --- O Efeito Glassmorphism (Estilo RPG) --- */
 #central-box {
     background: var(--primary-glass);
-    backdrop-filter: blur(16px); /* O segredo do vidro fosco */
-    -webkit-backdrop-filter: blur(16px); /* Safari support */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid var(--border-color);
+    border-top: 1px solid rgba(59, 130, 246, 0.6); /* Topo iluminado */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     
     border-radius: var(--border-radius);
     padding: 40px;
@@ -69,55 +84,68 @@ body {
     flex-direction: column;
     gap: 20px;
     position: relative;
-    transition: transform 0.1s ease-out; /* Para o JS do parallax */
+    transition: transform 0.1s ease-out;
 }
 
 #logo {
     margin-bottom: 10px;
 }
+
 #game-logo {
     max-width: 220px;
-    filter: drop-shadow(0 0 10px var(--accent-glow)); /* Brilho na logo */
+    /* Brilho Dourado/Azul na logo */
+    filter: drop-shadow(0 0 15px var(--accent-glow));
     transition: transform 0.3s ease;
 }
+
 #game-logo:hover {
     transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 0 20px var(--gold-glow));
 }
 
-/* --- Botões Modernos --- */
+/* --- Botões Modernos (Estilo RPG) --- */
 .nav-btn {
-    padding: 15px 0;
+    padding: 18px 0; /* Mais robusto */
     width: 100%;
-    font-size: 1.1em;
-    font-weight: 600;
-    letter-spacing: 1px;
+    
+    /* Tipografia Épica */
+    font-family: 'Cinzel', serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
     
-    background: rgba(255, 255, 255, 0.05); /* Fundo sutil */
+    background: rgba(0, 0, 0, 0.3); /* Fundo escuro sutil */
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-color);
-    border-radius: 8px;
+    border-radius: 8px; /* Levemente arredondado, mas robusto */
     
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* Efeito de Hover nos botões */
+/* Efeito de Hover nos botões - Vira Dourado/Épico */
 .nav-btn:hover {
-    background: var(--accent-color);
-    color: #000;
-    box-shadow: 0 0 15px var(--accent-glow);
-    border-color: transparent;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.4));
+    color: var(--gold-color);
+    border-color: var(--gold-color);
+    box-shadow: 0 0 15px var(--accent-glow), inset 0 0 10px rgba(251, 191, 36, 0.1);
     transform: translateY(-3px);
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
 }
 
-/* Botão de Perigo */
+/* Botão de Perigo (Sair/Resetar) */
+.btn-danger {
+    border-color: rgba(239, 68, 68, 0.3);
+}
 .btn-danger:hover {
-    background: var(--danger-color) !important;
-    box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
-    color: white;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.4)) !important;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    color: #ffcccc;
+    border-color: var(--danger-color);
 }
 
 /* --- Seções e Transições --- */
@@ -126,7 +154,7 @@ body {
     flex-direction: column;
     gap: 15px;
     width: 100%;
-    animation: slideIn 0.4s ease-out forwards;
+    animation: slideIn 0.5s ease-out forwards;
 }
 
 .hidden {
@@ -140,11 +168,15 @@ body {
 
 h2 {
     margin-top: 0;
-    font-weight: 300;
-    letter-spacing: 2px;
+    font-family: 'Cinzel', serif; /* Fonte Épica */
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--gold-color);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+    
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 /* --- Cards dos Desenvolvedores --- */
@@ -159,17 +191,20 @@ h2 {
     background: var(--card-bg);
     padding: 15px;
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background 0.3s;
     width: 120px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
 .dev-card:hover {
     transform: translateY(-5px);
-    background: rgba(255,255,255,0.1);
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--gold-color);
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 .dev-avatar {
@@ -178,12 +213,20 @@ h2 {
     border-radius: 50%;
     border: 2px solid var(--accent-color);
     margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: border-color 0.3s;
+}
+
+.dev-card:hover .dev-avatar {
+    border-color: var(--gold-color);
 }
 
 .dev-name {
     font-size: 0.9em;
     font-weight: bold;
     margin-bottom: 5px;
+    font-family: 'Lato', sans-serif;
+    color: var(--text-color);
 }
 
 .github-link {
@@ -191,13 +234,17 @@ h2 {
     color: var(--accent-color);
     text-decoration: none;
     opacity: 0.8;
+    transition: color 0.2s;
 }
 .github-link:hover {
     opacity: 1;
+    color: var(--gold-color);
     text-decoration: underline;
 }
 
 .warning-text {
     color: #ff6b6b;
     font-size: 0.9em;
+    font-family: 'Lato', sans-serif;
+    font-style: italic;
 }
