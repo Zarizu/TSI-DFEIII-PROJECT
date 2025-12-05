@@ -1,6 +1,7 @@
 <div align="center">
 
-[![Português](https://img.shields.io/badge/Lang-Português-green?style=for-the-badge)](./README.md)
+[![pt-br](https://img.shields.io/badge/lang-pt_br-green.svg)](./README.md)
+
 
 </div>
 
