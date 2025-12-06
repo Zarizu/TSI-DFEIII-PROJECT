@@ -360,9 +360,6 @@ teamRoster.addEventListener('click', (event) => {
         const character = window.team.find(c => c.id === charId);
         
         if (character) {
-            console.log("2. Personagem encontrado:", character.name);
-            console.log("Level:", character.lvl);
-            console.log("Ultimo Upgrade Especial:", character.lastSpecialUpgradeLevel);
 
             // Verifica se o método existe (se não existir, o save é velho)
             if (typeof character.hasPendingSpecialUpgrade !== 'function') {

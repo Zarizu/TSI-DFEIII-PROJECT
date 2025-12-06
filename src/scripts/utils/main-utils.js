@@ -24,6 +24,10 @@ function executeRound() {
 }
 
 function checkPhaseEnd() {
+    const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
+    if (aliveEnemies.length > 0){
+    return false;
+    }
     phaseNumber.textContent = GAME_MANAGER.passPhase();
     
     refreshAllUI(); 
@@ -64,9 +68,11 @@ function calculateCombatOrder() {
     
 }
 
-function endRound(passRound = true) {
+function endRound(passRound = true, effects = true) {
+    if(effects){
+        BATTLE_MANAGER.processAllEffects();
+    }
 
-    BATTLE_MANAGER.processAllEffects();
 
     refreshAllUI(); 
 

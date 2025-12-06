@@ -1,3 +1,4 @@
+
 let firstCharData = localStorage.getItem('FirstCharData');
 if(firstCharData != null){
     firstCharData = JSON.parse(firstCharData);

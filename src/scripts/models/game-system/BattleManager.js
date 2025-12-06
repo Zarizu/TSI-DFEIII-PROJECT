@@ -19,7 +19,7 @@ BattleManager.prototype.processActions = async function(){
         await wait(turnDelay);
     }
     
-        const alivePlayers = window.team.filter(char => char.currentHP > 0);
+    const alivePlayers = window.team.filter(char => char.currentHP > 0);
         // GAME OVER
     if (alivePlayers.length === 0) {
 
@@ -175,6 +175,20 @@ BattleManager.prototype.processAllEffects = function() {
 
     // Processa efeitos do time inimigo
     this._processGroupEffects(window.enemyTeam);
+
+    const alivePlayers = window.team.filter(char => char.currentHP > 0);
+    if (alivePlayers.length === 0) {
+
+        triggerGameOver();
+        return;
+    }
+
+    const aliveEnemies = window.enemyTeam.filter(enemy => enemy.currentHP > 0);
+    if (aliveEnemies.length === 0) {
+        checkPhaseEnd(); 
+    } else {
+        endRound(true,false);
+    }
 };
 
 BattleManager.prototype._processGroupEffects = function(group) {
