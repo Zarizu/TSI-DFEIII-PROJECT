@@ -40,12 +40,12 @@ const SKILLS = {
     ),
     
     ICE_SHIELD: new ApplyEffectSkill(
-        'Escudada',
+        'Escudo de gelo',
         '🛡️',
-        'Aplica Escudo em si mesmo por 1 turno.',
+        'Aplica Escudo em si mesmo por 3 turnos.',
         2,
         'ally',
         EFFECTS.SHIELD,
-        1
+        3
     )
 };

@@ -101,9 +101,11 @@ DamageOverTimeEffect.prototype.onApply = function(caster, target){
 }
 
 // override de método
-DamageOverTimeEffect.prototype.onTick = function(target) {
-    if(target.currentHP <= this.damagePerTick){ this.currentHP = 0; return};     
+DamageOverTimeEffect.prototype.onTick = function(caster, target) {
+    if(target.currentHP <= this.damagePerTick){
+    target.currentHP = 0; return};     
     target.currentHP -= this.damagePerTick;
+    
 
 }
 
@@ -164,7 +166,7 @@ HealOverTimeEffect.prototype.onApply= function(caster, target){
     this.healPerTick = Math.round(casterStatValue / this.duration);
     this.power = this.healPerTick;
 }
-HealOverTimeEffect.prototype.onTick = function(target) {
+HealOverTimeEffect.prototype.onTick = function(caster,target) {
     
     target.currentHP += this.healPerTick;
 

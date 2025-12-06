@@ -347,18 +347,41 @@ turnOrderList.addEventListener('mousemove', (event) => {
 });
 
 teamRoster.addEventListener('click', (event) => {
+    // Verifica se clicou no botão +
     const levelUpButton = event.target.closest('.level-up-icon');
     
     if (levelUpButton) {
+        console.log("1. Clique no botão detectado!");
+
         const parentCard = levelUpButton.closest('.team-member-portrait');
         const charId = parseInt(parentCard.dataset.id, 10);
         
+        // Procura o personagem
         const character = window.team.find(c => c.id === charId);
         
         if (character) {
-            openLevelUpModal(character); 
+            console.log("2. Personagem encontrado:", character.name);
+            console.log("Level:", character.lvl);
+            console.log("Ultimo Upgrade Especial:", character.lastSpecialUpgradeLevel);
+
+            // Verifica se o método existe (se não existir, o save é velho)
+            if (typeof character.hasPendingSpecialUpgrade !== 'function') {
+                console.error("ERRO: O personagem é antigo e não tem o método novo. Resete o save!");
+                openLevelUpModal(character); // Abre o normal como fallback
+                return;
+            }
+
+            if (character.hasPendingSpecialUpgrade()) {
+                console.log("3. Abrindo Modal Especial...");
+                openSpecialUpgradeModal(character);
+            } else {
+                console.log("3. Abrindo Modal Normal...");
+                openLevelUpModal(character);
+            }
+        } else {
+            console.error("Erro: Personagem não encontrado no window.team");
         }
-        return; 
+        return;
     }
     
     const lockedSlot = event.target.closest('.locked-slot[data-action="buy-slot"]');
@@ -423,6 +446,7 @@ teamRoster.addEventListener('click', (event) => {
         }
     }
 });
+
 levelUpModal.addEventListener('click', (event) => {
     const plusButton = event.target.closest('.lvlup-plus-btn');
     

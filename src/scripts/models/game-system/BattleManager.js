@@ -158,6 +158,9 @@ BattleManager.prototype.processAllyActions = function(character){
                     else if (skillResult.type === 'effect') {
                         showCombatText(targetCard, skillResult.effect.name, skillResult.effect.effectType);
                     }
+                }else{
+                    //colocar de forma visual
+                    console.log('sem mana');
                 }
                 
                 resolve();
@@ -166,63 +169,89 @@ BattleManager.prototype.processAllyActions = function(character){
     });
 }
 
-BattleManager.prototype.processAllEffects = function(){
-    const allCombatants = [...window.team, ...window.enemyTeam];
+BattleManager.prototype.processAllEffects = function() {
+    // Processa efeitos do time do jogador
+    this._processGroupEffects(window.team);
 
-    allCombatants.forEach(character => {
+    // Processa efeitos do time inimigo
+    this._processGroupEffects(window.enemyTeam);
+};
+
+BattleManager.prototype._processGroupEffects = function(group) {
+    group.forEach(character => {
+        // Se já morreu, ignora
         if (character.currentHP <= 0) return;
 
+        // Encontra o card visual correspondente (tenta nos dois containers para garantir)
         const combatantCard = playerArea.querySelector(`.player-card[data-id="${character.id}"]`) || 
-                            enemyArea.querySelector(`.enemy-card[data-id="${character.id}"]`);
+        enemyArea.querySelector(`.enemy-card[data-id="${character.id}"]`);
 
+        // Itera sobre os efeitos de trás para frente (seguro para remoção com splice)
         for (let i = character.effects.length - 1; i >= 0; i--) {
             const effect = character.effects[i];
             const hpBefore = character.currentHP;
             
-            effect.onTick(null,character);
+            //  Encontrar o Caster (Quem jogou o efeito)
+            const caster = window.team.find(c => c.id === effect.casterId) || 
+            window.enemyTeam.find(c => c.id === effect.casterId);
+
+            // Agora passamos (caster, target)
+            if (typeof effect.onTick === 'function') {
+                effect.onTick(caster, character);
+            }
             
+            // Feedback Visual (Dano/Cura)
             const hpAfter = character.currentHP;
             const hpChange = hpAfter - hpBefore;
 
             if (combatantCard) {
-                if (hpChange > 0) { // ganhou vida 
+                if (hpChange > 0) { 
                     showCombatText(combatantCard, `+${hpChange}`, 'heal');
-                } else if (hpChange < 0) { // perdeu vida
+                } else if (hpChange < 0) { 
                     showCombatText(combatantCard, hpChange, 'damage');
                 }
             }
             
+            //  Verificação de Morte por Efeito 
             if (character.currentHP <= 0 && hpBefore > 0) {
+                console.log(`[Efeito] ${character.name} foi morto por ${effect.name}!`);
                 
-                const caster = window.team.find(c => c.id === effect.casterId);
-                
-                if (caster && caster instanceof PCharacter && character.xpGiven) {
-                    caster.gainExperience(character.xpGiven);
+                // Recompensas (XP e Ouro)
+                // Só dá recompensa se quem matou foi um PCharacter (Aliado)
+                if (caster && caster instanceof PCharacter) {
+                    if (character.xpGiven) {
+                        caster.gainExperience(character.xpGiven);
+                    }
+                    if (character.goldGiven && typeof PLAYER_MANAGER !== 'undefined') {
+                        PLAYER_MANAGER.addGold(character.goldGiven);
+                    }
                 }
-                if (caster && caster instanceof PCharacter && character.goldGiven) {
-                    PLAYER_MANAGER.addGold(character.goldGiven);
-                }
                 
+                // Animação e Remoção
                 playDeathAnimation(combatantCard, () => {
                     if (character instanceof PCharacter) {
                         removeCharfromSquad(character);
                     } else {
                         removeEnemyFromSquad(character);
+                        // Se quiser checar fim de fase aqui também, pode chamar checkPhaseEnd()
                     }
                 });
 
+                // Se morreu, para de processar outros efeitos neste personagem
                 break; 
             }
 
+            // --- 5. Controle de Duração ---
             effect.duration--;
             if (effect.duration <= 0) {
                 if (typeof effect.onRemove === 'function') {
-                    effect.onRemove(null,character);
+                    // Passa o caster no onRemove também, caso precise remover buffs dependentes de status
+                    effect.onRemove(caster, character);
                 }
                 character.effects.splice(i, 1);
             }
         }
     });
-}
+};
 
 const BATTLE_MANAGER = new BattleManager();

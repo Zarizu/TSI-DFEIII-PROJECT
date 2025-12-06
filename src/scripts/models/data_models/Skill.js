@@ -25,6 +25,51 @@ function Skill(name, icon, description, targetType, manaCost, rarity ='common'){
 
 }
 
+Skill.prototype.create = function(data) {
+    if (!data) return null;
+
+    // 1. Verifica se é uma Skill de Dano
+    // Critério: Tem 'basePower' ou o tipo está explícito como 'damage'
+    if (data.type === 'damage' || data.basePower !== undefined) {
+        return new DamageSkill(
+            data.name,
+            data.icon,
+            data.description,
+            data.manaCost,
+            data.targetType,
+            data.basePower,
+            data.rarity || 'common'
+        );
+    } 
+    
+    // 2. Verifica se é uma Skill de Efeito
+    // Critério: Tem 'effectToApply' ou tipo explícito 'effect'
+    else if (data.type === 'effect' || data.effectToApply !== undefined) {
+        return new ApplyEffectSkill(
+            data.name,
+            data.icon,
+            data.description,
+            data.manaCost,
+            data.targetType,
+            data.effectToApply || data.effect, // Aceita ambos os nomes para flexibilidade
+            data.duration,
+            data.rarity || 'common'
+        );
+    } 
+    
+    // 3. Fallback: Cria uma Skill genérica
+    else {
+        return new Skill(
+            data.name,
+            data.icon,
+            data.description,
+            data.targetType,
+            data.manaCost,
+            data.rarity || 'common'
+        );
+    }
+};
+
 Skill.prototype.canUse = function(caster){
     if(caster.currentMana < this.manaCost){
         return false;
@@ -34,7 +79,7 @@ Skill.prototype.canUse = function(caster){
 
 Skill.prototype.useSkill = function(caster, target){
     if(!this.canUse(caster)){
-        return;
+        return false;
     }
 
     caster.currentMana -= this.manaCost;

@@ -12,6 +12,7 @@ function refreshAllUI() {
         updateEnemySquad(enemy);
     })
 }
+
 function refreshRoster() {
     // Limpa o roster antigo
     teamRoster.innerHTML = '';
@@ -31,9 +32,17 @@ function refreshRoster() {
             // Lógica do ícone de level up
             let levelUpIconHTML = '';
             
-            // Só mostra o botão se tiver pontos E for o Round 1 (Preparação)
-            if (character.unspentAttributePoints > 0 && GAME_MANAGER.getRound() === 1) {
-                levelUpIconHTML = `<div class="level-up-icon" title="Pontos disponíveis!">+</div>`;
+            const hasNormalPoints = character.unspentAttributePoints > 0;
+            const hasSpecialUpgrade = (typeof character.hasPendingSpecialUpgrade === 'function') ? character.hasPendingSpecialUpgrade() : false;
+
+            if ((hasNormalPoints || hasSpecialUpgrade) && GAME_MANAGER.getRound() === 1) {
+                // Adiciona a classe 'special' se for upgrade de nível 5, 10
+                const specialClass = hasSpecialUpgrade ? 'special' : ''; 
+                
+                // O título muda para informar o jogador
+                const titleText = hasSpecialUpgrade ? "Maestria Disponível!" : "Pontos de Atributo";
+
+                levelUpIconHTML = `<div class="level-up-icon ${specialClass}" title="${titleText}">+</div>`;
             }
 
             // Lógica da imagem (com fallback)
@@ -64,13 +73,13 @@ function refreshRoster() {
             `;
         }
         
-        //Slot Vazio ---
+        //Slot Vazio
         else if (i < PLAYER_MANAGER.unlockedSlots) {
             slot.classList.add('team-member-portrait', 'empty-slot');
             slot.innerHTML = `<div>Espaço Livre</div>`;
         }
 
-        //Slot Trancado ---
+        //Slot Trancado
         else {
             slot.classList.add('team-member-portrait', 'locked-slot');
 
@@ -99,6 +108,7 @@ function refreshRoster() {
     // Atualiza o título
     teamPanelTitle.textContent = `Esquadrão (${window.team.length}/${PLAYER_MANAGER.unlockedSlots})`;
 }
+
 function drawRoster(character) {
     refreshRoster();
 }

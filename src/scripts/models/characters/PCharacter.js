@@ -24,6 +24,9 @@ class PCharacter extends Character {
         this.experienceGap = this.lvl * 100;
         
         this.canRebirth = false;
+
+        //flag dos upgrades
+        this.lastSpecialUpgradeLevel = 0;
     }
 
     gainExperience(amount) {
@@ -94,6 +97,8 @@ class PCharacter extends Character {
         this.experience = 0;
         this.experienceGap = this.lvl * 100;
         
+        this.lastSpecialUpgradeLevel = 0;
+
         this.recalculateAll();
         
         //Cura total (recompensa pelo Rebirth)
@@ -127,4 +132,11 @@ class PCharacter extends Character {
         return true;
     }
 
+    hasPendingSpecialUpgrade() {
+        // O próximo marco é sempre o último pego + 5.
+        // Ex: Se pegou o 0 (início), o próximo é 5. Se pegou o 5, o próximo é 10.
+        const nextMilestone = this.lastSpecialUpgradeLevel + 5;
+        // Se o nível é múltiplo de 5 E ainda não pegamos o upgrade desse nível
+        return this.lvl >= nextMilestone;
+    }
 }

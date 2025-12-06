@@ -40,7 +40,7 @@ function checkPhaseEnd() {
                 drawShop();
             });
         }
-
+        
         }, 500);
 
     setTimeout(() => {
@@ -299,3 +299,130 @@ document.getElementById('restart-game-btn').addEventListener('click', () => {
     
     window.location.href = './char_creation.html';
 });
+
+function openSpecialUpgradeModal(character) {
+    const modal = document.getElementById('special-upgrade-modal');
+    const container = document.getElementById('upgrade-options-container');
+    container.innerHTML = ''; // Limpa opções anteriores
+
+    //  Gera 3 Opções Aleatórias
+    const options = [];
+    
+    for (let i = 0; i < 3; i++) {
+        // 50% de chance de ser Skill, 50% de Atributo
+        // (Se não tiver skills disponíveis no banco de dados, força atributo)
+        const trySkill = Math.random() > 0.5;
+        
+        if (trySkill) {
+            const skillUpgrade = generateSkillUpgrade(character);
+            // Se retornou null (personagem já tem todas as skills), gera atributo
+            options.push(skillUpgrade || generateAttributeUpgrade(character));
+        } else {
+            options.push(generateAttributeUpgrade(character));
+        }
+    }
+
+    // Renderiza as Cartas
+    options.forEach((opt) => {
+        const card = document.createElement('div');
+        card.className = `upgrade-card type-${opt.type}`;
+        
+        // Ícone visual baseado no tipo
+        let iconHtml = opt.type === 'stat' ? '💪' : '📜';
+        if (opt.key === 'int') iconHtml = '🧠';
+        if (opt.key === 'agi') iconHtml = '💨';
+        
+        card.innerHTML = `
+            <div class="upgrade-icon">${iconHtml}</div>
+            <div class="upgrade-info">
+                <span class="upgrade-type">${opt.type === 'stat' ? 'Atributo' : 'Nova Habilidade'}</span>
+                <div class="upgrade-title">${opt.title}</div>
+                <div class="upgrade-desc">${opt.description}</div>
+            </div>
+        `;
+
+        // Clique na Opção
+        card.addEventListener('click', () => {
+            applySpecialUpgrade(character, opt);
+            modal.classList.add('hidden');
+            
+            // Após escolher o especial, se ainda tiver pontos normais, abre o modal normal
+            if (character.unspentAttributePoints > 0) {
+                setTimeout(() => openLevelUpModal(character), 300);
+            } else {
+                refreshAllUI();
+            }
+        });
+
+        container.appendChild(card);
+    });
+
+    modal.classList.remove('hidden');
+}
+
+// Gera Upgrade de Atributo (+2 ou +3)
+function generateAttributeUpgrade(char) {
+    const attrs = ['str', 'con', 'agi', 'int', 'wis'];
+    const labels = { str: 'Força', con: 'Constituição', agi: 'Agilidade', int: 'Inteligência', wis: 'Sabedoria' };
+    
+    const key = attrs[Math.floor(Math.random() * attrs.length)];
+    const amount = Math.floor(Math.random() * 2) + 2; // +2 ou +3
+
+    return {
+        type: 'stat',
+        key: key,
+        amount: amount,
+        title: `+${amount} ${labels[key]}`,
+        description: `Aumenta permanentemente seu atributo base.`
+    };
+}
+
+// Gera Upgrade de Skill (Busca no SKILLS)
+
+function generateSkillUpgrade(char) {
+
+    const allSkillKeys = Object.keys(SKILLS); 
+    
+    const availableKeys = allSkillKeys.filter(k => {
+        const skillObj = SKILLS[k];
+        // Verifica se o ID da skill já existe no array char.skills
+        // (Nota: certifique-se que suas skills no char tenham a propriedade .id ou .templateId para comparar)
+        return !char.skills.some(s => s.name === skillObj.name); 
+    });
+
+    if (availableKeys.length === 0) return generateAttributeUpgrade(char);
+
+    const randomKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
+    const skillTemplate = SKILLS[randomKey];
+    
+    // Retorna o objeto formatado para o card de upgrade
+    return {
+        type: 'skill',           
+        skillData: skillTemplate,
+        title: skillTemplate.name,
+        description: skillTemplate.description,
+        icon: skillTemplate.icon || '📜' 
+    };
+}
+
+function applySpecialUpgrade(char, opt) {
+    if (opt.type === 'stat') {
+        // Lógica de Atributo...
+        char.attributes[opt.key] += opt.amount;
+        if(opt.key === 'con') char.currentHP += (opt.amount * 5); 
+        char.recalculateAll();
+        console.log(`[UPGRADE] +${opt.amount} em ${opt.key}`);
+    } 
+    else if (opt.type === 'skill') {
+        
+        // O método estático resolve qual classe instanciar e gera o ID único
+        const newSkillInstance = Skill.prototype.create(opt.skillData);
+        
+        if (newSkillInstance) {
+            char.skills.push(newSkillInstance);
+            console.log(`[UPGRADE] Nova habilidade: ${newSkillInstance.name} (ID: ${newSkillInstance.id})`);
+        }
+    }
+
+    char.lastSpecialUpgradeLevel += 5; 
+}
